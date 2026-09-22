@@ -1,0 +1,64 @@
+name: Daily article
+
+on:
+  schedule:
+    - cron: "30 1 * * *"   # 07:00 IST every day
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Publish even if today's article already exists"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-article
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Write today's article
+        id: gen
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-2.5-flash' }}
+          TRENDING: ${{ vars.TRENDING || 'on' }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          IMAGE_MODEL: ${{ vars.IMAGE_MODEL }}
+        run: python scripts/generate.py ${{ inputs.force && '--force' || '' }}
+
+      - name: Build site (pages, images, sitemap, feed, home page)
+        run: python scripts/build.py
+
+      - name: Commit and push
+        run: |
+          git config user.name "techdcoded-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then echo "Nothing to commit"; exit 0; fi
+          git commit -m "New article: ${{ steps.gen.outputs.title || 'daily update' }}"
+          git push
+
+      - name: Notify search engines (IndexNow)
+        if: steps.gen.outputs.slug != ''
+        run: |
+          sleep 90
+          python scripts/indexnow.py "https://techdcoded.com/articles/${{ steps.gen.outputs.slug }}/" "https://techdcoded.com/articles/" "https://techdcoded.com/"
+
+      - name: Summary
+        if: steps.gen.outputs.slug != ''
+        run: echo "### Published → https://techdcoded.com/articles/${{ steps.gen.outputs.slug }}/" >> $GITHUB_STEP_SUMMARY
