@@ -736,6 +736,7 @@ def main():
         "word_count": wc, "review": {k: v for k, v in rev.items() if k != "problems"},
         "author": "TechDcoded Team",
     }
+    CONTENT.mkdir(parents=True, exist_ok=True)   # folder disappears on GitHub when it's empty
     (CONTENT / f"{today}-{slug}.json").write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
     if topic.get("vector"):
         emb[slug] = topic["vector"]

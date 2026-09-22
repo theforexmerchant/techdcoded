@@ -56,6 +56,8 @@ def _parse_topics(text):
 
 def load_articles():
     arts = []
+    if not CONTENT.exists():
+        return arts
     for p in sorted(CONTENT.glob("*.json")):
         a = json.loads(p.read_text(encoding="utf-8"))
         a["_file"] = p.name
