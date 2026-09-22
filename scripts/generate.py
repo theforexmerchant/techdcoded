@@ -17,6 +17,7 @@ from common import (CONTENT, DATA, load_topics, load_articles, load_embeddings, 
 API = "https://generativelanguage.googleapis.com/v1beta/models"
 KEY = os.environ.get("GEMINI_API_KEY", "")
 MODEL = os.environ.get("GEMINI_MODEL", "") or "auto"
+FALLBACKS = []   # other usable models, tried when the main one is overloaded
 EMBED_MODEL = os.environ.get("GEMINI_EMBED_MODEL", "gemini-embedding-001")
 SIM_LIMIT = 0.86      # embedding cosine above this = too similar to an existing article
 JAC_LIMIT = 0.55      # title word-overlap above this = too similar
@@ -33,37 +34,45 @@ Never mention that you are an AI. No clickbait that the article doesn't deliver 
 
 
 # ---------------- Gemini helpers ----------------
-def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=4):
+def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=3):
+    """Call Gemini. If the model stays overloaded (503/429), move on to the next available model."""
+    global MODEL
     body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": temperature}}
     if search:
         body["tools"] = [{"google_search": {}}]
     elif json_mode:
         body["generationConfig"]["responseMimeType"] = "application/json"
-    url = f"{API}/{MODEL}:generateContent"
-    last = ""
-    for i in range(retries):
-        try:
-            r = requests.post(url, json=body, headers={"x-goog-api-key": KEY}, timeout=180)
-        except requests.RequestException as ex:
-            last = f"network error {ex}"; time.sleep(10 * (i + 1)); continue
-        if r.status_code in (429, 500, 502, 503, 504):
-            last = f"{r.status_code}: {r.text[:250]}"
-            print(f"  Gemini busy/limited ({'search' if search else 'text'}) try {i + 1}: {last}")
-            # a used-up quota won't recover in minutes — stop waiting
-            if r.status_code == 429 and ("quota" in r.text.lower() or "exhausted" in r.text.lower()) and i >= 1:
-                break
-            time.sleep(10 * (i + 1)); continue
-        if r.status_code >= 400:
-            raise RuntimeError(f"Gemini {r.status_code}: {r.text[:300]}")
-        j = r.json()
-        cand = (j.get("candidates") or [{}])[0]
-        text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []) if not p.get("thought"))
-        if not text.strip():
-            last = f"empty reply (finishReason={cand.get('finishReason')}, feedback={j.get('promptFeedback')})"
-            print("  Gemini", last); time.sleep(5); continue
-        return text, cand.get("groundingMetadata", {})
-    raise RuntimeError(f"Gemini request failed after retries — last error: {last}")
+    last, switches = "", 0
+    while True:
+        url = f"{API}/{MODEL}:generateContent"
+        quota = False
+        for i in range(retries):
+            try:
+                r = requests.post(url, json=body, headers={"x-goog-api-key": KEY}, timeout=180)
+            except requests.RequestException as ex:
+                last = f"network error {ex}"; time.sleep(10 * (i + 1)); continue
+            if r.status_code in (429, 500, 502, 503, 504):
+                last = f"{MODEL} {r.status_code}: {r.text[:200]}"
+                print(f"  Gemini busy/limited ({'search' if search else 'text'}) try {i + 1}: {last}")
+                quota = r.status_code == 429 and ("quota" in r.text.lower() or "exhausted" in r.text.lower())
+                if quota and i >= 1:
+                    break
+                time.sleep(15 * (i + 1)); continue
+            if r.status_code >= 400:
+                raise RuntimeError(f"Gemini {r.status_code}: {r.text[:300]}")
+            j = r.json()
+            cand = (j.get("candidates") or [{}])[0]
+            text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []) if not p.get("thought"))
+            if not text.strip():
+                last = f"empty reply (finishReason={cand.get('finishReason')}, feedback={j.get('promptFeedback')})"
+                print("  Gemini", last); time.sleep(5); continue
+            return text, cand.get("groundingMetadata", {})
+        if FALLBACKS and switches < 3:
+            MODEL = FALLBACKS.pop(0); switches += 1
+            print(f"  Switching to backup model: {MODEL}")
+            continue
+        raise RuntimeError(f"Gemini request failed after retries — last error: {last}")
 
 
 def resolve_model():
@@ -72,9 +81,9 @@ def resolve_model():
     global MODEL
     if MODEL != "auto":
         r = requests.get(f"{API}/{MODEL}", headers={"x-goog-api-key": KEY}, timeout=30)
-        if r.ok:
-            print("Using model:", MODEL); return
-        print(f"Model {MODEL} unavailable ({r.status_code}); auto-selecting a current one.")
+        if not r.ok:
+            print(f"Model {MODEL} unavailable ({r.status_code}); auto-selecting a current one.")
+            MODEL = "auto"
     models, token = [], None
     while True:
         r = requests.get(API, headers={"x-goog-api-key": KEY}, params={"pageSize": 200, **({"pageToken": token} if token else {})}, timeout=30)
@@ -96,8 +105,10 @@ def resolve_model():
                  and not any(b in m["name"] for b in bad)]
     if not cands:
         sys.exit("No usable Gemini text model found for this API key.")
-    MODEL = max(cands, key=score)["name"].split("/")[-1]
-    print("Using model:", MODEL)
+    ordered = [m["name"].split("/")[-1] for m in sorted(cands, key=score, reverse=True)]
+    FALLBACKS[:] = [m for m in ordered if m != MODEL] if MODEL != "auto" else ordered[1:]
+    MODEL = ordered[0] if MODEL == "auto" or MODEL not in ordered else MODEL
+    print("Using model:", MODEL, "| backups:", FALLBACKS[:4])
 
 
 def gemini_json(prompt, temperature=0.6):
