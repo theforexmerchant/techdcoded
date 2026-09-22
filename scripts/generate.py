@@ -266,6 +266,25 @@ AUTO_REFILL_BELOW = 40     # when fewer unused ideas remain, invent more
 AUTO_REFILL_COUNT = 30
 HT = "{https://trends.google.com/trending/rss}"
 
+# Niche focus: TechDcoded decodes HOW TECHNOLOGY WORKS. Core categories are chosen ~80% of days;
+# edge categories (business, careers, crime, philosophy...) ~20%, and only when the angle explains the tech.
+EDGE_CATEGORIES = {
+    "Tech Investigations", "Tech Experiments", "Tech Predictions", "Tech Psychology", "Tech Crime", "Tech History",
+    "Tech Business", "Tech Careers", "Digital Society", "Tech Philosophy", "Forbidden Technology", "The Race",
+    "Million-Dollar Mistakes", "Tech Black Market", "24 Hours Without", "Tech Survival", "Future Crimes", "Invisible Wars",
+    "One Day As", "Can You Live Without", "AI vs Human", "AI vs AI", "Government Tech Controversies",
+    "Corporate Tech Frauds", "Cybercrime Stories", "Cryptocurrency Scams", "Untold Tech Heroes", "Stories From the Future",
+    "What Really Happened", "How Rich Could You Get", "What If You Were", "Dark Patterns Exposed", "Hidden Business Models",
+    "Technology Horror", "Tech Layoffs & Careers", "AI & Workforce", "Psychology of Tech", "Tech & Society",
+}
+CORE_SHARE = 1.0   # 100% core technology topics
+NICHE_MIN = 7   # topic must score >= 7/10 on "decodes how a technology works"
+NICHE_RULE = ("NICHE RULE: TechDcoded explains HOW TECHNOLOGY WORKS — the engineering, science, systems and inner workings "
+              "behind gadgets, apps, AI, internet, payments, vehicles, space and everyday tech. The reader must finish "
+              "understanding a technology better. Business, careers, finance, crime or social topics only qualify when the "
+              "article explains the technology behind them (e.g. 'How the Twitter Bitcoin hack actually worked' fits; "
+              "'Why profitable companies lay off workers' does not).")
+
 
 def google_trends_india():
     """Google Trends daily trending searches for India, with the headline that explains each trend."""
@@ -320,12 +339,17 @@ def screen(cands, cat, idea, source, existing_titles, emb):
         t = c.get("title", "").strip()
         if not t:
             continue
+        nf = c.get("niche_fit")
+        if isinstance(nf, (int, float)) and nf < NICHE_MIN:
+            print(f"skip (off-niche {nf}/10):", t); continue
         if any(jaccard(t, x) > JAC_LIMIT for x in existing_titles):
             print("skip (title overlap):", t); continue
         vec = embed(f"{t}. {c.get('angle', '')}")
         top = max((cosine(vec, v) for v in emb.values()), default=0) if vec else 0
         if top > SIM_LIMIT:
             print(f"skip (similar {top:.2f}):", t); continue
+        if (c.get("category") or cat) in EDGE_CATEGORIES:
+            print("skip (edge category):", t); continue
         return {"category": c.get("category") or cat, "idea": c.get("idea") or idea, "source": source,
                 "trend_context": c.get("trend_context", ""), **c, "vector": vec}
     return None
@@ -344,15 +368,17 @@ Ignore politics, entertainment gossip, sports scores, crime unrelated to tech, s
 For each, write an EXPLAINER article idea that stays useful for months (how it works / what it means / what to do),
 NOT a news report. Example: trending "new iPhone launched" -> "How the iPhone's New Chip Actually Works".
 Title: 40-65 chars, phrased the way people search on Google.
-Category: choose the closest from {json.dumps(categories)} (or a short new one if none fit).
+Category: choose the closest from {json.dumps(sorted(set(categories) - EDGE_CATEGORIES))} (or a short new technology category if none fit).
 fit: 1-10 for how well it suits TechDcoded AND how much lasting search interest it will have.
+{NICHE_RULE}
+niche_fit: 1-10 for how much the article decodes how a technology works (be strict).
 Do NOT repeat these published articles: {json.dumps(existing[:60], ensure_ascii=False)}
 
 Headlines:
 {json.dumps(heads, ensure_ascii=False)}
 
 Return JSON: [{{"title": "...", "primary_keyword": "...", "angle": "...", "category": "...", "fit": n,
-"trend_context": "one line: what is trending and why, with the date if known", "idea": "short topic name"}}]"""
+"trend_context": "one line: what is trending and why, with the date if known", "idea": "short topic name", "niche_fit": n}}]"""
     try:
         cands = gemini_json(prompt, temperature=0.5)
     except Exception as ex:
@@ -375,10 +401,13 @@ You plan content for TechDcoded. Here are example ideas from our idea bank (cate
 
 Invent {n} NEW article ideas in the same spirit — curiosity-driven explainers, "how it works", comparisons,
 hidden costs, myths, history, future, careers, India-relevant tech. Spread them across these categories and feel free
-to add up to 3 new categories: {json.dumps(cats)}
+to add up to 3 new technology categories: {json.dumps(sorted(set(cats) - EDGE_CATEGORIES))}
 Each idea must be clearly different from every example and from these published articles:
 {json.dumps([a["title"] for a in articles][:120], ensure_ascii=False)}
 Prefer ideas with steady Google search demand. No politics, no medical or financial advice.
+{NICHE_RULE}
+ALL ideas must be in technology-explainer categories (how it works, gadgets, AI, internet, hardware,
+fintech systems, space, vehicles, everyday tech science, comparisons, reverse engineering, cost of...).
 
 Return JSON: [{{"category": "...", "idea": "..."}}]"""
     try:
@@ -404,15 +433,21 @@ Return JSON: [{{"category": "...", "idea": "..."}}]"""
 
 def pick_from_bank(articles, emb):
     used = {a.get("idea", "") for a in articles}
-    fresh = [t for t in load_topics() if t[1] not in used]
+    fresh = [t for t in load_topics() if t[1] not in used and t[0] not in EDGE_CATEGORIES]
     if len(fresh) < AUTO_REFILL_BELOW:
         invent_ideas(articles)
-        fresh = [t for t in load_topics() if t[1] not in used]
+        fresh = [t for t in load_topics() if t[1] not in used and t[0] not in EDGE_CATEGORIES]
     cat_count = {}
     for a in articles:
         cat_count[a.get("category", "")] = cat_count.get(a.get("category", ""), 0) + 1
     random.shuffle(fresh)
     fresh.sort(key=lambda t: cat_count.get(t[0], 0))  # least-covered categories first
+    core = [t for t in fresh if t[0] not in EDGE_CATEGORIES]
+    edge = [t for t in fresh if t[0] in EDGE_CATEGORIES]
+    fresh = core   # edge categories are never used
+    if not fresh:
+        invent_ideas(articles)
+        fresh = [t for t in load_topics() if t[1] not in used and t[0] not in EDGE_CATEGORIES]
     existing = [a["title"] for a in articles]
     for cat, idea in fresh[:6]:
         same_cat = [a["title"] for a in articles if a.get("category") == cat]
@@ -421,10 +456,13 @@ def pick_from_bank(articles, emb):
 Propose 5 distinct blog article titles for the TechDcoded category "{cat}" based on this idea: "{idea}".
 Each title must target something people actually search on Google (a question or clear phrase), be specific,
 40-65 characters, and promise real value. Prefer evergreen angles.
+{NICHE_RULE}
+If the idea is not about technology itself, find the technology angle inside it (how the systems/tools behind it work).
 Do NOT overlap with these existing TechDcoded articles:
 {json.dumps(same_cat[-40:] + existing[:40], ensure_ascii=False)}
 
-Return JSON: [{{"title": "...", "primary_keyword": "...", "angle": "one line on what the article covers"}}]"""
+niche_fit: 1-10 for how much the article decodes how a technology works (be strict).
+Return JSON: [{{"title": "...", "primary_keyword": "...", "angle": "one line on what the article covers", "niche_fit": n}}]"""
         try:
             cands = gemini_json(prompt, temperature=0.9)
         except Exception as ex:
@@ -562,6 +600,8 @@ def write(topic, notes, feedback=None, previous=None):
     prompt = f"""{STYLE}
 
 Write a complete, genuinely helpful, SEO-optimised article.
+{NICHE_RULE}
+Keep the focus on explaining the technology: how it works inside, step by step, with analogies a non-engineer understands.
 Working title: "{topic['title']}"  |  Primary keyword: "{topic.get('primary_keyword', '')}"  |  Angle: {topic['angle']}
 Category: {topic['category']}
 {("This topic is trending right now: " + topic['trend_context'] + chr(10) + "Open with a short hook about why it is in the news, then deliver an evergreen explainer that stays useful for months. Do not write a news report.") if topic.get('source') == 'trending' else ''}
