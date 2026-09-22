@@ -1,10 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Tech D Coded</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechDcoded — AI &amp; Technology Explained Simply | Tech Tutorials</title>
+<meta name="description" content="TechDcoded explains AI, gadgets, science, future tech and how everyday technology works — in simple, jargon-free videos and tutorials. You use the technology. We decode it.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<meta name="author" content="TechDcoded">
+<meta name="theme-color" content="#050a1e">
+<link rel="canonical" href="https://techdcoded.com/">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preload" as="image" type="image/webp" href="assets/banner.webp" imagesrcset="assets/banner-1000.webp 1000w, assets/banner.webp 1983w" imagesizes="(max-width:1152px) 100vw, 1120px" fetchpriority="high">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="TechDcoded">
+<meta property="og:locale" content="en_IN">
+<meta property="og:url" content="https://techdcoded.com/">
+<meta property="og:title" content="TechDcoded — AI &amp; Technology Explained Simply">
+<meta property="og:description" content="AI, gadgets, science, future tech and how things work — explained in simple videos. You use the technology. We decode it.">
+<meta property="og:image" content="https://techdcoded.com/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="480">
+<meta property="og:image:alt" content="TechDcoded — You use the technology. We decode it.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="TechDcoded — AI &amp; Technology Explained Simply">
+<meta name="twitter:description" content="AI, gadgets, science, future tech and how things work — explained in simple videos.">
+<meta name="twitter:image" content="https://techdcoded.com/assets/og.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "name": "TechDcoded", "url": "https://techdcoded.com/", "logo": "https://techdcoded.com/assets/logo-mark.png", "slogan": "You use the technology. We decode it.", "email": "business@techdcoded.com", "sameAs": ["https://www.youtube.com/@techdcoded", "https://www.instagram.com/techdcoded", "https://www.facebook.com/techdcoded/", "https://www.tiktok.com/@techdcoded", "https://www.threads.com/@techdcoded", "https://www.pinterest.com/techdcoded/", "https://www.twitch.tv/techdcoded", "https://www.linkedin.com/in/techdcoded", "https://x.com/techdcoded", "https://www.google.com/maps/search/TechDcoded", "https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a"], "@id": "https://techdcoded.com/#org", "description": "TechDcoded explains AI, gadgets, science, future tech and how everyday technology works in simple, jargon-free videos.", "knowsAbout": ["Artificial Intelligence", "Science and Innovation", "Consumer Technology", "How Technology Works", "Future Technology", "Tech Tips and Tutorials"], "contactPoint": {"@type": "ContactPoint", "contactType": "business inquiries", "email": "business@techdcoded.com"}}, {"@type": "WebSite", "@id": "https://techdcoded.com/#website", "url": "https://techdcoded.com/", "name": "TechDcoded", "alternateName": "Tech D Coded", "inLanguage": "en-IN", "publisher": {"@id": "https://techdcoded.com/#org"}}]}</script>
+<style>
+:root{--bg:#050a1e;--line:rgba(80,160,255,.22);--cyan:#3fd0ff;--blue:#1e90ff;--text:#e8f0ff;--muted:#9fb3d9}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:Inter,system-ui,sans-serif;background:radial-gradient(ellipse at 50% 0%,#0b1d52 0%,var(--bg) 60%);background-color:var(--bg);color:var(--text);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+picture{display:contents}
+#net{position:fixed;inset:0;z-index:0;pointer-events:none}
+main{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:20px 16px}
+.logo{display:block;height:clamp(46px,5vw,66px);width:auto;max-width:100%;margin:0 auto 12px;filter:drop-shadow(0 0 18px rgba(30,144,255,.35))}
+.banner{width:min(1120px,100%);height:auto;display:block;border-radius:22px 22px 0 0;border:1px solid var(--line);border-bottom:0;box-shadow:0 0 70px rgba(30,144,255,.25)}
+
+.box{position:relative;width:min(1120px,100%);padding:24px 26px 26px;text-align:center;border-radius:0 0 22px 22px;overflow:hidden;
+  background:radial-gradient(600px 180px at 0% 0%,rgba(30,144,255,.18),transparent 70%),radial-gradient(600px 180px at 100% 100%,rgba(63,208,255,.14),transparent 70%),linear-gradient(180deg,#0a1a48,#060e2a);
+  border:1px solid var(--line);border-top:1px solid rgba(63,208,255,.55);box-shadow:0 30px 80px rgba(0,0,0,.55),0 0 70px rgba(30,144,255,.2)}
+.box::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(63,208,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(63,208,255,.05) 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(180deg,#000,transparent 85%);-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%);pointer-events:none}
+.box::after{content:"";position:absolute;top:0;left:-30%;width:30%;height:2px;background:linear-gradient(90deg,transparent,#3fd0ff,#fff,#3fd0ff,transparent);box-shadow:0 0 14px #3fd0ff;animation:sweep 4.5s ease-in-out infinite}
+@keyframes sweep{0%{left:-30%}60%,100%{left:100%}}
+.box>*{position:relative}
+.hd{margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:16px}
+.ln{flex:1;max-width:160px;height:1px;background:linear-gradient(90deg,transparent,rgba(63,208,255,.8))}.ln:last-child{transform:scaleX(-1)}
+.box h2{font-size:clamp(.72rem,1.3vw,.9rem);letter-spacing:.34em;font-weight:700;color:#dce6f7;white-space:nowrap}
+.box h2 b{color:var(--cyan);text-shadow:0 0 14px rgba(63,208,255,.6)}
+.h1{font-size:clamp(1.05rem,2vw,1.35rem);font-weight:700;color:#fff;line-height:1.3;letter-spacing:.01em}
+.h1 span{background:linear-gradient(90deg,#3fd0ff,#7fb6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.intro{max-width:760px;margin:6px auto 18px;font-size:.86rem;line-height:1.55;color:var(--muted)}.intro b{color:#cfe0ff;font-weight:600}
+.sub{margin:6px 0 18px;font-size:.88rem;color:var(--muted)}.sub b{color:#fff}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.sc{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;text-align:left;overflow:hidden;
+  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015));border:1px solid rgba(120,170,255,.16);transition:transform .25s,border-color .25s,box-shadow .25s,background .25s}
+.sc::before{content:"";position:absolute;top:0;left:-120%;width:60%;height:100%;background:linear-gradient(105deg,transparent,rgba(255,255,255,.14),transparent);transform:skewX(-20deg);transition:left .6s}
+.sc:hover{transform:translateY(-4px);border-color:var(--g);box-shadow:0 12px 30px -8px var(--g),0 0 0 1px var(--g) inset;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.03))}
+.sc:hover::before{left:140%}
+.sc .t{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--c);box-shadow:0 6px 16px -4px var(--g),0 0 0 1px rgba(255,255,255,.12) inset}
+.sc svg{width:24px;height:24px}
+.tx{display:flex;flex-direction:column;line-height:1.2;min-width:0}
+.tx b{font-size:.92rem;color:#fff;font-weight:700}
+.tx small{font-size:.72rem;color:var(--muted);margin-top:3px}
+.ar{margin-left:auto;font-size:.9rem;color:rgba(159,179,217,.5);transition:.25s}
+.sc:hover .ar{color:#fff;transform:translate(2px,-2px)}
+footer a{color:var(--muted);border-bottom:1px dashed rgba(63,208,255,.4)}footer a:hover{color:var(--cyan)}
+footer{margin-top:14px;font-size:.75rem;color:#6f86b5;letter-spacing:.08em;text-align:center}
+
+/* BUSINESS BOX */
+.biz{position:relative;width:min(1120px,100%);margin-top:14px;border-radius:20px;padding:1.5px;overflow:hidden;
+  background:conic-gradient(from var(--a),#3fd0ff,#8b5cf6 20%,transparent 35%,transparent 65%,#1e90ff 80%,#3fd0ff);animation:rot 5s linear infinite;box-shadow:0 20px 60px -10px rgba(30,144,255,.45)}
+@property --a{syntax:"<angle>";inherits:false;initial-value:0deg}
+@keyframes rot{to{--a:360deg}}
+.biz-in{position:relative;display:flex;align-items:center;gap:18px;padding:16px 22px;border-radius:18.5px;overflow:hidden;
+  background:radial-gradient(400px 120px at 0% 50%,rgba(139,92,246,.25),transparent 70%),radial-gradient(400px 120px at 100% 50%,rgba(63,208,255,.18),transparent 70%),linear-gradient(120deg,#0c1a4a,#081233 60%,#0a1640)}
+.biz-ic{flex:none;width:52px;height:52px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#8b5cf6,#1e90ff 60%,#3fd0ff);box-shadow:0 8px 24px -4px rgba(99,102,241,.7),0 0 0 1px rgba(255,255,255,.2) inset}
+.biz-ic svg{width:28px;height:28px}
+.biz-tx{text-align:left;line-height:1.3;min-width:0}
+.biz-tx small{display:block;font-size:.68rem;letter-spacing:.3em;font-weight:700;color:var(--cyan);text-transform:uppercase}
+.biz-tx p{font-size:1.02rem;font-weight:600;color:#fff;margin-top:3px}
+.biz-act{margin-left:auto;display:flex;align-items:center;gap:8px;flex:none}
+.biz-mail{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:999px;font-weight:700;font-size:.95rem;color:#fff;
+  background:linear-gradient(135deg,#8b5cf6,#1e90ff 55%,#3fd0ff);box-shadow:0 8px 24px -6px rgba(30,144,255,.8);transition:.25s}
+.biz-mail:hover{transform:translateY(-2px);box-shadow:0 14px 34px -6px rgba(63,208,255,.9)}
+.biz-mail svg{width:18px;height:18px}
+.biz-copy{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:#dce6f7;background:rgba(255,255,255,.07);border:1px solid rgba(120,170,255,.3);transition:.25s;position:relative}
+.biz-copy:hover{background:rgba(63,208,255,.18);border-color:var(--cyan)}
+.biz-copy svg{width:18px;height:18px}
+.biz-copy .tip{position:absolute;bottom:115%;left:50%;transform:translateX(-50%);font-size:.7rem;padding:3px 8px;border-radius:6px;background:#3fd0ff;color:#05102e;font-weight:700;opacity:0;transition:.2s;white-space:nowrap;pointer-events:none}
+.biz-copy.ok .tip{opacity:1}
+/* FEATURE ROW */
+.feat{width:min(1120px,100%);display:grid;grid-template-columns:1.45fr 1fr;gap:14px;margin-top:14px}
+.fc{position:relative;display:flex;align-items:center;gap:16px;padding:12px;border-radius:18px;text-align:left;overflow:hidden;cursor:pointer;color:inherit;font:inherit;
+  border:1px solid rgba(120,170,255,.2);transition:transform .25s,box-shadow .25s,border-color .25s}
+.fc:hover{transform:translateY(-3px)}
+.yt{background:radial-gradient(360px 120px at 0% 0%,rgba(255,0,0,.2),transparent 70%),linear-gradient(135deg,#140c2e,#0a1233)}
+.yt:hover{border-color:rgba(255,60,60,.6);box-shadow:0 14px 36px -10px rgba(255,0,0,.55)}
+.th{position:relative;flex:none;width:150px;aspect-ratio:16/9;border-radius:12px;overflow:hidden;background:linear-gradient(110deg,#101c44 30%,#1a2c62 50%,#101c44 70%);background-size:200% 100%;animation:shim 1.4s linear infinite}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.th .pl{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.25);transition:.25s}
+.th .pl span{width:40px;height:28px;border-radius:8px;background:#f00;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.5)}
+.yt:hover .pl{background:rgba(0,0,0,.05)}
+@keyframes shim{to{background-position:-200% 0}}
+.fx{min-width:0;flex:1}
+.lb{display:inline-flex;align-items:center;gap:7px;font-size:.66rem;letter-spacing:.25em;font-weight:700;text-transform:uppercase;color:#ff6b6b}
+.dot{width:7px;height:7px;border-radius:50%;background:#ff3030;box-shadow:0 0 0 0 rgba(255,48,48,.7);animation:pulse 1.8s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(255,48,48,0)}100%{box-shadow:0 0 0 0 rgba(255,48,48,0)}}
+.fx h3{font-size:.98rem;line-height:1.3;color:#fff;margin:5px 0 4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.fx .mt{font-size:.74rem;color:var(--muted)}
+.go{flex:none;align-self:center;padding:9px 16px;border-radius:999px;font-size:.8rem;font-weight:700;color:#fff;white-space:nowrap}
+.yt .go{background:linear-gradient(180deg,#ff3b30,#c4150d);box-shadow:0 6px 18px -4px rgba(255,0,0,.6)}
+.wa{background:radial-gradient(320px 120px at 0% 0%,rgba(37,211,102,.22),transparent 70%),linear-gradient(135deg,#07241f,#0a1633)}
+.wa:hover{border-color:rgba(37,211,102,.65);box-shadow:0 14px 36px -10px rgba(37,211,102,.55)}
+.wai{flex:none;width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#25D366,#128C7E);box-shadow:0 8px 22px -4px rgba(37,211,102,.6),0 0 0 1px rgba(255,255,255,.18) inset}
+.wai svg{width:30px;height:30px}
+.wa .lb{color:#4ade80}
+.wa .go{background:linear-gradient(180deg,#25D366,#128C7E);box-shadow:0 6px 18px -4px rgba(37,211,102,.6)}
+/* video modal */
+.vm{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:16px;background:rgba(2,6,20,.85);backdrop-filter:blur(8px)}
+.vm.on{display:grid}
+.vm .fr{position:relative;width:min(960px,100%);aspect-ratio:16/9;border-radius:16px;overflow:hidden;box-shadow:0 0 80px rgba(30,144,255,.4);border:1px solid var(--line)}
+.vm iframe{width:100%;height:100%;border:0}
+.vm .x{position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.08);color:#fff;font-size:1.3rem;cursor:pointer}
+@media (max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}.feat{grid-template-columns:1fr}}
+@media (max-width:600px){
+  main{padding:16px 12px}
+  .banner{border-radius:14px 14px 0 0}.box{border-radius:0 0 14px 14px;padding:18px 12px 14px}
+  .ln{display:none}.box h2{white-space:normal;letter-spacing:.25em}
+  .sub{font-size:.8rem;margin:6px 0 14px}.intro{font-size:.8rem;margin:6px 0 14px}.h1{font-size:1rem}
+  .grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .sc{padding:9px 10px;gap:10px;border-radius:13px}.sc .t{width:38px;height:38px;border-radius:10px}.sc svg{width:21px;height:21px}
+  .tx b{font-size:.85rem}.ar{display:none}
+  .th{width:112px}.fc{gap:12px;padding:10px}.fx h3{font-size:.86rem}.go{display:none}.wai{width:46px;height:46px}
+  .biz{border-radius:16px}.biz-in{flex-wrap:wrap;justify-content:center;text-align:center;padding:14px;gap:12px;border-radius:14.5px}
+  .biz-tx{text-align:center;flex:1 1 60%}.biz-tx p{font-size:.9rem}.biz-ic{width:44px;height:44px}
+  .biz-act{margin:0 auto}.biz-mail{font-size:.85rem;padding:10px 16px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
 </head>
 <body>
-<h1>Welcome to Tech D Coded</h1>
-<p>Website coming soon.</p>
+<canvas id="net" aria-hidden="true"></canvas>
+<main>
+  <picture><source srcset="assets/logo.webp" type="image/webp"><img class="logo" src="assets/logo.png" width="620" height="143" alt="TechDcoded — Unrevealing Technology logo"></picture>
+  <picture><source type="image/webp" srcset="assets/banner-1000.webp 1000w, assets/banner.webp 1983w" sizes="(max-width:1152px) 100vw, 1120px"><img class="banner" src="assets/banner.jpg" width="1983" height="615" fetchpriority="high" alt="TechDcoded banner — You use the technology. We decode it. Topics: artificial intelligence, science and innovation, tech in daily life, how it works, future tech, tips and tutorials."></picture>
+
+  <section class="box" aria-label="Follow TechDcoded">
+    <h1 class="h1">Technology explained simply — <span>AI, gadgets, science &amp; how things work</span></h1>
+    <p class="intro">TechDcoded breaks down <b>artificial intelligence</b>, <b>science &amp; innovation</b>, <b>tech in daily life</b>, <b>how it works</b>, <b>future tech</b> and <b>tips &amp; tutorials</b> into clear, jargon-free videos. Follow <b>@techdcoded</b> everywhere.</p>
+    <div class="hd"><span class="ln"></span><h2>JOIN A <b>SMARTER TECH</b> COMMUNITY</h2><span class="ln"></span></div>
+    <div class="grid">
+      <a class="sc" style="--c:#FF0000;--g:rgba(255,0,0,.55)" href="https://www.youtube.com/@techdcoded?sub_confirmation=1" target="_blank" rel="noopener" aria-label="YouTube"><span class="t"><svg viewBox="0 0 24 24" fill="#fff"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></span><span class="tx"><b>YouTube</b><small>Subscribe</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);--g:rgba(214,36,159,.6)" href="https://www.instagram.com/techdcoded" target="_blank" rel="noopener" aria-label="Instagram"><span class="t"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.69.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 1 0 0 12.32 6.16 6.16 0 0 0 0-12.32zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.41-11.85a1.44 1.44 0 1 0 0 2.88 1.44 1.44 0 0 0 0-2.88z"/></svg></span><span class="tx"><b>Instagram</b><small>Follow</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#1877F2;--g:rgba(24,119,242,.6)" href="https://www.facebook.com/techdcoded/" target="_blank" rel="noopener" aria-label="Facebook"><span class="t"><svg viewBox="0 0 24 24" fill="#fff"><path d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.4c0-3 1.8-4.7 4.5-4.7 1.3 0 2.7.2 2.7.2v3h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12z"/></svg></span><span class="tx"><b>Facebook</b><small>Like & follow</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#000;--g:rgba(37,244,238,.6)" href="https://www.tiktok.com/@techdcoded" target="_blank" rel="noopener" aria-label="TikTok"><span class="t"><svg viewBox="0 0 24 24"><g transform="translate(-.7 -.5)" fill="#25F4EE"><path id="tk" d="M12.53.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></g><use href="#tk" transform="translate(.7 .5)" fill="#FE2C55"/><use href="#tk" fill="#fff"/></svg></span><span class="tx"><b>TikTok</b><small>Follow</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#000;--g:rgba(255,255,255,.35)" href="https://www.threads.com/@techdcoded" target="_blank" rel="noopener" aria-label="Threads"><span class="t"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M16 11.2c-.4-2.6-2-3.9-4.2-3.9-2.4 0-3.9 1.7-3.9 4.4s1.5 4.4 3.8 4.4c2.5 0 4-1.6 4.3-4.9.3-2.6-.8-3.6-3.3-3.4"/><path d="M19.6 7.5A8.7 8.7 0 0 0 12 3C7 3 3.5 6.8 3.5 12S7 21 12 21c3.4 0 6-1.6 7.2-4.2"/></svg></span><span class="tx"><b>Threads</b><small>Follow</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#E60023;--g:rgba(230,0,35,.55)" href="https://www.pinterest.com/techdcoded/" target="_blank" rel="noopener" aria-label="Pinterest"><span class="t"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12.02 0C5.4 0 .03 5.37.03 11.99c0 5.08 3.16 9.42 7.62 11.16-.1-.95-.2-2.4.04-3.44.22-.94 1.41-5.96 1.41-5.96s-.36-.72-.36-1.78c0-1.66.97-2.91 2.17-2.91 1.02 0 1.52.77 1.52 1.69 0 1.03-.65 2.57-.99 3.99-.29 1.19.6 2.170 1.77 2.17 2.13 0 3.77-2.25 3.77-5.49 0-2.86-2.06-4.87-5.01-4.87-3.41 0-5.41 2.56-5.41 5.2 0 1.03.39 2.14.89 2.74.1.12.11.23.08.35l-.33 1.36c-.05.22-.17.27-.4.16-1.5-.69-2.430-2.88-2.43-4.65 0-3.78 2.75-7.25 7.92-7.25 4.16 0 7.39 2.97 7.39 6.92 0 4.14-2.61 7.46-6.23 7.46-1.21 0-2.35-.63-2.76-1.38l-.75 2.85c-.27 1.04-1 2.35-1.5 3.15 1.12.34 2.31.53 3.55.53 6.61 0 11.990-5.36 11.99-11.99C23.97 5.39 18.59.03 11.99.03z"/></svg></span><span class="tx"><b>Pinterest</b><small>Save ideas</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#9146FF;--g:rgba(145,70,255,.6)" href="https://www.twitch.tv/techdcoded" target="_blank" rel="noopener" aria-label="Twitch"><span class="t"><svg viewBox="0 0 24 24" fill="#fff"><path d="M11.57 4.71h1.72v5.15h-1.72zm4.72 0H18v5.15h-1.71zM6 0 1.71 4.29v15.42h5.15V24l4.28-4.29h3.43L22.29 12V0zm14.57 11.14-3.43 3.43h-3.43l-3 3v-3H6.86V1.71h13.71z"/></svg></span><span class="tx"><b>Twitch</b><small>Watch live</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#0A66C2;--g:rgba(10,102,194,.6)" href="https://www.linkedin.com/in/techdcoded" target="_blank" rel="noopener" aria-label="LinkedIn"><span class="t"><svg viewBox="0 0 24 24" fill="#fff"><path d="M20.4 20.5h-3.6v-5.6c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9v5.7H9.4V9h3.4v1.6c.5-.9 1.6-1.8 3.4-1.8 3.6 0 4.3 2.4 4.3 5.5v6.2zM5.3 7.4a2.1 2.1 0 1 1 0-4.1 2.1 2.1 0 0 1 0 4.1zm1.8 13.1H3.6V9h3.5v11.5z"/></svg></span><span class="tx"><b>LinkedIn</b><small>Connect</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#000;--g:rgba(255,255,255,.35)" href="https://x.com/techdcoded" target="_blank" rel="noopener" aria-label="X (Twitter)"><span class="t"><svg viewBox="0 0 24 24" fill="#fff" style="width:26px;height:26px"><path d="M18.2 2.2h3.4l-7.4 8.5 8.7 11.5h-6.8l-5.3-7-6.1 7H1.3l7.9-9L.8 2.2h7l4.8 6.4 5.6-6.4zm-1.2 18h1.9L7 4.1H5L17 20.2z"/></svg></span><span class="tx"><b>X (Twitter)</b><small>Follow</small></span><span class="ar">↗</span></a>
+      <a class="sc" style="--c:#fff;--g:rgba(66,133,244,.6)" href="https://www.google.com/maps/search/TechDcoded" target="_blank" rel="noopener" aria-label="Google"><span class="t"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.47c-.29 1.48-1.14 2.73-2.4 3.58v3h3.86c2.26-2.09 3.56-5.17 3.56-8.82z"/><path fill="#34A853" d="M12 24c3.24 0 5.950-1.08 7.93-2.91l-3.86-3c-1.08.72-2.45 1.16-4.07 1.16-3.13 0-5.78-2.11-6.73-4.96H1.29v3.09C3.26 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.62H1.29C.47 8.24 0 10.06 0 12s.47 3.76 1.29 5.38l3.98-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.26 2.7 1.29 6.62l3.98 3.09c.95-2.850 3.6-4.96 6.73-4.96z"/></svg></span><span class="tx"><b>Google</b><small>Find us</small></span><span class="ar">↗</span></a>
+    </div>
+  </section>
+
+  <section class="feat" aria-label="Latest video and WhatsApp channel">
+    <a class="fc yt" id="yt" href="https://www.youtube.com/@techdcoded/videos" target="_blank" rel="noopener">
+      <span class="th"><img id="ytThumb" alt="" hidden><span class="pl"><span><svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M6 4l14 8-14 8z"/></svg></span></span></span>
+      <span class="fx"><span class="lb"><span class="dot"></span>Latest video</span><h3 id="ytTitle">Watch the newest TechDcoded episode on YouTube</h3><span class="mt" id="ytMeta">New explainers every week</span></span>
+      <span class="go">Watch now</span>
+    </a>
+    <a class="fc wa" href="https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a" target="_blank" rel="noopener">
+      <span class="wai"><svg viewBox="0 0 24 24" fill="#fff"><path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.07-.3-.15-1.26-.46-2.39-1.47-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.07 2.88 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.63.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.27-.2-.57-.35zm-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88zm8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.89a11.82 11.82 0 0 0-3.48-8.41z"/></svg></span>
+      <span class="fx"><span class="lb">WhatsApp channel</span><h3>Daily tech bites, straight to your phone</h3><span class="mt">Free · No spam · Leave anytime</span></span>
+      <span class="go">Join</span>
+    </a>
+  </section>
+
+  <section class="biz" aria-label="Business enquiries">
+    <div class="biz-in">
+      <span class="biz-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m11 17 2 2a1 1 0 1 0 3-3"/><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4"/><path d="m21 3 1 11h-2"/><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3"/><path d="M3 4h8"/></svg></span>
+      <div class="biz-tx"><small>Partner with us</small><p>For business collaboration inquiries, contact:</p></div>
+      <div class="biz-act">
+        <a class="biz-mail" href="mailto:business@techdcoded.com?subject=Business%20collaboration%20with%20TechDcoded"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>business@techdcoded.com</a>
+        <button class="biz-copy" id="copy" type="button" aria-label="Copy email address"><span class="tip">Copied!</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <footer>© TechDcoded™ · All rights reserved</footer>
+</main>
+<div class="vm" id="vm" role="dialog" aria-modal="true" aria-label="Video player"><button class="x" id="vmx" aria-label="Close">✕</button><div class="fr" id="vmf"></div></div>
+
+<script>
+
+// Latest YouTube video (via /api/latest-video Cloudflare Pages Function)
+(async()=>{
+  const yt=document.getElementById('yt');
+  try{
+    const r=await fetch('/api/latest-video');if(!r.ok)throw 0;const v=await r.json();if(!v.videoId)throw 0;
+    const im=document.getElementById('ytThumb');im.src=v.thumb;im.alt=v.title;im.hidden=false;im.parentElement.style.animation='none';
+    document.getElementById('ytTitle').textContent=v.title;
+    if(v.published){const d=Math.max(0,Math.round((Date.now()-new Date(v.published))/864e5));document.getElementById('ytMeta').textContent=d===0?'Published today':d===1?'Published yesterday':'Published '+d+' days ago';}
+    yt.href='https://www.youtube.com/watch?v='+v.videoId;
+    yt.onclick=e=>{if(e.metaKey||e.ctrlKey)return;e.preventDefault();
+      document.getElementById('vmf').innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+v.videoId+'?autoplay=1&rel=0" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="'+v.title.replace(/"/g,'&quot;')+'"></iframe>';
+      document.getElementById('vm').classList.add('on');};
+  }catch(e){yt.querySelector('.th').style.animation='none';yt.querySelector('.th').style.background='linear-gradient(135deg,#2a0a0a,#5a0f0f)';}
+})();
+const vm=document.getElementById('vm'),closeV=()=>{vm.classList.remove('on');document.getElementById('vmf').innerHTML=''};
+document.getElementById('vmx').onclick=closeV;vm.onclick=e=>{if(e.target===vm)closeV()};addEventListener('keydown',e=>{if(e.key==='Escape')closeV()});
+const cp=document.getElementById('copy');cp.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText('business@techdcoded.com').then(()=>{cp.classList.add('ok');setTimeout(()=>cp.classList.remove('ok'),1500)}).catch(()=>{})};
+(()=>{
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const c=document.getElementById('net'),x=c.getContext('2d'),r=devicePixelRatio||1;let W,H,P=[];
+  const size=()=>{W=c.width=innerWidth*r;H=c.height=innerHeight*r;c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';
+    const n=Math.min(90,Math.floor(innerWidth*innerHeight/16000));P=Array.from({length:n},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3*r,vy:(Math.random()-.5)*.3*r}))};
+  size();addEventListener('resize',size);const D=120*r;
+  (function f(){x.clearRect(0,0,W,H);
+    for(const p of P){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;x.fillStyle='rgba(63,208,255,.7)';x.beginPath();x.arc(p.x,p.y,1.5*r,0,7);x.fill()}
+    for(let i=0;i<P.length;i++)for(let j=i+1;j<P.length;j++){const a=P[i],b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);
+      if(d<D){x.strokeStyle=`rgba(30,144,255,${(1-d/D)*.3})`;x.lineWidth=.8*r;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}
+    requestAnimationFrame(f)})();
+})();
+</script>
 </body>
 </html>
