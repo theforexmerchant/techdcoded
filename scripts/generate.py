@@ -41,18 +41,29 @@ def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=4)
     elif json_mode:
         body["generationConfig"]["responseMimeType"] = "application/json"
     url = f"{API}/{MODEL}:generateContent"
+    last = ""
     for i in range(retries):
-        r = requests.post(url, json=body, headers={"x-goog-api-key": KEY}, timeout=240)
+        try:
+            r = requests.post(url, json=body, headers={"x-goog-api-key": KEY}, timeout=180)
+        except requests.RequestException as ex:
+            last = f"network error {ex}"; time.sleep(10 * (i + 1)); continue
         if r.status_code in (429, 500, 502, 503, 504):
-            time.sleep(20 * (i + 1)); continue
+            last = f"{r.status_code}: {r.text[:250]}"
+            print(f"  Gemini busy/limited ({'search' if search else 'text'}) try {i + 1}: {last}")
+            # a used-up quota won't recover in minutes — stop waiting
+            if r.status_code == 429 and ("quota" in r.text.lower() or "exhausted" in r.text.lower()) and i >= 1:
+                break
+            time.sleep(10 * (i + 1)); continue
         if r.status_code >= 400:
             raise RuntimeError(f"Gemini {r.status_code}: {r.text[:300]}")
-        cand = r.json()["candidates"][0]
-        text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []))
+        j = r.json()
+        cand = (j.get("candidates") or [{}])[0]
+        text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []) if not p.get("thought"))
         if not text.strip():
-            time.sleep(5); continue
+            last = f"empty reply (finishReason={cand.get('finishReason')}, feedback={j.get('promptFeedback')})"
+            print("  Gemini", last); time.sleep(5); continue
         return text, cand.get("groundingMetadata", {})
-    raise RuntimeError("Gemini request failed after retries")
+    raise RuntimeError(f"Gemini request failed after retries — last error: {last}")
 
 
 def resolve_model():
@@ -313,7 +324,18 @@ def research(topic):
 Produce detailed factual research notes for a writer: definitions, how it works step by step, key numbers with
 dates and who reported them, recent developments (last 12-18 months), Indian context if relevant, common myths,
 and questions people ask. Bullet points. Be precise; mark anything uncertain as uncertain."""
-    text, meta = gemini(prompt, search=True, temperature=0.3)
+    try:
+        text, meta = gemini(prompt, search=True, temperature=0.3)
+    except RuntimeError as ex:
+        # Live Google Search grounding unavailable (e.g. free-tier search quota used up).
+        # Fall back to the model's own knowledge, restricted to well-established facts.
+        print("Search grounding unavailable, using knowledge-only research:", ex)
+        text, meta = gemini(f"""Write detailed factual research notes for a writer on: "{topic['title']}" ({topic['angle']}).
+Cover definitions, how it works step by step, history, real-world and Indian examples, common myths and questions people ask.
+Use ONLY well-established facts you are highly confident about. Do NOT include recent statistics, prices, dates of the
+last 2 years, or specific figures unless they are long-standing and widely known. Mark anything uncertain as uncertain.
+Bullet points.""", temperature=0.2)
+        meta = {"_ungrounded": True}
     sources, seen = [], set()
     for ch in meta.get("groundingChunks", []):
         w = ch.get("web", {})
@@ -325,7 +347,7 @@ and questions people ask. Bullet points. Be precise; mark anything uncertain as 
             except requests.RequestException:
                 pass
             sources.append({"title": title, "url": uri})
-    return text, sources[:8]
+    return text, sources[:8], not meta.get("_ungrounded")
 
 
 WRITE_SPEC = """Return JSON with exactly these keys:
@@ -465,7 +487,13 @@ def main():
 
     topic = pick_topic(articles, emb)
     print("Topic:", topic["title"], "|", topic["category"])
-    notes, sources = research(topic)
+    notes, sources, grounded = research(topic)
+    if not grounded and topic.get("source") == "trending":
+        # news-driven topics need live facts; switch to an evergreen idea instead
+        print("Trending topic needs live search; switching to an evergreen idea today.")
+        topic = pick_from_bank(load_articles(), emb) or topic
+        print("Topic:", topic["title"], "|", topic["category"])
+        notes, sources, grounded = research(topic)
 
     art = write(topic, notes)
     for attempt in range(2):
