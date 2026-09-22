@@ -9,6 +9,7 @@ Env: GEMINI_API_KEY (required), GEMINI_MODEL (optional; auto-picks newest flash 
 """
 import json, os, random, re, sys, time
 import xml.etree.ElementTree as ET
+sys.stdout.reconfigure(line_buffering=True)
 import requests
 import media
 from common import (CONTENT, DATA, load_topics, load_articles, load_embeddings, save_embeddings,
@@ -18,6 +19,7 @@ API = "https://generativelanguage.googleapis.com/v1beta/models"
 KEY = os.environ.get("GEMINI_API_KEY", "")
 MODEL = os.environ.get("GEMINI_MODEL", "") or "auto"
 FALLBACKS = []   # other usable models, tried when the main one is overloaded
+SEARCH_OK = True # turned off for the rest of the run once search quota is exhausted
 EMBED_MODEL = os.environ.get("GEMINI_EMBED_MODEL", "gemini-embedding-001")
 SIM_LIMIT = 0.86      # embedding cosine above this = too similar to an existing article
 JAC_LIMIT = 0.55      # title word-overlap above this = too similar
@@ -36,7 +38,9 @@ Never mention that you are an AI. No clickbait that the article doesn't deliver 
 # ---------------- Gemini helpers ----------------
 def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=3):
     """Call Gemini. If the model stays overloaded (503/429), move on to the next available model."""
-    global MODEL
+    global MODEL, SEARCH_OK
+    if search and not SEARCH_OK:
+        raise RuntimeError("search disabled for this run (quota exhausted earlier)")
     body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
             "generationConfig": {"temperature": temperature}}
     if search:
@@ -56,6 +60,9 @@ def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=3)
                 last = f"{MODEL} {r.status_code}: {r.text[:200]}"
                 print(f"  Gemini busy/limited ({'search' if search else 'text'}) try {i + 1}: {last}")
                 quota = r.status_code == 429 and ("quota" in r.text.lower() or "exhausted" in r.text.lower())
+                if quota and search:
+                    SEARCH_OK = False
+                    raise RuntimeError(f"search quota exhausted: {last}")
                 if quota and i >= 1:
                     break
                 time.sleep(15 * (i + 1)); continue
@@ -456,20 +463,37 @@ Research notes (your ONLY source of facts):
 
 
 def mechanical_issues(a):
-    issues = []
+    """Returns (hard, soft, word_count). Hard problems block publishing; soft ones are requested in the
+    rewrite but tolerated (and auto-fixed where possible) if the editor scores the article well."""
+    hard, soft = [], []
     body = a.get("body_md", "")
     wc = len(re.findall(r"\w+", body))
-    if wc < MIN_WORDS: issues.append(f"Body is only {wc} words; must be at least {MIN_WORDS + 200}.")
-    if len(re.findall(r"^## ", body, re.M)) < 5: issues.append("Needs at least 6 '## ' sections.")
-    if len(a.get("faq", [])) < 4: issues.append("Needs 5 FAQ items.")
-    if not (30 <= len(a.get("title", "")) <= 70): issues.append("Title must be 40-65 characters.")
-    if not (110 <= len(a.get("meta_description", "")) <= 170): issues.append("Meta description must be 140-160 characters.")
-    if re.search(r"as an ai|language model|i cannot|\[insert|lorem ipsum", body, re.I): issues.append("Contains AI boilerplate/placeholder text.")
-    if re.search(r"^# ", body, re.M): issues.append("Remove the H1 from body_md.")
+    if wc < 900: hard.append(f"Body is only {wc} words; must be at least {MIN_WORDS + 200}.")
+    elif wc < MIN_WORDS: soft.append(f"Body is {wc} words; aim for {MIN_WORDS + 200}+.")
+    if re.search(r"as an ai (language )?model|\[insert|lorem ipsum|\bTODO\b", body, re.I):
+        hard.append("Contains AI boilerplate/placeholder text.")
+    if len(re.findall(r"^## ", body, re.M)) < 5: soft.append("Use at least 6 '## ' sections.")
+    if len(a.get("faq", [])) < 4: soft.append("Include 5 FAQ items.")
+    if not (30 <= len(a.get("title", "")) <= 70): soft.append("Title should be 40-65 characters.")
+    if not (110 <= len(a.get("meta_description", "")) <= 170): soft.append("Meta description should be 140-160 characters.")
     nblocks = len(re.findall(r"^:::[ \t]*[a-zA-Z]+", body, re.M))
-    if nblocks < 4: issues.append(f"Only {nblocks} visual blocks; include 5-8 (::: blocks), including at least one :::steps diagram.")
-    if not re.search(r"^:::[ \t]*steps", body, re.M): issues.append("Add at least one :::steps process diagram.")
-    return issues, wc
+    if nblocks < 4: soft.append(f"Only {nblocks} visual blocks; include 5-8 (::: blocks).")
+    if not re.search(r"^:::[ \t]*steps", body, re.M): soft.append("Add at least one :::steps process diagram.")
+    return hard, soft, wc
+
+
+def autofix(a):
+    """Small, safe fixes so a good article is never rejected over formatting."""
+    a["body_md"] = re.sub(r"^# .*\n?", "", a.get("body_md", ""), flags=re.M).strip()
+    md = re.sub(r"\s+", " ", a.get("meta_description", "")).strip()
+    if len(md) > 160:
+        md = md[:157].rsplit(" ", 1)[0].rstrip(",;:-") + "…"
+    if len(md) < 110 and a.get("tldr"):
+        md = re.sub(r"\s+", " ", a["tldr"]).strip()
+        md = md if len(md) <= 160 else md[:157].rsplit(" ", 1)[0] + "…"
+    a["meta_description"] = md
+    a["title"] = re.sub(r"\s+", " ", a.get("title", "")).strip().strip('"')
+    return a
 
 
 def review(article, notes):
@@ -520,14 +544,17 @@ def main():
 
     art = write(topic, notes)
     for attempt in range(2):
-        issues, wc = mechanical_issues(art)
+        art = autofix(art)
+        hard, soft, wc = mechanical_issues(art)
         rev = review(art, notes)
         print(f"Review attempt {attempt + 1}:", {k: v for k, v in rev.items() if k != 'problems'}, "words:", wc)
-        if not issues and passes(rev):
+        if hard or soft:
+            print("  Format notes:", hard + soft)
+        if not hard and passes(rev) and (not soft or attempt == 1):
             break
         if attempt == 1:
-            sys.exit("Quality gate failed twice — skipping today. Problems: " + json.dumps(issues + rev.get("problems", []))[:1500])
-        art = write(topic, notes, feedback=issues + rev.get("problems", []), previous=art)
+            sys.exit("Quality gate failed twice — skipping today. Problems: " + json.dumps(hard + rev.get("problems", []))[:1500])
+        art = write(topic, notes, feedback=hard + soft + rev.get("problems", []), previous=art)
 
     slug = slugify(art["title"])
     existing_slugs = {a["slug"] for a in articles}
