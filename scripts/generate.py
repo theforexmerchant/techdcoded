@@ -59,6 +59,14 @@ def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=3)
                 if quota and i >= 1:
                     break
                 time.sleep(15 * (i + 1)); continue
+            if r.status_code in (403, 404):
+                # model retired / not offered to this account: drop it, jump to Google's suggestion if given
+                last = f"{MODEL} {r.status_code}: {r.text[:200]}"
+                print(f"  Model not usable: {last}")
+                hint = re.search(r"use models/([\w.\-]+)", r.text)
+                if hint and hint.group(1) != MODEL:
+                    FALLBACKS.insert(0, hint.group(1))
+                break
             if r.status_code >= 400:
                 raise RuntimeError(f"Gemini {r.status_code}: {r.text[:300]}")
             j = r.json()
@@ -68,7 +76,9 @@ def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=3)
                 last = f"empty reply (finishReason={cand.get('finishReason')}, feedback={j.get('promptFeedback')})"
                 print("  Gemini", last); time.sleep(5); continue
             return text, cand.get("groundingMetadata", {})
-        if FALLBACKS and switches < 3:
+        while FALLBACKS and FALLBACKS[0] == MODEL:
+            FALLBACKS.pop(0)
+        if FALLBACKS and switches < 6:
             MODEL = FALLBACKS.pop(0); switches += 1
             print(f"  Switching to backup model: {MODEL}")
             continue
@@ -106,6 +116,8 @@ def resolve_model():
     if not cands:
         sys.exit("No usable Gemini text model found for this API key.")
     ordered = [m["name"].split("/")[-1] for m in sorted(cands, key=score, reverse=True)]
+    best_major = score(max(cands, key=score))[1] // 1
+    ordered = [n for n in ordered if (score({"name": n})[1] // 1) >= best_major - 0] or ordered  # same generation only
     FALLBACKS[:] = [m for m in ordered if m != MODEL] if MODEL != "auto" else ordered[1:]
     MODEL = ordered[0] if MODEL == "auto" or MODEL not in ordered else MODEL
     print("Using model:", MODEL, "| backups:", FALLBACKS[:4])
