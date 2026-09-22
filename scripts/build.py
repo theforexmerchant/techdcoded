@@ -264,7 +264,7 @@ def list_page(arts):
 <section class="list-hero"><h1>Tech, decoded daily</h1><p>{desc}</p></section>
 <div class="tools"><input class="search" id="q" type="search" placeholder="Search articles…" aria-label="Search articles"><div class="chips" id="chips">{chips}</div></div>
 <div class="cards" id="cards">{cards}</div>
-<p class="empty" id="empty">No articles match that search yet.</p>
+<p class="empty" id="empty"{' style="display:block"' if not arts else ''}>{'New articles are coming soon — check back tomorrow!' if not arts else 'No articles match that search yet.'}</p>
 </main>
 <script>
 const q=document.getElementById('q'),cs=[...document.querySelectorAll('#cards .card')];let cat='';
@@ -327,7 +327,28 @@ def main():
         (d / "index.html").write_text(article_page(a, arts, emb), encoding="utf-8")
     (OUT / "index.html").write_text(list_page(arts), encoding="utf-8")
     sitemap(arts); feed(arts); home_latest(arts)
+    cleanup(arts, emb)
     print(f"Built {len(arts)} articles")
+
+
+def cleanup(arts, emb):
+    """Delete pages, pictures and memory of articles whose file was removed from content/articles/."""
+    import shutil
+    from common import save_embeddings
+    slugs = {a["slug"] for a in arts}
+    for d in OUT.iterdir():
+        if d.is_dir() and d.name not in slugs:
+            shutil.rmtree(d); print("removed page:", d.name)
+    if IMG.exists():
+        for f in IMG.iterdir():
+            base = re.sub(r"-\d+$", "", f.stem)  # photos are saved as <slug>-1, <slug>-2 ...
+            if f.stem not in slugs and base not in slugs:
+                f.unlink(); print("removed image:", f.name)
+    stale = [k for k in emb if k not in slugs]
+    if stale:
+        for k in stale:
+            emb.pop(k)
+        save_embeddings(emb)
 
 
 if __name__ == "__main__":
