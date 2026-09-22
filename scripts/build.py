@@ -123,9 +123,9 @@ def head(title, desc, url, image, extra=""):
 <link rel="canonical" href="{url}">
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="alternate" type="application/rss+xml" title="TechDcoded" href="/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="TechDCoded" href="/feed.xml">
 <meta name="theme-color" content="#050a1e">
-<meta property="og:site_name" content="TechDcoded">
+<meta property="og:site_name" content="TechDCoded">
 <meta property="og:locale" content="en_IN">
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
@@ -144,7 +144,7 @@ def head(title, desc, url, image, extra=""):
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="/" aria-label="TechDcoded home"><picture><source srcset="/assets/logo.webp" type="image/webp"><img src="/assets/logo.png" alt="TechDcoded" width="620" height="143"></picture></a>
+  <a class="brand" href="/" aria-label="TechDCoded home"><picture><source srcset="/assets/logo.webp" type="image/webp"><img src="/assets/logo.png" alt="TechDCoded" width="620" height="143"></picture></a>
   <nav><a class="hide-m" href="/">Home</a><a href="/articles/">Articles</a><a class="hide-m" href="https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a" target="_blank" rel="noopener">WhatsApp</a>
   <a class="btn-yt" href="https://www.youtube.com/@techdcoded?sub_confirmation=1" target="_blank" rel="noopener">▶ Subscribe</a></nav>
 </div></header>
@@ -155,17 +155,38 @@ def foot():
     links = "".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in SOCIAL)
     return f"""<footer class="foot"><div class="wrap">
 <nav><a href="/">Home</a><a href="/articles/">All articles</a>{links}</nav>
-<p>© TechDcoded™ · You use the technology. We decode it. · <a href="mailto:business@techdcoded.com">business@techdcoded.com</a></p>
+<p>© TechDCoded™ · You use the technology. We decode it. · <a href="mailto:business@techdcoded.com">business@techdcoded.com</a></p>
 </div></footer>
 </body>
 </html>"""
 
 
-def card(a, lazy=True):
+def mins(a):
+    return read_time(a.get("word_count") or len(re.findall(r"\w+", a.get("body_md", ""))))
+
+
+def pic(a, lazy, style):
     img = f"/assets/articles/{a['slug']}"
-    return f"""<a class="card" href="/articles/{a['slug']}/" data-cat="{e(a['category'])}" data-q="{e((a['title'] + ' ' + a['meta_description'] + ' ' + a['category']).lower())}">
-<picture style="display:block;width:100%"><source srcset="{img}.webp" type="image/webp"><img src="{img}.jpg" alt="{e(a.get('image_alt', a['title']))}" width="1200" height="630" style="display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover"{' loading="lazy"' if lazy else ''}></picture>
-<div class="cb"><span class="cat">{e(a['category'])}</span><h3>{e(a['title'])}</h3><p>{e(a['meta_description'])}</p><time datetime="{a['date']}">{fmt_date(a['date'])}</time></div></a>"""
+    alt = e(a.get("image_alt", a["title"]))
+    load = ' loading="lazy"' if lazy else ' fetchpriority="high"'
+    return (f'<picture style="display:block;width:100%;height:100%"><source srcset="{img}.webp" type="image/webp">'
+            f'<img src="{img}.jpg" alt="{alt}" width="1200" height="630" style="{style}"{load}></picture>')
+
+
+def card(a, lazy=True, extra=""):
+    return f"""<a class="card{extra}" href="/articles/{a['slug']}/" data-cat="{e(a['category'])}" data-q="{e((a['title'] + ' ' + a['meta_description'] + ' ' + a['category']).lower())}">
+<div class="cimg">{pic(a, lazy, "display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover")}</div>
+<div class="cb"><span class="cat">{e(a['category'])}</span><h3>{e(a['title'])}</h3><p>{e(a['meta_description'])}</p>
+<div class="cm"><time datetime="{a['date']}">{fmt_date(a['date'])}</time><span>{mins(a)} min read</span></div></div></a>"""
+
+
+def featured(a):
+    return f"""<a class="feature" href="/articles/{a['slug']}/">
+<div class="fimg">{pic(a, False, "display:block;width:100%;height:100%;object-fit:cover")}</div>
+<div class="fb"><div class="ftag"><span class="new">Latest</span><span class="cat">{e(a['category'])}</span></div>
+<h2>{e(a['title'])}</h2><p>{e(a['meta_description'])}</p>
+<div class="cm"><time datetime="{a['date']}">{fmt_date(a['date'])}</time><span>{mins(a)} min read</span></div>
+<span class="read">Read article <b>→</b></span></div></a>"""
 
 
 # ---------------- article page ----------------
@@ -199,8 +220,8 @@ def article_page(a, arts, emb):
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "BlogPosting", "headline": a["title"], "description": a["meta_description"], "image": [image],
          "datePublished": f"{a['date']}T{a.get('time', '07:00')}:00+05:30", "dateModified": f"{a.get('updated', a['date'])}T{a.get('time', '07:00')}:00+05:30",
-         "author": {"@type": "Organization", "name": "TechDcoded", "url": SITE},
-         "publisher": {"@type": "Organization", "name": "TechDcoded", "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/logo-mark.png"}},
+         "author": {"@type": "Organization", "name": "TechDCoded", "url": SITE},
+         "publisher": {"@type": "Organization", "name": "TechDCoded", "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/logo-mark.png"}},
          "mainEntityOfPage": url, "articleSection": a["category"], "keywords": ", ".join([a.get("primary_keyword", "")] + a.get("secondary_keywords", [])),
          "wordCount": wc, "inLanguage": "en-IN"},
         {"@type": "BreadcrumbList", "itemListElement": [
@@ -219,14 +240,14 @@ def article_page(a, arts, emb):
     rel = "".join(card(r) for r in related(a, arts, emb))
     share_txt = e(f"{a['title']} {url}")
     img = f"/assets/articles/{a['slug']}"
-    return head(f"{a['title']} | TechDcoded", a["meta_description"], url, image, extra) + f"""
+    return head(f"{a['title']} | TechDCoded", a["meta_description"], url, image, extra) + f"""
 <div class="progress" id="prog"></div>
 <main class="narrow">
 <nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/articles/">Articles</a><span>›</span>{e(a['category'])}</nav>
 <article>
 <span class="pill">{e(a['category'])}</span>
 <h1 class="title">{e(a['title'])}</h1>
-<div class="meta"><span>{e(a.get('author', 'TechDcoded Team'))}</span><span>·</span><time datetime="{a['date']}">{fmt_date(a['date'])}</time><span>·</span><span>{read_time(wc)} min read</span></div>
+<div class="meta"><span>{e(a.get('author', 'TechDCoded Team'))}</span><span>·</span><time datetime="{a['date']}">{fmt_date(a['date'])}</time><span>·</span><span>{read_time(wc)} min read</span></div>
 <div class="hero-img"><picture><source srcset="{img}.webp" type="image/webp"><img src="{img}.jpg" alt="{e(a.get('image_alt', a['title']))}" width="1200" height="630" fetchpriority="high"></picture></div>
 <div class="answer"><b>Quick answer</b><p>{e(a['tldr'])}</p></div>
 {f'<div class="takeaways"><h2>Key takeaways</h2><ul>{takeaways}</ul></div>' if takeaways else ''}
@@ -257,23 +278,37 @@ document.querySelectorAll('.prose .vb').forEach(el=>io.observe(el));
 # ---------------- list page ----------------
 def list_page(arts):
     cats = sorted({a["category"] for a in arts})
-    chips = '<button class="chip on" data-c="">All</button>' + "".join(f'<button class="chip" data-c="{e(c)}">{e(c)}</button>' for c in cats)
-    cards = "".join(card(a, lazy=i > 5) for i, a in enumerate(arts))
-    ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "TechDcoded Articles", "url": f"{SITE}/articles/",
+    chips = '<button class="chip on" data-c="">All topics</button>' + "".join(f'<button class="chip" data-c="{e(c)}">{e(c)}</button>' for c in cats)
+    cards = "".join(card(a, lazy=i > 5, extra=" first" if i == 0 else "") for i, a in enumerate(arts))
+    ld = {"@context": "https://schema.org", "@type": "CollectionPage", "name": "TechDCoded Articles", "url": f"{SITE}/articles/",
           "hasPart": [{"@type": "BlogPosting", "headline": a["title"], "url": f"{SITE}/articles/{a['slug']}/"} for a in arts[:30]]}
-    desc = "Simple, jargon-free explainers on AI, gadgets, fintech, space, how things work and the future of technology — a new article every day."
-    return head("Tech Explained Simply — Articles | TechDcoded", desc, f"{SITE}/articles/", f"{SITE}/assets/og.jpg",
+    desc = "In-depth, easy-to-follow explainers on AI, gadgets, fintech, space and the technology shaping everyday life."
+    feat = featured(arts[0]) if arts else ""
+    rest = len(arts) > 1
+    return head("Articles — Technology Explained Clearly | TechDCoded", desc, f"{SITE}/articles/", f"{SITE}/assets/og.jpg",
                 f'<meta property="og:type" content="website"><script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>') + f"""
 <main class="wrap">
-<section class="list-hero"><h1>Tech, decoded daily</h1><p>{desc}</p></section>
-<div class="tools"><input class="search" id="q" type="search" placeholder="Search articles…" aria-label="Search articles"><div class="chips" id="chips">{chips}</div></div>
+<section class="lx-hero">
+<span class="eyebrow">Articles &amp; Explainers</span>
+<h1>TechDCoded <span class="grad">Articles</span></h1>
+<p>{desc}</p>
+<ul class="trust"><li>Researched &amp; fact-checked</li><li>Plain-English explanations</li><li>Visual, easy to follow</li></ul>
+</section>
+{f'<section id="featured">{feat}</section>' if arts else ''}
+<section class="browse"{'' if arts else ' style="display:none"'}>
+<div class="bh"><h2>{'All articles' if rest else 'Browse'}</h2><input class="search" id="q" type="search" placeholder="Search articles" aria-label="Search articles"></div>
+<div class="chips" id="chips">{chips}</div>
 <div class="cards" id="cards">{cards}</div>
-<p class="empty" id="empty"{' style="display:block"' if not arts else ''}>{'New articles are coming soon — check back tomorrow!' if not arts else 'No articles match that search yet.'}</p>
+<p class="empty" id="empty">No articles match your search.</p>
+<p class="soon" id="soon"{'' if not rest else ' style="display:none"'}>More explainers are on the way.</p>
+</section>
+{'' if arts else '<p class="empty" style="display:block">New articles are coming soon.</p>'}
 </main>
 <script>
-const q=document.getElementById('q'),cs=[...document.querySelectorAll('#cards .card')];let cat='';
-function f(){{const s=q.value.trim().toLowerCase();let n=0;cs.forEach(c=>{{const ok=(!cat||c.dataset.cat===cat)&&(!s||c.dataset.q.includes(s));c.style.display=ok?'':'none';n+=ok}});document.getElementById('empty').style.display=n?'none':'block'}}
-q.oninput=f;document.getElementById('chips').onclick=ev=>{{const b=ev.target.closest('.chip');if(!b)return;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;f()}};
+const q=document.getElementById('q'),cs=[...document.querySelectorAll('#cards .card')],fe=document.getElementById('featured'),em=document.getElementById('empty'),so=document.getElementById('soon');let cat='';
+function f(){{const s=q.value.trim().toLowerCase(),on=!!(s||cat);let n=0;cs.forEach(c=>{{const ok=(!cat||c.dataset.cat===cat)&&(!s||c.dataset.q.includes(s))&&(on||!c.classList.contains('first'));c.style.display=ok?'':'none';n+=ok}});
+if(fe)fe.style.display=on?'none':'';em.style.display=(on&&!n)?'block':'none';so.style.display=(!on&&!n)?'block':'none'}}
+q.oninput=f;document.getElementById('chips').onclick=ev=>{{const b=ev.target.closest('.chip');if(!b)return;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c;f()}};f();
 </script>
 """ + foot()
 
@@ -294,7 +329,7 @@ def feed(arts):
         dt = datetime.strptime(f"{a['date']} {a.get('time', '07:00')}", "%Y-%m-%d %H:%M").strftime("%a, %d %b %Y %H:%M:00 +0530")
         u = f"{SITE}/articles/{a['slug']}/"
         items += f"<item><title>{xesc(a['title'])}</title><link>{u}</link><guid>{u}</guid><pubDate>{dt}</pubDate><category>{xesc(a['category'])}</category><description>{xesc(a['meta_description'])}</description><enclosure url=\"{SITE}/assets/articles/{a['slug']}.jpg\" type=\"image/jpeg\" length=\"0\"/></item>"
-    (ROOT / "feed.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>TechDcoded</title><link>{SITE}/</link><description>Technology explained simply — a new article every day.</description><language>en-in</language>{items}</channel></rss>\n')
+    (ROOT / "feed.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<rss version="2.0"><channel><title>TechDCoded</title><link>{SITE}/</link><description>Technology, explained clearly.</description><language>en-in</language>{items}</channel></rss>\n')
 
 
 def home_latest(arts):
@@ -302,6 +337,7 @@ def home_latest(arts):
     s = p.read_text(encoding="utf-8")
     if "<!--LATEST:START-->" not in s:
         return
+    s = s.replace("TechDcoded", "TechDCoded")
     style = ("<style>.latest .la{display:grid;grid-template-columns:128px 1fr;gap:12px;align-items:center;padding:10px}"
              ".latest .la .th{position:relative;display:block;width:128px;aspect-ratio:1200/630;border-radius:9px;overflow:hidden;"
              "border:1px solid rgba(120,170,255,.25);box-shadow:0 6px 16px -6px rgba(0,0,0,.6)}"
@@ -324,6 +360,10 @@ def home_latest(arts):
 
 def main():
     arts, emb = load_articles(), load_embeddings()
+    for a in arts:   # consistent brand spelling in text written by the AI
+        for k in ("title", "meta_description", "body_md", "author", "image_alt"):
+            if isinstance(a.get(k), str):
+                a[k] = a[k].replace("TechDcoded", "TechDCoded")
     OUT.mkdir(exist_ok=True)
     for a in arts:
         make_image(a)
