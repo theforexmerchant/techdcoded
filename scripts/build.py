@@ -1,6 +1,6 @@
 """Builds all article pages, the /articles/ index, featured images, sitemap.xml, feed.xml,
 and the 'Latest articles' block on the home page from content/articles/*.json."""
-import html, json, re, textwrap
+import hashlib, html, json, re, textwrap
 from datetime import datetime
 from pathlib import Path
 from xml.sax.saxutils import escape as xesc
@@ -8,6 +8,9 @@ import markdown
 from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageFilter
 import blocks
 from common import ROOT, SITE, SOCIAL, load_articles, load_embeddings, cosine, now_ist
+
+# version tag so browsers always fetch the newest stylesheet after a change
+CSS_V = hashlib.md5((ROOT / "assets" / "site.css").read_bytes()).hexdigest()[:8]
 
 OUT = ROOT / "articles"
 IMG = ROOT / "assets" / "articles"
@@ -135,7 +138,7 @@ def head(title, desc, url, image, extra=""):
 <meta name="twitter:image" content="{image}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/assets/site.css">
+<link rel="stylesheet" href="/assets/site.css?v={CSS_V}">
 {extra}
 {METRICOOL}
 </head>
@@ -161,7 +164,7 @@ def foot():
 def card(a, lazy=True):
     img = f"/assets/articles/{a['slug']}"
     return f"""<a class="card" href="/articles/{a['slug']}/" data-cat="{e(a['category'])}" data-q="{e((a['title'] + ' ' + a['meta_description'] + ' ' + a['category']).lower())}">
-<picture><source srcset="{img}.webp" type="image/webp"><img src="{img}.jpg" alt="{e(a.get('image_alt', a['title']))}" width="1200" height="630"{' loading="lazy"' if lazy else ''}></picture>
+<picture style="display:block;width:100%"><source srcset="{img}.webp" type="image/webp"><img src="{img}.jpg" alt="{e(a.get('image_alt', a['title']))}" width="1200" height="630" style="display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover"{' loading="lazy"' if lazy else ''}></picture>
 <div class="cb"><span class="cat">{e(a['category'])}</span><h3>{e(a['title'])}</h3><p>{e(a['meta_description'])}</p><time datetime="{a['date']}">{fmt_date(a['date'])}</time></div></a>"""
 
 
