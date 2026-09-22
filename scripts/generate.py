@@ -4,7 +4,7 @@ Picks a fresh topic from data/topics.txt, blocks near-duplicates, researches it 
 Gemini + Google Search grounding, writes an SEO article, runs a quality gate, and saves
 content/articles/<date>-<slug>.json. Exits non-zero (so GitHub emails you) if quality fails.
 
-Env: GEMINI_API_KEY (required), GEMINI_MODEL (default gemini-2.5-flash),
+Env: GEMINI_API_KEY (required), GEMINI_MODEL (optional; auto-picks newest flash model),
      GEMINI_EMBED_MODEL (default gemini-embedding-001)
 """
 import json, os, random, re, sys, time
@@ -16,7 +16,7 @@ from common import (CONTENT, DATA, load_topics, load_articles, load_embeddings, 
 
 API = "https://generativelanguage.googleapis.com/v1beta/models"
 KEY = os.environ.get("GEMINI_API_KEY", "")
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+MODEL = os.environ.get("GEMINI_MODEL", "") or "auto"
 EMBED_MODEL = os.environ.get("GEMINI_EMBED_MODEL", "gemini-embedding-001")
 SIM_LIMIT = 0.86      # embedding cosine above this = too similar to an existing article
 JAC_LIMIT = 0.55      # title word-overlap above this = too similar
@@ -45,13 +45,48 @@ def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=4)
         r = requests.post(url, json=body, headers={"x-goog-api-key": KEY}, timeout=240)
         if r.status_code in (429, 500, 502, 503, 504):
             time.sleep(20 * (i + 1)); continue
-        r.raise_for_status()
+        if r.status_code >= 400:
+            raise RuntimeError(f"Gemini {r.status_code}: {r.text[:300]}")
         cand = r.json()["candidates"][0]
         text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []))
         if not text.strip():
             time.sleep(5); continue
         return text, cand.get("groundingMetadata", {})
     raise RuntimeError("Gemini request failed after retries")
+
+
+def resolve_model():
+    """Use GEMINI_MODEL if it exists; otherwise pick the newest stable 'flash' text model available to this key.
+    Google retires model names over time, so this keeps the pipeline working without edits."""
+    global MODEL
+    if MODEL != "auto":
+        r = requests.get(f"{API}/{MODEL}", headers={"x-goog-api-key": KEY}, timeout=30)
+        if r.ok:
+            print("Using model:", MODEL); return
+        print(f"Model {MODEL} unavailable ({r.status_code}); auto-selecting a current one.")
+    models, token = [], None
+    while True:
+        r = requests.get(API, headers={"x-goog-api-key": KEY}, params={"pageSize": 200, **({"pageToken": token} if token else {})}, timeout=30)
+        if r.status_code in (400, 401, 403):
+            sys.exit(f"GEMINI_API_KEY was rejected ({r.status_code}): {r.text[:300]}")
+        r.raise_for_status()
+        j = r.json(); models += j.get("models", []); token = j.get("nextPageToken")
+        if not token:
+            break
+    bad = ("image", "tts", "audio", "live", "embedding", "vision", "thinking-exp", "learnlm", "gemma", "robotics", "computer")
+    def score(m):
+        n = m["name"].split("/")[-1]
+        ver = [float(x) for x in re.findall(r"(\d+(?:\.\d+)?)", n)[:1]] or [0]
+        return (("preview" not in n and "exp" not in n), ver[0], "lite" not in n, "latest" in n)
+    cands = [m for m in models if "generateContent" in m.get("supportedGenerationMethods", [])
+             and "flash" in m["name"] and not any(b in m["name"] for b in bad)]
+    if not cands:
+        cands = [m for m in models if "generateContent" in m.get("supportedGenerationMethods", []) and "gemini" in m["name"]
+                 and not any(b in m["name"] for b in bad)]
+    if not cands:
+        sys.exit("No usable Gemini text model found for this API key.")
+    MODEL = max(cands, key=score)["name"].split("/")[-1]
+    print("Using model:", MODEL)
 
 
 def gemini_json(prompt, temperature=0.6):
@@ -416,6 +451,7 @@ def passes(r):
 def main():
     if not KEY:
         sys.exit("GEMINI_API_KEY is not set")
+    resolve_model()
     articles, emb = load_articles(), load_embeddings()
     today = now_ist().strftime("%Y-%m-%d")
     if any(a["date"] == today for a in articles) and "--force" not in sys.argv:
