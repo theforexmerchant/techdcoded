@@ -12,6 +12,7 @@ import xml.etree.ElementTree as ET
 sys.stdout.reconfigure(line_buffering=True)
 import requests
 import media
+from article_format import parse_article, to_text
 from common import (CONTENT, DATA, load_topics, load_articles, load_embeddings, save_embeddings,
                     cosine, jaccard, slugify, now_ist)
 
@@ -36,13 +37,13 @@ Never mention that you are an AI. No clickbait that the article doesn't deliver 
 
 
 # ---------------- Gemini helpers ----------------
-def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=3):
+def _gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=2):
     """Call Gemini. If the model stays overloaded (503/429), move on to the next available model."""
     global MODEL, SEARCH_OK
     if search and not SEARCH_OK:
         raise RuntimeError("search disabled for this run (quota exhausted earlier)")
     body = {"contents": [{"role": "user", "parts": [{"text": prompt}]}],
-            "generationConfig": {"temperature": temperature}}
+            "generationConfig": {"temperature": temperature, "maxOutputTokens": 16384}}
     if search:
         body["tools"] = [{"google_search": {}}]
     elif json_mode:
@@ -85,11 +86,102 @@ def gemini(prompt, *, search=False, json_mode=False, temperature=0.7, retries=3)
             return text, cand.get("groundingMetadata", {})
         while FALLBACKS and FALLBACKS[0] == MODEL:
             FALLBACKS.pop(0)
-        if FALLBACKS and switches < 6:
+        if FALLBACKS and switches < 3:
             MODEL = FALLBACKS.pop(0); switches += 1
             print(f"  Switching to backup model: {MODEL}")
             continue
         raise RuntimeError(f"Gemini request failed after retries — last error: {last}")
+
+
+# ---------------- Free backup AIs ----------------
+# Order: Gemini (free) -> GitHub Models (free, built into GitHub Actions) -> Groq (free key, optional).
+# If one is overloaded or refuses, the next one answers. Live Google Search research stays Gemini-only.
+GH_TOKEN = os.environ.get("GITHUB_TOKEN", "")
+GROQ_KEY = os.environ.get("GROQ_API_KEY", "")
+DEAD = set()          # providers that failed hard this run — skipped for the remaining calls
+_MODEL_CACHE = {}
+
+
+def _pick(ids, prefs, avoid=("embed", "whisper", "tts", "guard", "vision", "audio", "image", "speech", "moderation", "nano")):
+    ids = [i for i in ids if not any(a in i.lower() for a in avoid)]
+    out = []
+    for p in prefs:
+        out += [i for i in ids if re.search(p, i, re.I) and i not in out]
+    return out
+
+
+def _models_for(provider):
+    if provider in _MODEL_CACHE:
+        return _MODEL_CACHE[provider]
+    ids = []
+    try:
+        if provider == "github":
+            r = requests.get("https://models.github.ai/catalog/models", headers={"Authorization": f"Bearer {GH_TOKEN}"}, timeout=30)
+            ids = [m.get("id", "") for m in r.json()] if r.ok else []
+            ids = _pick(ids, [r"gpt-5(?!.*nano)", r"gpt-4\.1(?!.*nano)", r"gpt-4o", r"deepseek-v3", r"llama-4", r"llama-3\.3-70b"]) or \
+                  ["openai/gpt-4.1", "openai/gpt-4.1-mini", "openai/gpt-4o-mini"]
+        elif provider == "groq":
+            r = requests.get("https://api.groq.com/openai/v1/models", headers={"Authorization": f"Bearer {GROQ_KEY}"}, timeout=30)
+            ids = [m.get("id", "") for m in r.json().get("data", [])] if r.ok else []
+            ids = _pick(ids, [r"gpt-oss-120b", r"kimi", r"llama-4-maverick", r"llama-3\.3-70b", r"qwen", r"llama"]) or \
+                  ["openai/gpt-oss-120b", "llama-3.3-70b-versatile"]
+    except Exception as ex:
+        print(f"  {provider} model list failed: {ex}")
+    _MODEL_CACHE[provider] = ids[:4]
+    return _MODEL_CACHE[provider]
+
+
+def _openai_compat(provider, prompt, json_mode, temperature):
+    url, key, max_out = {
+        "github": ("https://models.github.ai/inference/chat/completions", GH_TOKEN, 4000),
+        "groq": ("https://api.groq.com/openai/v1/chat/completions", GROQ_KEY, 8000),
+    }[provider]
+    last = ""
+    for model in _models_for(provider):
+        body = {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": temperature, "max_tokens": max_out}
+        if json_mode:
+            body["response_format"] = {"type": "json_object"}
+        for attempt in range(2):
+            try:
+                r = requests.post(url, json=body, headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"}, timeout=180)
+            except requests.RequestException as ex:
+                last = f"{model} network {ex}"; time.sleep(5); continue
+            if r.status_code == 400 and "response_format" in body:
+                body.pop("response_format"); continue       # model doesn't support JSON mode; ask plainly
+            if r.status_code in (429, 500, 502, 503, 504):
+                last = f"{model} {r.status_code}: {r.text[:160]}"; print(f"  {provider} busy: {last}"); time.sleep(8); continue
+            if r.status_code >= 400:
+                last = f"{model} {r.status_code}: {r.text[:160]}"; print(f"  {provider} refused: {last}"); break
+            try:
+                text = r.json()["choices"][0]["message"]["content"] or ""
+            except (KeyError, IndexError, ValueError):
+                text = ""
+            if text.strip():
+                return text
+            last = f"{model} empty reply"
+    raise RuntimeError(f"{provider} failed — {last}")
+
+
+def gemini(prompt, *, search=False, json_mode=False, temperature=0.7):
+    """Ask an AI. Search requests need Gemini; everything else falls back across free providers."""
+    if search:
+        return _gemini(prompt, search=True, temperature=temperature)
+    order = [p.strip() for p in os.environ.get("AI_ORDER", "gemini,github,groq").split(",") if p.strip()]
+    errors = []
+    for p in order:
+        if p in DEAD or (p == "github" and not GH_TOKEN) or (p == "groq" and not GROQ_KEY) or (p == "gemini" and not KEY):
+            continue
+        try:
+            if p == "gemini":
+                return _gemini(prompt, json_mode=json_mode, temperature=temperature)
+            text = _openai_compat(p, prompt, json_mode, temperature)
+            print(f"  (answered by {p})")
+            return text, {}
+        except RuntimeError as ex:
+            errors.append(f"{p}: {str(ex)[:200]}")
+            print(f"  {p} unavailable — trying the next AI. ({str(ex)[:120]})")
+            DEAD.add(p)
+    raise RuntimeError("All AIs failed: " + " | ".join(errors))
 
 
 def resolve_model():
@@ -131,16 +223,21 @@ def resolve_model():
 
 
 def gemini_json(prompt, temperature=0.6):
+    def unwrap(x):
+        # JSON-mode AIs must return an object, so lists often arrive as {"items": [...]} — unwrap them
+        if isinstance(x, dict) and len(x) == 1 and isinstance(next(iter(x.values())), list):
+            return next(iter(x.values()))
+        return x
     for _ in range(3):
         text, _ = gemini(prompt, json_mode=True, temperature=temperature)
         text = re.sub(r"^```(?:json)?|```$", "", text.strip(), flags=re.M).strip()
         try:
-            return json.loads(text)
+            return unwrap(json.loads(text))
         except json.JSONDecodeError:
             m = re.search(r"[\[{].*[\]}]", text, re.S)
             if m:
                 try:
-                    return json.loads(m.group(0))
+                    return unwrap(json.loads(m.group(0)))
                 except json.JSONDecodeError:
                     pass
     raise RuntimeError("Model did not return valid JSON")
@@ -153,9 +250,11 @@ def embed(text):
         r = requests.post(url, json=body, headers={"x-goog-api-key": KEY}, timeout=60)
         if r.status_code in (429, 500, 503):
             time.sleep(10 * (i + 1)); continue
-        r.raise_for_status()
+        if not r.ok:
+            break
         return [round(v, 5) for v in r.json()["embedding"]["values"]]
-    raise RuntimeError("Embedding failed")
+    print("  embedding unavailable — using title-overlap check only")
+    return None
 
 
 # ---------------- Topic selection ----------------
@@ -215,14 +314,16 @@ def fetch_trends():
 
 def screen(cands, cat, idea, source, existing_titles, emb):
     """Return the first candidate that is not a near-duplicate of anything published."""
-    for c in cands:
+    for c in cands if isinstance(cands, list) else []:
+        if not isinstance(c, dict):
+            continue
         t = c.get("title", "").strip()
         if not t:
             continue
         if any(jaccard(t, x) > JAC_LIMIT for x in existing_titles):
             print("skip (title overlap):", t); continue
         vec = embed(f"{t}. {c.get('angle', '')}")
-        top = max((cosine(vec, v) for v in emb.values()), default=0)
+        top = max((cosine(vec, v) for v in emb.values()), default=0) if vec else 0
         if top > SIM_LIMIT:
             print(f"skip (similar {top:.2f}):", t); continue
         return {"category": c.get("category") or cat, "idea": c.get("idea") or idea, "source": source,
@@ -256,7 +357,8 @@ Return JSON: [{{"title": "...", "primary_keyword": "...", "angle": "...", "categ
         cands = gemini_json(prompt, temperature=0.5)
     except Exception as ex:
         print("trend pick failed:", ex); return None
-    cands = sorted([c for c in cands if c.get("fit", 0) >= TREND_MIN_FIT], key=lambda c: -c.get("fit", 0))
+    cands = cands if isinstance(cands, list) else []
+    cands = sorted([c for c in cands if isinstance(c, dict) and (c.get("fit") or 0) >= TREND_MIN_FIT], key=lambda c: -(c.get("fit") or 0))
     print("Trending candidates:", [(c.get("title"), c.get("fit")) for c in cands])
     return screen(cands, "", "", "trending", existing, emb)
 
@@ -285,8 +387,10 @@ Return JSON: [{{"category": "...", "idea": "..."}}]"""
         print("idea invention failed:", ex); return 0
     known = {i.lower() for _, i in topics}
     lines = []
-    for x in new:
-        c, i = x.get("category", "").strip(), x.get("idea", "").strip()
+    for x in new if isinstance(new, list) else []:
+        if not isinstance(x, dict):
+            continue
+        c, i = str(x.get("category", "")).strip(), str(x.get("idea", "")).strip()
         if c and i and i.lower() not in known and not any(jaccard(i, k) > 0.7 for k in known):
             known.add(i.lower()); lines.append((c, i))
     if lines:
@@ -380,24 +484,32 @@ Bullet points.""", temperature=0.2)
     return text, sources[:8], not meta.get("_ungrounded")
 
 
-WRITE_SPEC = """Return JSON with exactly these keys:
-{
- "title": "SEO title, 40-65 chars, contains the primary keyword naturally",
- "meta_description": "140-160 chars, compelling, contains the primary keyword",
- "primary_keyword": "...",
- "secondary_keywords": ["5-8 related search phrases"],
- "tldr": "2-3 sentence direct answer to the title question (this appears at the top)",
- "key_takeaways": ["4-5 short bullet takeaways"],
- "body_md": "The article body in Markdown (rules below)",
- "faq": [{"q": "real question people search", "a": "40-80 word answer"}],
- "image_alt": "short description of the topic for the featured image alt text",
- "visuals": [{"after_heading": "exact text of the ## heading this picture belongs under",
-              "type": "photo or illustration",
-              "query": "2-4 word stock-photo search, concrete and visual (e.g. 'data center servers')",
-              "prompt": "for illustrations: one sentence describing a concept scene, no text in image",
-              "caption": "one helpful sentence explaining what the reader sees",
-              "alt": "accessible description"}]
-}
+WRITE_SPEC = """Reply in EXACTLY this plain-text format (keep every ### LABEL ### line; no JSON, no code fences):
+
+### TITLE ###
+SEO title, 40-65 characters, containing the primary keyword naturally
+### META ###
+Meta description, 140-160 characters, containing the primary keyword
+### KEYWORD ###
+primary keyword
+### SECONDARY ###
+5-8 related search phrases, comma separated
+### TLDR ###
+2-3 sentence direct answer to the title question
+### TAKEAWAYS ###
+- 4-5 short bullet takeaways, one per line
+### BODY ###
+The full article body in Markdown (rules below)
+### FAQ ###
+Q: a real question people search
+A: 40-80 word answer
+(5 pairs)
+### IMAGE_ALT ###
+short description of the topic for the featured image
+### VISUALS ###
+2-3 lines, each: heading text | photo or illustration | 2-4 word stock-photo search | one-sentence caption
+(heading text = the exact ## heading the picture belongs under)
+### END ###
 
 body_md rules: 1300-1800 words. Start with an engaging intro paragraph (no heading). Use ## for 6-9 main sections and
 ### for sub-points. Short paragraphs (2-4 sentences), bullet lists, **bold** for key terms, one Markdown table where a
@@ -439,14 +551,14 @@ text
 text
 :::
 
-visuals: 2-3 items placed under different ## headings. Use "photo" for real objects/places/people-at-work,
-"illustration" for abstract concepts. FAQ: 5 items. Write in English."""
+VISUALS: use "photo" for real objects/places/people-at-work, "illustration" for abstract concepts. Write in English."""
 
 
 def write(topic, notes, feedback=None, previous=None):
     extra = ""
     if feedback:
-        extra = f"\n\nAn editor reviewed your previous draft and found these problems — fix ALL of them:\n{json.dumps(feedback, ensure_ascii=False)}\n\nPrevious draft:\n{json.dumps(previous, ensure_ascii=False)[:20000]}"
+        extra = (f"\n\nAn editor reviewed your previous draft and found these problems — fix ALL of them:\n"
+                 f"{json.dumps(feedback, ensure_ascii=False)}\n\nPrevious draft:\n{to_text(previous)[:14000]}")
     prompt = f"""{STYLE}
 
 Write a complete, genuinely helpful, SEO-optimised article.
@@ -455,11 +567,19 @@ Category: {topic['category']}
 {("This topic is trending right now: " + topic['trend_context'] + chr(10) + "Open with a short hook about why it is in the news, then deliver an evergreen explainer that stays useful for months. Do not write a news report.") if topic.get('source') == 'trending' else ''}
 
 Research notes (your ONLY source of facts):
-{notes}
+{notes[:9000]}
 {extra}
 
 {WRITE_SPEC}"""
-    return gemini_json(prompt, temperature=0.7)
+    last = None
+    for _ in range(3):
+        text, _ = gemini(prompt, temperature=0.7)
+        try:
+            return parse_article(text)
+        except RuntimeError as ex:
+            last = ex
+            print("  draft not in the expected format, asking again:", ex)
+    raise RuntimeError(f"Could not get a complete article: {last}")
 
 
 def mechanical_issues(a):
@@ -503,10 +623,10 @@ helpfulness (answers the title fully, specific, not generic), readability (clear
 not generic filler), safety (no harmful instructions). List concrete problems to fix.
 
 Research notes:
-{notes[:12000]}
+{notes[:6000]}
 
 Article:
-{json.dumps(article, ensure_ascii=False)[:24000]}
+{to_text(article)[:16000]}
 
 Return JSON: {{"accuracy": n, "helpfulness": n, "readability": n, "originality": n, "safety": n, "problems": ["..."]}}"""
     return gemini_json(prompt, temperature=0.2)
@@ -528,7 +648,9 @@ def main():
 
     missing = [a for a in articles if a["slug"] not in emb]  # e.g. hand-written articles
     for a in missing:
-        emb[a["slug"]] = embed(f"{a['title']}. {a.get('meta_description', '')}")
+        v = embed(f"{a['title']}. {a.get('meta_description', '')}")
+        if v:
+            emb[a["slug"]] = v
     if missing:
         save_embeddings(emb)
 
@@ -575,7 +697,8 @@ def main():
         "author": "TechDcoded Team",
     }
     (CONTENT / f"{today}-{slug}.json").write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
-    emb[slug] = topic["vector"]
+    if topic.get("vector"):
+        emb[slug] = topic["vector"]
     save_embeddings(emb)
     print("Saved:", slug)
     if os.environ.get("GITHUB_OUTPUT"):
