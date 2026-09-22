@@ -1,0 +1,708 @@
+# TechDcoded topic bank (from the content plan doc).
+# Lines starting with "## " are categories; every other non-empty line is an idea.
+# Add new ideas anytime — the daily generator picks up changes automatically.
+
+## Fresh Tech
+What is Agentic AI? (The assistant that can do things for you)
+How Smart Glasses Could Replace Your Phone
+AI Exoskeletons You Can Buy (For hiking, elderly care, and more)
+Emotion-Aware Plush Toys (AI companions for kids and adults)
+Smart Carts That Follow You (The shopping experience of the future)
+The Rise of Wearable AI (Earbuds with cameras, smart jewelry, etc.)
+eSIM Explained (The end of the physical SIM card)
+Satellite Connectivity on Your Phone (No signal? No problem.)
+Why "Agentic AI" Means the End of Apps as We Know Them
+Consumer Exoskeletons for Under $300
+AI That Fits in Your Pocket (The new wave of affordable AI hardware)
+How Smart Rings Are Replacing Watches
+The Truth About AI "Agents" (They're the new app)
+The "Digital Twin" Stadium (How AI manages crowds in real-time)
+The Future of Medical Exoskeletons (From hospitals to homes)
+
+## Old Tech Comeback
+Why Gen Z is Buying iPods (The "choice overload" cure)
+The Digital Camera Comeback (The joy of printing photos)
+Why CDs are Making a Comeback
+The "Dumbphone" Movement (The phone that does almost nothing)
+Vinyl Records: The growing market
+Smart Typewriters are a Thing (Freewrite, Pomera)
+The Boom Box is Back (With Bluetooth and USB-C)
+Retro Game Consoles (Why Gen Z owns one)
+The Blackberry-Style Keyboard Phone Comeback (Clicks Keyboard)
+Modern Cassette Players (Retrospekt, We Are Rewind)
+Why Retro Games Are "More Relaxing"
+Mechanical Keyboards Are Cool Again (The satisfying "click")
+The Disposable Camera is Back (Kodak's keychain version)
+Payphones Becoming Wi-Fi Kiosks
+Tamagotchi Gets an Upgrade (With Bluetooth and wireless charging)
+
+## How It Works
+How the World Cup Smart Ball Works (motion sensor chip)
+Inside the FIFA VAR Room (Replay operators, headsets, cameras)
+What are Nvidia GPUs Really For? (The brains of AI, explained)
+Why AI Needs Memory (The "forgotten heroes" behind every chatbot)
+How a Touchscreen Works
+How GPS Finds Your Way
+How a House Can Make Its Own Power (Solar, batteries, etc.)
+Why AI Needs Cooling (The heat problem in data centers)
+The Cooling Revolution (Liquid cooling in data centers)
+How a Robot Vacuum Cleans a Room
+
+## Consumer Tech
+What is the tech behind the iPhone camera?
+What is the tech behind noise-cancelling headphones?
+What is the tech behind OLED displays?
+What is the tech behind foldable smartphones?
+What is the tech behind smartwatches?
+What is the tech behind wireless charging?
+What is the tech behind Wi-Fi 7?
+What is the tech behind Bluetooth audio?
+
+## AI & Software
+What is the tech behind ChatGPT?
+What is the tech behind AI image generators?
+What is the tech behind voice assistants?
+What is the tech behind facial recognition?
+What is the tech behind recommendation algorithms?
+What is the tech behind self-driving cars?
+What is the tech behind AI trading bots?
+What is the tech behind Deepfake AI?
+
+## Finance & FinTech
+What is the tech behind UPI?
+What is the tech behind Visa and Mastercard payments?
+What is the tech behind stock exchanges?
+What is the tech behind algorithmic trading?
+What is the tech behind high-frequency trading (HFT)?
+What is the tech behind cryptocurrency wallets?
+What is the tech behind blockchain?
+What is the tech behind digital banks?
+
+## Internet & Cloud
+What is the tech behind Google Search?
+What is the tech behind YouTube recommendations?
+What is the tech behind Netflix streaming?
+What is the tech behind Cloud Computing?
+What is the tech behind Content Delivery Networks (CDNs)?
+What is the tech behind APIs?
+What is the tech behind QR codes?
+
+## Electronics & Hardware
+What is the tech behind SSDs?
+What is the tech behind GPUs?
+What is the tech behind CPUs?
+What is the tech behind RAM?
+What is the tech behind USB-C?
+What is the tech behind HDMI?
+What is the tech behind power banks?
+What is the tech behind lithium-ion batteries?
+
+## Automotive
+What is the tech behind Tesla's Autopilot?
+What is the tech behind electric vehicles?
+What is the tech behind regenerative braking?
+What is the tech behind Formula 1 cars?
+What is the tech behind ABS braking systems?
+What is the tech behind hybrid cars?
+
+## Advanced Tech
+What is the tech behind Bloomberg terminals?
+What is the tech behind trading APIs?
+What is the tech behind latency in trading?
+What is the tech behind payment gateways?
+What is the tech behind fraud detection systems?
+What is the tech behind cybersecurity?
+What is the tech behind data centers?
+What is the tech behind quantum computing?
+
+## Consumer Products
+Technology behind LED bulbs
+Technology behind air conditioners
+Technology behind refrigerators
+Technology behind washing machines
+Technology behind vacuum cleaners
+Technology behind smart TVs
+Technology behind microwave ovens
+Technology behind induction cooktops
+Technology behind water purifiers
+
+## Transportation
+Technology behind electric cars
+Technology behind motorcycles
+Technology behind bullet trains
+Technology behind aircraft engines
+Technology behind cruise ships
+Technology behind drones
+Technology behind autonomous vehicles
+Technology behind GPS navigation
+Technology behind traffic signal systems
+
+## Food Technology
+How instant noodles are made
+Technology behind chocolate production
+Technology behind soft drink manufacturing
+Technology behind packaged milk
+Technology behind frozen foods
+Technology behind coffee machines
+Technology behind bottled water
+Food preservation technology
+Smart farming technology
+Vertical farming
+
+## Medical Technology
+MRI machines
+CT scanners
+Artificial organs
+Robotic surgery
+Hearing aids
+Prosthetic limbs
+DNA sequencing
+Wearable health devices
+Medical AI
+Vaccine manufacturing
+
+## Construction Technology
+How skyscrapers resist earthquakes
+3D-printed houses
+Smart cement
+Glass technology
+Steel manufacturing
+Tunnel boring machines
+Mega bridges
+
+## Space Technology
+Reusable rockets
+Satellite internet
+Space stations
+Mars rovers
+Space telescopes
+Rocket engines
+Lunar missions
+Space suits
+CubeSats
+Deep-space communication
+
+## Defence Technology
+Radar systems
+Fighter jets
+Aircraft carriers
+How missile guidance works (high level)
+Stealth technology
+Military drones
+Cyber warfare
+Electronic warfare
+Sonar systems
+Laser weapons
+
+## Tech Investigations
+Biggest technology scams ever
+Fake products exposed
+Why products secretly fail
+Hidden costs of "free" apps
+Companies that copied competitors
+Fake AI startups
+
+## Tech Experiments
+Testing viral gadgets: what actually works
+Comparing AI tools on the same task
+Unusual tech projects
+Stress-testing electronics
+Speed tests explained
+Battery tests explained
+
+## Tech Predictions
+Which jobs AI will replace next
+Technologies that will disappear
+Future billion-dollar industries
+Next smartphone revolution
+Future of transportation
+AI in 2035
+
+## Tech Psychology
+Why people buy iPhones
+Why gamers upgrade PCs
+Why people trust AI
+The psychology of app addiction
+Why expensive gadgets feel better
+Why notifications control attention
+
+## Tech Crime
+Biggest cyber heists
+Famous hacking stories
+Cryptocurrency thefts
+Data breaches explained
+Dark web investigations
+Digital forensics
+
+## Tech History
+The rise and fall of Nokia
+Why Yahoo lost
+The browser wars
+The history of Wi-Fi
+Evolution of CPUs
+The birth of the internet
+
+## Tech Business
+Why startups fail
+Billion-dollar startup ideas
+Business models of tech giants
+Subscription economy
+Why companies buy startups
+Monopoly in tech
+
+## Tech Careers
+Day in the life of an AI engineer
+Highest-paying tech jobs
+Skills for 2030
+What engineers actually do
+Tech interview challenges
+Career roadmaps
+
+## Digital Society
+Cashless economy
+Smart cities
+Digital identity
+AI in government
+Future of education
+Future of healthcare
+
+## Tech Philosophy
+Can AI be conscious?
+Should robots have rights?
+Can technology make humans immortal?
+Will AI replace creativity?
+Is privacy dead?
+Should we fear superintelligence?
+
+## Forbidden Technology
+Technologies governments restricted
+Inventions that were banned
+AI tools companies don't want employees using
+Products that were too dangerous to sell
+Military inventions that became consumer products
+
+## The Race
+The race to build AGI
+The race for quantum computers
+The race for the first trillion-dollar company
+The race for room-temperature superconductors
+The race to dominate space
+
+## Million-Dollar Mistakes
+A single software bug that cost billions
+The coding mistake that crashed a company
+Products that failed after billions were invested
+The worst engineering disasters
+
+## Impossible Jobs
+How engineers repair internet cables underwater
+How satellites are repaired
+How skyscraper windows are cleaned
+Inside nuclear reactor maintenance
+The people who fix airplanes
+
+## Tech Black Market
+Counterfeit chips
+Fake SSDs
+Fake graphics cards
+Electronics recycling mafia
+Illegal e-waste trade
+
+## Hidden Billion-Dollar Machines
+Machines that make CPUs
+Banknote printing machines
+Passport manufacturing
+Chip packaging machines
+Diamond-cutting robots
+
+## 24 Hours Without
+24 hours without GPS
+24 hours without internet
+24 hours without satellites
+24 hours without electricity
+24 hours without AI
+24 hours without semiconductors
+
+## Can We Build It
+Can we build Iron Man's suit?
+Can we build a real lightsaber?
+Can we build a flying car?
+Can we build a space elevator?
+Can we build an invisible cloak?
+
+## Tech Survival
+Technology after a global catastrophe
+How the internet could recover
+Rebuilding civilization with today's knowledge
+Can humanity survive without chips?
+
+## Future Crimes
+AI bank robberies
+Deepfake elections
+Drone piracy
+Quantum hacking
+Robot crimes
+
+## Luxury Technology
+Inside a ₹10 crore yacht
+How Formula 1 steering wheels work
+Technology in private jets
+Hypercar engineering
+Luxury watch movements
+
+## Secret Rooms
+Inside Google's data centers
+Inside bank vaults
+Inside submarine control rooms
+Inside air traffic control
+Inside internet exchange points
+
+## Technology Olympics
+Fastest CPU
+Strongest robot
+Biggest battery
+Highest-capacity SSD
+Largest data center
+
+## What Costs ₹1 Crore
+₹1 crore microscope
+₹1 crore camera
+₹1 crore robot
+₹1 crore medical machine
+₹1 crore server
+
+## Invisible Wars
+Browser wars
+AI wars
+Chip wars
+EV battery wars
+Streaming wars
+Satellite internet wars
+
+## Tech Mysteries
+Why no one can replace TSMC
+Why ASML is so important
+Why GPS is free
+Why the internet never sleeps
+Why some companies are impossible to compete with
+Why Do Computers Slow Down?
+Why Do Hard Drives Fail?
+Why Do Batteries Die?
+Why Is Silicon Used in Chips?
+Why Can't Phones Last Forever?
+Why Do Websites Crash?
+Why Does the Internet Break?
+Why Is Latency So Hard to Fix?
+Why Are Chips So Tiny?
+Why Does AI Hallucinate?
+
+## One Day As
+One day as an AI engineer
+One day as a NASA scientist
+One day as a chip designer
+One day as an ethical hacker
+One day as a Formula 1 engineer
+
+## Can You Live Without
+Can you live without Google?
+Can you live without Microsoft?
+Can you live without Apple?
+Can you live without Amazon?
+Can you live without ChatGPT?
+Can you live without your smartphone?
+
+## Engineering vs Nature
+Can technology stop earthquakes?
+Can we control rain?
+Can AI predict earthquakes?
+Can robots replace bees?
+Can we cool cities with technology?
+
+## AI vs Human
+AI vs Human Doctor – Who Diagnoses Better?
+AI vs Human Lawyer – Who Wins the Case?
+AI vs Human Programmer
+AI vs Human Artist
+AI vs Human Music Composer
+AI vs Human Teacher
+AI vs Human Architect
+AI vs Human Chef
+AI vs Human Investor
+AI vs Human Trader During a Market Crash
+AI vs Human Detective
+AI vs Human Negotiator
+AI vs Human Journalist
+AI vs Human Translator
+AI vs Human Video Editor
+
+## AI vs AI
+Which AI Can Start a Business From $100?
+Which AI Can Write the Best YouTube Script?
+Which AI Can Build the Best Website?
+Which AI Can Design the Best Logo?
+Which AI Can Make the Best Trading Strategy?
+Which AI Can Pass a College Exam?
+Which AI Can Create the Best Startup Pitch?
+Which AI Can Replace an Entire Marketing Team?
+
+## Government Tech Controversies
+Surveillance software controversies
+Spyware scandals
+Election software controversies
+Fake digital identity schemes
+Fake cybersecurity companies
+
+## Corporate Tech Frauds
+Theranos – The $9 Billion Blood Test Lie
+Wirecard – Europe's Biggest Fintech Fraud
+Nikola – The Electric Truck That Rolled Downhill
+FTX – How a Crypto Empire Collapsed
+Celsius Network – The Crypto Bank That Froze Billions
+OneCoin – The Fake Cryptocurrency Worth Billions
+
+## Cybercrime Stories
+The Biggest Ransomware Attack Ever
+The Twitter Bitcoin Hack
+The Sony Pictures Hack
+The Colonial Pipeline Attack
+The WannaCry Outbreak
+The NotPetya Attack
+The MGM Resorts Cyberattack
+The SolarWinds Supply Chain Attack
+
+## Cryptocurrency Scams
+Squid Game Token Rug Pull
+BitConnect
+SafeMoon Controversies
+NFT Exit Scams
+Pump-and-Dump Groups
+Fake AI Crypto Projects
+Fake Bitcoin Wallet Apps
+Pig Butchering Scams
+
+## Untold Tech Heroes
+The Engineer Behind the USB Standard
+The Team That Invented Wi-Fi
+The Mind Behind QR Codes
+The Creator of CAPTCHA
+The Woman Who Wrote the Code That Took Humans to the Moon
+The Engineer Who Designed Ethernet
+The Inventors of the Lithium-Ion Battery
+
+## The Impossible Mission
+Deliver Internet to Mount Everest
+Build a Factory on the Moon
+Cool the World's Largest AI Supercomputer
+Move an Entire Building Without Breaking It
+Build a Cable Across an Ocean
+Send Data Across Space
+Power a City Without Fossil Fuels
+Recover Data From a Destroyed Hard Drive
+
+## Stories From the Future
+The Last Password You'll Ever Type
+The Last Human Driver
+The Last Cash Transaction
+The Last Data Center
+The Last Battery Factory
+The First City Fully Run by AI
+The First Country With Robot Police
+
+## What Really Happened
+What Really Happened During the Global Chip Shortage?
+What Really Happened Inside the Biggest Data Breach?
+What Really Happened When Facebook Went Offline?
+What Really Happened During the CrowdStrike Outage?
+What Really Happened When a Major Crypto Exchange Failed?
+
+## Am I Being Lied To
+Is your phone secretly listening?
+Is AI really intelligent?
+Is 5G actually faster everywhere?
+Are cloud photos really safe?
+Why are internet speeds never what you pay for?
+Are EV ranges misleading?
+Why do companies slow down old devices?
+
+## I Never Thought About That
+How much would one Google search cost if you paid for it?
+What if every password leaked today?
+How many people touch your online payment?
+How many computers help deliver one YouTube video?
+What happens in one second of the internet?
+
+## How Rich Could You Get
+What if you bought NVIDIA before AI?
+What if you mined Bitcoin from day one?
+What if you built the first app for smartphones?
+
+## What If You Were
+You wake up as the CEO of NVIDIA
+You're the engineer who must fix the internet
+You're the only programmer left on Earth
+You must rebuild Google from scratch
+You have 24 hours to stop a cyberattack
+
+## Can This Be Hacked
+Can your car be hacked?
+Can a smart home be hacked?
+Can satellites be hacked?
+Can AI hack AI?
+
+## The Domino Effect
+An undersea cable breaks: what happens?
+A satellite fails: what changes?
+A chip shortage begins: why cars disappear
+A data center goes offline: who notices first?
+
+## Dark Patterns Exposed
+Why Cancel Buttons Are Hidden
+Infinite Scroll Psychology
+Loot Box Mechanics
+Countdown Timers
+Fake Scarcity
+Cookie Popups
+Subscription Traps
+"Only 1 Left!" Messages
+
+## Hidden Business Models
+How "Free" Apps Make Money
+Cloud Storage Pricing Explained
+Food Delivery Algorithms
+Ride-Hailing Surge Pricing
+Streaming Subscription Economics
+AI Pricing Explained
+Online Education Platforms' Business Model
+Mobile Game Monetization
+
+## Technology Horror
+The day every satellite disappeared
+The bug nobody noticed
+The engineer who forgot one semicolon
+The password that unlocked everything
+
+## Tech Layoffs & Careers
+Why Are Tech Layoffs Still Happening?
+Why Are AI Companies Hiring While Big Tech Is Firing?
+The Hidden Economics Behind Tech Layoffs
+Why Profitable Companies Still Lay Off Employees
+The Death of the Easy Tech Job
+Why Entry-Level Tech Jobs Are Disappearing
+Why Every CEO Suddenly Loves "Efficiency"
+The Rise of Lean Tech Companies
+The End of Hypergrowth in Silicon Valley?
+
+## AI & Workforce
+Is AI Actually Replacing Jobs or Just Changing Them?
+Which Tech Jobs Are Safest From AI?
+Why AI Creates Jobs While Also Eliminating Them
+The New Skills Companies Actually Want
+What Happens Inside a Company Before Layoffs?
+
+## Psychology of Tech
+Why Can't We Stop Scrolling?
+Why Are Notifications So Addictive?
+Why Do We Trust AI So Easily?
+Why Are Fake Apps Still Downloaded?
+Why Do People Fall for Online Scams?
+
+## Tech & Society
+Why Is Cash Slowly Disappearing?
+Why Is Digital Identity Becoming Essential?
+Why Are Governments Investing in AI?
+Why Is Cybersecurity Suddenly a National Issue?
+Why Are Cities Becoming Smarter?
+
+## Technology vs Technology
+Wi-Fi vs 5G
+AMD vs NVIDIA
+ARM vs x86
+Android vs iOS Architecture
+OLED vs MicroLED
+EVs vs Hydrogen Cars
+Fiber vs Satellite Internet
+CPUs vs GPUs
+HDD vs SSD
+Lithium vs Sodium Batteries
+
+## Innovation Stories
+The Technology That Changed the World Overnight
+Products That Failed but Changed the Future
+Accidental Inventions That Became Essential
+Technologies That Were 20 Years Ahead of Their Time
+The Biggest Engineering Mistakes Ever Made
+The Most Expensive Tech Failures
+The Race to Build the Fastest Chip
+The Secret War for Rare Earth Metals
+The Companies That Invented the Future
+Technologies That Almost Never Happened
+
+## Reverse Engineering
+Reverse Engineering the iPhone
+Reverse Engineering Tesla
+Reverse Engineering ChatGPT
+Reverse Engineering Amazon
+Reverse Engineering Netflix
+Reverse Engineering Google Search
+Reverse Engineering YouTube
+Reverse Engineering Uber
+Reverse Engineering UPI
+Reverse Engineering WhatsApp
+
+## Engineering Behind Chaos
+Why Blackouts Happen
+Why Banks Go Offline
+Why Flights Get Delayed
+Why AI Gives Wrong Answers
+Why GPS Isn't Always Accurate
+Why Batteries Explode
+Why Rockets Fail
+Why Robots Fall
+Why Self-Driving Cars Crash
+
+## Impossible Engineering
+Can We Build an Invisible Car?
+Can We Build a Floating City?
+Can We Build a Robot Doctor?
+Can We Build an AI Government?
+Can We Build a City on Mars?
+Can We Build Unlimited Batteries?
+Can We Build a Human Brain?
+Can We Build an Underwater Internet?
+Can We Build a Weather-Control Machine?
+
+## Why Doesn't It Exist
+Why Don't Phones Last 20 Years?
+Why Don't We Have Unlimited Internet?
+Why Can't We Charge a Phone in 5 Seconds?
+Why Can't Cars Drive Forever?
+Why Don't We Have Wireless Electricity?
+Why Can't We Store Summer's Solar Power for Winter?
+Why Can't We Build Unbreakable Screens?
+Why Can't We Stop Spam Calls?
+Why Can't We Make a Truly Private Smartphone?
+Why Can't We Build Silent Airplanes?
+
+## The Cost Of
+The Cost of One Google Search
+The Cost of One AI Prompt
+The Cost of Sending a WhatsApp Message
+The Cost of Streaming One Netflix Movie
+The Cost of One Bitcoin Transaction
+The Cost of Charging an EV
+The Cost of Training an AI Model
+The Cost of Manufacturing an iPhone
+The Cost of Delivering One Amazon Package
+The Cost of One Instagram Scroll
+
+## Everyday Tech Science
+Why Your Phone Knows You're Walking
+Why Google Knows Where You Are
+How Your Phone Measures Distance
+Why Bluetooth Doesn't Interfere With Wi-Fi
+How Your Camera Focuses Instantly
+Why Your Screen Doesn't Burn Out
+How Face Unlock Really Works
+How Contactless Payments Work
+How QR Codes Store Information
+How Voice Assistants Recognize Speech
