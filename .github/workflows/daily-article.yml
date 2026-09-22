@@ -2,11 +2,11 @@ name: Daily article
 
 on:
   schedule:
-          - cron: "30 1 * * *"    # 07:00 IST — main daily run
-          - cron: "30 5 * * *"    # 11:00 IST — backup try
-          - cron: "30 9 * * *"    # 15:00 IST — backup try
-          - cron: "30 13 * * *"   # 19:00 IST — backup try
-  workflow_dispatch:
+    - cron: "30 1 * * *"    # 07:00 IST — main daily run
+    - cron: "30 5 * * *"    # 11:00 IST — backup try (does nothing if today's article exists)
+    - cron: "30 9 * * *"    # 15:00 IST — backup try
+    - cron: "30 13 * * *"   # 19:00 IST — backup try
+  workflow_dispatch:        # "Run workflow" button for manual runs
     inputs:
       force:
         description: "Publish even if today's article already exists"
@@ -15,6 +15,7 @@ on:
 
 permissions:
   contents: write
+  models: read      # lets the robot use free GitHub Models as a backup AI
 
 concurrency:
   group: daily-article
@@ -23,7 +24,7 @@ concurrency:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v5
 
@@ -42,6 +43,8 @@ jobs:
           TRENDING: ${{ vars.TRENDING || 'on' }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           IMAGE_MODEL: ${{ vars.IMAGE_MODEL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: python scripts/generate.py ${{ inputs.force && '--force' || '' }}
 
       - name: Build site (pages, images, sitemap, feed, home page)
@@ -59,7 +62,7 @@ jobs:
       - name: Notify search engines (IndexNow)
         if: steps.gen.outputs.slug != ''
         run: |
-          sleep 90
+          sleep 90   # give Cloudflare time to deploy
           python scripts/indexnow.py "https://techdcoded.com/articles/${{ steps.gen.outputs.slug }}/" "https://techdcoded.com/articles/" "https://techdcoded.com/"
 
       - name: Summary
