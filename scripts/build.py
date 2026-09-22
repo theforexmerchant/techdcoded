@@ -48,7 +48,8 @@ def make_image(a):
     glow = glow.filter(ImageFilter.GaussianBlur(140))
     im = ImageChops.add(im, glow)
     d = ImageDraw.Draw(im)
-    photo = next((IMG / f"{x['file']}.jpg" for x in a.get("images", []) if (IMG / f"{x['file']}.jpg").exists()), None)
+    photo = IMG / f"{a['cover']}.jpg" if a.get("cover") and (IMG / f"{a['cover']}.jpg").exists() else \
+        next((IMG / f"{x['file']}.jpg" for x in a.get("images", []) if (IMG / f"{x['file']}.jpg").exists()), None)
     if photo:  # use the article's first picture as the cover, with a brand-coloured shade for legible text
         ph = Image.open(photo).convert("RGB")
         sc = max(W / ph.width, H / ph.height)
@@ -341,7 +342,7 @@ def cleanup(arts, emb):
             shutil.rmtree(d); print("removed page:", d.name)
     if IMG.exists():
         for f in IMG.iterdir():
-            base = re.sub(r"-\d+$", "", f.stem)  # photos are saved as <slug>-1, <slug>-2 ...
+            base = re.sub(r"-(\d+|cover)$", "", f.stem)  # pictures are saved as <slug>-1, <slug>-cover ...
             if f.stem not in slugs and base not in slugs:
                 f.unlink(); print("removed image:", f.name)
     stale = [k for k in emb if k not in slugs]

@@ -589,7 +589,10 @@ text
 text
 :::
 
-VISUALS: use "photo" for real objects/places/people-at-work, "illustration" for abstract concepts. Write in English."""
+VISUALS: prefer "illustration" (custom AI art in our brand style) for concepts, processes and ideas; use "photo" only for
+specific real objects, places or people at work. For illustrations, the search field should describe the scene visually
+(e.g. "glowing data packets travelling through fibre optic cables"). Never ask for text, labels or logos in an image.
+Write in English."""
 
 
 def write(topic, notes, feedback=None, previous=None):
@@ -733,6 +736,7 @@ def main():
         "body_md": art["body_md"].strip(), "faq": art.get("faq", []),
         "image_alt": art.get("image_alt", art["title"]), "sources": sources,
         "images": media.get_visuals(art.get("visuals", []), slug),
+        "cover": media.cover_image(slug, art.get("image_alt") or art["title"]),
         "word_count": wc, "review": {k: v for k, v in rev.items() if k != "problems"},
         "author": "TechDcoded Team",
     }
