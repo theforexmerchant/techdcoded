@@ -298,8 +298,22 @@ def home_latest(arts):
     s = p.read_text(encoding="utf-8")
     if "<!--LATEST:START-->" not in s:
         return
-    items = "".join(f'<a class="la" href="/articles/{a["slug"]}/"><span class="lc">{e(a["category"])}</span><span class="lt">{e(a["title"])}</span><time datetime="{a["date"]}">{fmt_date(a["date"])}</time></a>' for a in arts[:3])
-    block = f'<!--LATEST:START--><section class="latest" aria-label="Latest articles"><div class="lh"><h2>Latest articles</h2><a href="/articles/">View all →</a></div><div class="lg">{items}</div></section><!--LATEST:END-->' if arts else "<!--LATEST:START--><!--LATEST:END-->"
+    style = ("<style>.latest .la{display:grid;grid-template-columns:128px 1fr;gap:12px;align-items:center;padding:10px}"
+             ".latest .la .th{position:relative;display:block;width:128px;aspect-ratio:1200/630;border-radius:9px;overflow:hidden;"
+             "border:1px solid rgba(120,170,255,.25);box-shadow:0 6px 16px -6px rgba(0,0,0,.6)}"
+             ".latest .la .th img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}"
+             ".latest .la:hover .th img{transform:scale(1.08)}"
+             ".latest .la .th::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(5,10,30,.55))}"
+             ".latest .la .tx{display:flex;flex-direction:column;gap:3px;min-width:0}"
+             ".latest .la .lt{font-size:.84rem;line-height:1.3;-webkit-line-clamp:3}"
+             "@media(max-width:600px){.latest .la{grid-template-columns:110px 1fr}.latest .la .th{width:110px}}</style>")
+    items = "".join(
+        f'<a class="la" href="/articles/{a["slug"]}/"><span class="th"><img src="/assets/articles/{a["slug"]}.webp" '
+        f'alt="{e(a.get("image_alt", a["title"]))}" width="1200" height="630" loading="lazy" '
+        f'onerror="this.onerror=null;this.src=\'/assets/articles/{a["slug"]}.jpg\'"></span>'
+        f'<span class="tx"><span class="lc">{e(a["category"])}</span><span class="lt">{e(a["title"])}</span>'
+        f'<time datetime="{a["date"]}">{fmt_date(a["date"])}</time></span></a>' for a in arts[:3])
+    block = f'<!--LATEST:START-->{style}<section class="latest" aria-label="Latest articles"><div class="lh"><h2>Latest articles</h2><a href="/articles/">View all →</a></div><div class="lg">{items}</div></section><!--LATEST:END-->' if arts else "<!--LATEST:START--><!--LATEST:END-->"
     s = re.sub(r"<!--LATEST:START-->.*?<!--LATEST:END-->", lambda m: block, s, flags=re.S)
     p.write_text(s, encoding="utf-8")
 
