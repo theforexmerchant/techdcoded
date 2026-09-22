@@ -5,6 +5,7 @@ body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;backgr
 a{color:var(--cyan);text-decoration:none}
 a:hover{text-decoration:underline}
 img{max-width:100%;display:block}
+picture{display:block;width:100%}
 .wrap{width:min(1120px,100% - 32px);margin-inline:auto}
 .narrow{width:min(780px,100% - 32px);margin-inline:auto}
 
@@ -72,7 +73,7 @@ h1.title{font-size:clamp(1.8rem,4.2vw,2.7rem);line-height:1.2;margin:14px 0 12px
 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 .card{display:flex;flex-direction:column;border-radius:16px;overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015));transition:transform .25s,box-shadow .25s,border-color .25s;color:inherit}
 .card:hover{transform:translateY(-4px);border-color:rgba(63,208,255,.5);box-shadow:0 16px 40px -14px rgba(30,144,255,.5);text-decoration:none}
-.card img{aspect-ratio:1200/630;object-fit:cover;width:100%}
+.card img{aspect-ratio:1200/630;object-fit:cover;width:100%;height:auto}
 .card .cb{padding:14px 16px 16px;display:flex;flex-direction:column;gap:6px;flex:1}
 .card .cat{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--cyan);font-weight:700}
 .card h3{font-size:1.02rem;line-height:1.35;color:#fff}
