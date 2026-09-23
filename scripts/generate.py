@@ -279,6 +279,7 @@ EDGE_CATEGORIES = {
 }
 CORE_SHARE = 1.0   # 100% core technology topics
 NICHE_MIN = 7   # topic must score >= 7/10 on "decodes how a technology works"
+AUTHOR = os.environ.get("AUTHOR_NAME", "Bibekananda Patra")
 NICHE_RULE = ("NICHE RULE: TechDcoded explains HOW TECHNOLOGY WORKS — the engineering, science, systems and inner workings "
               "behind gadgets, apps, AI, internet, payments, vehicles, space and everyday tech. The reader must finish "
               "understanding a technology better. Business, careers, finance, crime or social topics only qualify when the "
@@ -490,6 +491,81 @@ def pick_topic(articles, emb):
     raise RuntimeError("No non-duplicate topic found today")
 
 
+# ---------------- Free research: Wikipedia + link checking ----------------
+WIKI_API = "https://en.wikipedia.org/w/api.php"
+UA = {"User-Agent": "TechDCodedBot/1.0 (https://techdcoded.com; business@techdcoded.com)"}
+
+
+def wiki_pages(query, limit=3):
+    """Search Wikipedia and return [(title, url, plain text)] — free, no key, no quota."""
+    out = []
+    try:
+        r = requests.get(WIKI_API, timeout=30, headers=UA, params={
+            "action": "query", "list": "search", "srsearch": query, "srlimit": limit,
+            "format": "json", "srnamespace": 0})
+        r.raise_for_status()
+        titles = [h["title"] for h in r.json().get("query", {}).get("search", [])]
+    except Exception as ex:
+        print("  wikipedia search failed:", ex); return out
+    for t in titles:
+        try:
+            r = requests.get(WIKI_API, timeout=30, headers=UA, params={
+                "action": "query", "prop": "extracts", "explaintext": 1, "redirects": 1,
+                "titles": t, "format": "json"})
+            r.raise_for_status()
+            page = next(iter(r.json()["query"]["pages"].values()))
+            text = (page.get("extract") or "").strip()
+            if len(text) > 400:
+                out.append((page["title"], "https://en.wikipedia.org/wiki/" + page["title"].replace(" ", "_"), text[:12000]))
+        except Exception as ex:
+            print("  wikipedia fetch failed:", t, ex)
+    return out
+
+
+def link_alive(url):
+    """True only if the page really exists — AI models invent plausible-looking URLs."""
+    try:
+        r = requests.head(url, allow_redirects=True, timeout=15, headers=UA)
+        if r.status_code >= 400 or r.status_code == 405:
+            r = requests.get(url, allow_redirects=True, timeout=20, headers=UA, stream=True)
+        return r.status_code < 400
+    except requests.RequestException:
+        return False
+
+
+def verify_sources(sources, keep=6):
+    """Drop dead or invented links; keep the order, de-duplicate by URL."""
+    good, seen = [], set()
+    for s in sources:
+        u = (s.get("url") or "").strip()
+        if not u.startswith("http") or u in seen:
+            continue
+        seen.add(u)
+        if s.get("trusted") or link_alive(u):
+            good.append({"title": s.get("title") or u, "url": u})
+            if len(good) >= keep:
+                break
+        else:
+            print("  dropped dead source:", u)
+    return good
+
+
+def suggested_sources(topic, notes):
+    """Ask the model for official/authoritative references, then check each one exists."""
+    try:
+        data = gemini_json(f"""For an explainer article titled "{topic['title']}", list 4-6 authoritative reference pages a
+fact-checker would use: official documentation, standards bodies, manufacturer pages, government or regulator pages,
+university or research pages, or established tech publications. Only URLs you are confident really exist (prefer the
+site's stable, top-level documentation pages over deep article URLs).
+Return JSON: [{{"title": "page title - publisher", "url": "https://..."}}]""", temperature=0.2)
+        if isinstance(data, dict):
+            data = next((v for v in data.values() if isinstance(v, list)), [])
+        return [d for d in data if isinstance(d, dict) and d.get("url")]
+    except Exception as ex:
+        print("  source suggestion failed:", ex)
+        return []
+
+
 # ---------------- Research / write / review ----------------
 def research(topic):
     prompt = f"""Research this article topic using Google Search: "{topic['title']}" ({topic['angle']}).
@@ -508,6 +584,24 @@ Use ONLY well-established facts you are highly confident about. Do NOT include r
 last 2 years, or specific figures unless they are long-standing and widely known. Mark anything uncertain as uncertain.
 Bullet points.""", temperature=0.2)
         meta = {"_ungrounded": True}
+    if meta.get("_ungrounded"):
+        # No live search: research from Wikipedia (free) and cite it, plus checked reference links.
+        wiki = wiki_pages(topic["title"])
+        if wiki:
+            facts = "\n\n".join(f"SOURCE: {t}\n{txt}" for t, _, txt in wiki)
+            try:
+                summary, _ = gemini(f"""Using ONLY the reference material below, write detailed factual research notes for a
+writer on: "{topic['title']}" ({topic['angle']}). Cover how it works step by step, history, numbers with their context,
+real-world and Indian examples, common myths and questions people ask. Bullet points. Do not invent anything that is not
+supported by the material; mark gaps as "not covered by sources".
+
+REFERENCE MATERIAL
+{facts[:60000]}""", temperature=0.2)
+                text = summary + "\n\nBACKGROUND (model knowledge, use only if consistent with the above):\n" + text
+            except Exception as ex:
+                print("  wikipedia summarising failed:", ex)
+        raw = [{"title": t + " - Wikipedia", "url": u, "trusted": True} for t, u, _ in wiki] + suggested_sources(topic, text)
+        return text, verify_sources(raw), False
     sources, seen = [], set()
     for ch in meta.get("groundingChunks", []):
         w = ch.get("web", {})
@@ -519,7 +613,7 @@ Bullet points.""", temperature=0.2)
             except requests.RequestException:
                 pass
             sources.append({"title": title, "url": uri})
-    return text, sources[:8], not meta.get("_ungrounded")
+    return text, verify_sources(sources[:8]), not meta.get("_ungrounded")
 
 
 WRITE_SPEC = """Reply in EXACTLY this plain-text format (keep every ### LABEL ### line; no JSON, no code fences):
@@ -738,7 +832,7 @@ def main():
         "images": media.get_visuals(art.get("visuals", []), slug),
         "cover": media.cover_image(slug, art.get("image_alt") or art["title"]),
         "word_count": wc, "review": {k: v for k, v in rev.items() if k != "problems"},
-        "author": "TechDcoded Team",
+        "author": AUTHOR,
     }
     CONTENT.mkdir(parents=True, exist_ok=True)   # folder disappears on GitHub when it's empty
     (CONTENT / f"{today}-{slug}.json").write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
