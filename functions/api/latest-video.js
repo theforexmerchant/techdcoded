@@ -2,7 +2,7 @@
 // Returns the newest upload from the TechDcoded YouTube channel as JSON.
 // Set your channel ID in Cloudflare Pages > Settings > Environment variables as YT_CHANNEL_ID
 // (or replace the fallback below). Find it at youtube.com/account_advanced (starts with "UC").
-const FALLBACK_CHANNEL_ID = "UCxxxxxxxxxxxxxxxxxxxxxx";
+const FALLBACK_CHANNEL_ID = "UC185GgaWexYVGqtEjVe55zA";   // TechDCoded channel
 
 export async function onRequest({ env }) {
   const id = env.YT_CHANNEL_ID || FALLBACK_CHANNEL_ID;
