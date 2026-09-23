@@ -15,6 +15,7 @@ SOCIAL = [
     ("X", "https://x.com/techdcoded"),
     ("LinkedIn", "https://www.linkedin.com/in/techdcoded"),
     ("WhatsApp", "https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a"),
+    ("Telegram", "https://t.me/techdcoded"),
 ]
 
 
