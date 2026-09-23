@@ -145,7 +145,7 @@ def head(title, desc, url, image, extra=""):
 <body>
 <header class="top"><div class="wrap">
   <a class="brand" href="/" aria-label="TechDCoded home"><picture><source srcset="/assets/logo.webp" type="image/webp"><img src="/assets/logo.png" alt="TechDCoded" width="620" height="143"></picture></a>
-  <nav><a class="hide-m" href="/">Home</a><a href="/articles/">Articles</a><a class="hide-m" href="https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a" target="_blank" rel="noopener">WhatsApp</a>
+  <nav><a class="hide-m" href="/">Home</a><a href="/articles/">Articles</a><a class="hide-m" href="/about/">About</a><a class="hide-m" href="https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a" target="_blank" rel="noopener">WhatsApp</a>
   <a class="btn-yt" href="https://www.youtube.com/@techdcoded?sub_confirmation=1" target="_blank" rel="noopener">▶ Subscribe</a></nav>
 </div></header>
 """
@@ -154,7 +154,7 @@ def head(title, desc, url, image, extra=""):
 def foot():
     links = "".join(f'<a href="{u}" target="_blank" rel="noopener">{n}</a>' for n, u in SOCIAL)
     return f"""<footer class="foot"><div class="wrap">
-<nav><a href="/">Home</a><a href="/articles/">All articles</a>{links}</nav>
+<nav><a href="/">Home</a><a href="/articles/">All articles</a><a href="/about/">About</a><a href="/editorial-policy/">How we write</a>{links}</nav>
 <p>© TechDCoded™ · You use the technology. We decode it. · <a href="mailto:business@techdcoded.com">business@techdcoded.com</a></p>
 </div></footer>
 </body>
@@ -220,7 +220,7 @@ def article_page(a, arts, emb):
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "BlogPosting", "headline": a["title"], "description": a["meta_description"], "image": [image],
          "datePublished": f"{a['date']}T{a.get('time', '07:00')}:00+05:30", "dateModified": f"{a.get('updated', a['date'])}T{a.get('time', '07:00')}:00+05:30",
-         "author": {"@type": "Organization", "name": "TechDCoded", "url": SITE},
+         "author": {"@type": "Person", "name": a.get("author", AUTHOR_NAME), "url": f"{SITE}/about/"},
          "publisher": {"@type": "Organization", "name": "TechDCoded", "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/logo-mark.png"}},
          "mainEntityOfPage": url, "articleSection": a["category"], "keywords": ", ".join([a.get("primary_keyword", "")] + a.get("secondary_keywords", [])),
          "wordCount": wc, "inLanguage": "en-IN"},
@@ -256,6 +256,7 @@ def article_page(a, arts, emb):
 {f'<section class="faq"><h2>Frequently asked questions</h2>{faq}</section>' if faq else ''}
 {f'<section class="sources"><h2>Sources</h2><ol>{srcs}</ol></section>' if srcs else ''}
 </article>
+{author_box()}
 <div class="share">Share:
 <a href="https://wa.me/?text={share_txt}" target="_blank" rel="noopener">WhatsApp</a>
 <a href="https://x.com/intent/post?text={share_txt}" target="_blank" rel="noopener">X</a>
@@ -313,11 +314,107 @@ q.oninput=f;document.getElementById('chips').onclick=ev=>{{const b=ev.target.clo
 """ + foot()
 
 
+
+# ---------------- author box + about / editorial pages ----------------
+AUTHOR_NAME = "Bibekananda Patra"
+AUTHOR_ROLE = "Founder, TechDCoded"
+AUTHOR_BIO = ("I run TechDCoded, where I explain how everyday technology actually works — in short videos on YouTube "
+              "and in written explainers here. Every article is researched from public sources and written to be "
+              "understood without a technical background.")
+COFOUNDER_NAME = "Omm Shree Dibya Dulabha Patra"
+COFOUNDER_ROLE = "Co-founder, TechDCoded"
+AUTHOR_IMG = "/assets/author.jpg" if (ROOT / "assets" / "author.jpg").exists() else "/assets/logo-mark.png"
+
+
+def author_box():
+    return f"""<section class="authorbox">
+<img src="{AUTHOR_IMG}" alt="{AUTHOR_NAME}" width="72" height="72" loading="lazy">
+<div><b>{AUTHOR_NAME}</b><span>{AUTHOR_ROLE}</span>
+<p>{AUTHOR_BIO}</p>
+<p class="al">Co-founder: {COFOUNDER_NAME} · <a href="/about/">About TechDCoded</a> · <a href="/editorial-policy/">How we write</a> ·
+<a href="https://www.youtube.com/@techdcoded" target="_blank" rel="noopener">YouTube</a></p></div></section>"""
+
+
+def about_page():
+    ld = {"@context": "https://schema.org", "@type": "AboutPage", "url": f"{SITE}/about/",
+          "mainEntity": {"@type": "Person", "name": AUTHOR_NAME, "jobTitle": AUTHOR_ROLE, "description": AUTHOR_BIO,
+                         "url": f"{SITE}/about/", "worksFor": {"@id": f"{SITE}/#org"},
+                         "sameAs": ["https://www.youtube.com/@techdcoded", "https://www.instagram.com/techdcoded",
+                                    "https://www.linkedin.com/in/techdcoded", "https://x.com/techdcoded"]},
+          "about": {"@type": "Organization", "@id": f"{SITE}/#org", "name": "TechDCoded",
+                    "founder": [{"@type": "Person", "name": AUTHOR_NAME, "jobTitle": AUTHOR_ROLE},
+                                {"@type": "Person", "name": COFOUNDER_NAME, "jobTitle": COFOUNDER_ROLE}]}}
+    desc = "Who is behind TechDCoded — Bibek explains how everyday technology works, in short videos and written explainers."
+    return head("About TechDCoded", desc, f"{SITE}/about/", f"{SITE}/assets/og.jpg",
+                f'<script type="application/ld+json">{json.dumps(ld, ensure_ascii=False)}</script>') + f"""
+<main class="narrow">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span>About</nav>
+<article class="prose">
+<h1 class="title">About TechDCoded</h1>
+<p><b>TechDCoded exists for one reason: most technology is explained badly.</b> Manuals are dense, launch events are hype,
+and search results are written for advertisers. This site takes one piece of technology at a time and explains how it
+actually works, in plain language, with diagrams.</p>
+<h2>Who is behind TechDCoded</h2>
+<p>TechDCoded was founded by <b>{AUTHOR_NAME}</b> ({AUTHOR_ROLE}) and <b>{COFOUNDER_NAME}</b> ({COFOUNDER_ROLE}).</p>
+<h2>Who writes this</h2>
+<p>{AUTHOR_BIO} You'll find the same explanations as one-minute videos on
+<a href="https://www.youtube.com/@techdcoded" target="_blank" rel="noopener">YouTube</a> and across
+<a href="https://www.instagram.com/techdcoded" target="_blank" rel="noopener">Instagram</a>,
+<a href="https://www.facebook.com/techdcoded/" target="_blank" rel="noopener">Facebook</a> and
+<a href="https://t.me/techdcoded" target="_blank" rel="noopener">Telegram</a>.</p>
+<h2>What we cover</h2>
+<ul><li>Artificial intelligence and how the tools you use are built</li><li>Gadgets and consumer hardware</li>
+<li>Science and innovation behind everyday devices</li><li>Fintech and digital payments</li>
+<li>Future technology, explained without hype</li></ul>
+<h2>How the articles are made</h2>
+<p>Every explainer is researched from public sources, written for a reader with no technical background, checked for
+accuracy and clarity, and published with the sources listed at the end. The full process is on our
+<a href="/editorial-policy/">How we write</a> page.</p>
+<h2>Contact</h2>
+<p>Corrections, questions and collaboration: <a href="mailto:business@techdcoded.com">business@techdcoded.com</a>.
+If you spot an error in an article, tell us and we will fix it and note the update.</p>
+</article>
+</main>
+""" + foot()
+
+
+def policy_page():
+    desc = "How TechDCoded researches, writes, checks and corrects its technology explainers."
+    return head("How we write — editorial policy | TechDCoded", desc, f"{SITE}/editorial-policy/", f"{SITE}/assets/og.jpg") + f"""
+<main class="narrow">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span>How we write</nav>
+<article class="prose">
+<h1 class="title">How we write</h1>
+<p>We publish one technology explainer a day. Here is exactly how each one is made, so you can judge how much to trust it.</p>
+<h2>1. Choosing the topic</h2>
+<p>Topics come from what people are currently asking about in technology, and from a list of questions we keep about how
+things work. We only cover how technology works — not company gossip, business news or politics.</p>
+<h2>2. Research</h2>
+<p>Facts are gathered from public reference material, official documentation, standards bodies, manufacturer pages and
+established technology publications. Every link we cite is checked automatically to confirm the page exists before the
+article is published. Sources are listed at the bottom of each article.</p>
+<h2>3. Writing and AI use</h2>
+<p>Articles are drafted with the help of AI writing tools and then checked against the research notes for accuracy,
+clarity, completeness and originality. Drafts that fail those checks are rewritten or dropped rather than published.
+We say this openly because you deserve to know how what you're reading was made.</p>
+<h2>4. What we will not do</h2>
+<ul><li>No invented statistics, quotes or studies</li><li>No links to pages we have not verified</li>
+<li>No paid placements presented as explainers</li><li>No scare headlines that the article does not support</li></ul>
+<h2>5. Corrections</h2>
+<p>If something is wrong, email <a href="mailto:business@techdcoded.com">business@techdcoded.com</a>. We correct the
+article, update its date, and note what changed. Reader corrections are welcome and we act on them quickly.</p>
+</article>
+</main>
+""" + foot()
+
+
 # ---------------- sitemap / feed / home ----------------
 def sitemap(arts):
     today = now_ist().strftime("%Y-%m-%d")
     urls = [(f"{SITE}/", arts[0]["date"] if arts else today, "daily", "1.0"),
-            (f"{SITE}/articles/", arts[0]["date"] if arts else today, "daily", "0.9")]
+            (f"{SITE}/articles/", arts[0]["date"] if arts else today, "daily", "0.9"),
+            (f"{SITE}/about/", today, "monthly", "0.6"),
+            (f"{SITE}/editorial-policy/", today, "monthly", "0.4")]
     urls += [(f"{SITE}/articles/{a['slug']}/", a.get("updated", a["date"]), "monthly", "0.8") for a in arts]
     body = "".join(f"<url><loc>{u}</loc><lastmod>{d}</lastmod><changefreq>{c}</changefreq><priority>{p}</priority></url>" for u, d, c, p in urls)
     (ROOT / "sitemap.xml").write_text(f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>\n')
@@ -364,12 +461,17 @@ def main():
         for k in ("title", "meta_description", "body_md", "author", "image_alt"):
             if isinstance(a.get(k), str):
                 a[k] = a[k].replace("TechDcoded", "TechDCoded")
+        if a.get("author") in ("TechDcoded Team", "TechDCoded Team", "Bibek"):
+            a["author"] = AUTHOR_NAME
     OUT.mkdir(exist_ok=True)
     for a in arts:
         make_image(a)
         d = OUT / a["slug"]; d.mkdir(exist_ok=True)
         (d / "index.html").write_text(article_page(a, arts, emb), encoding="utf-8")
     (OUT / "index.html").write_text(list_page(arts), encoding="utf-8")
+    for folder, html in (("about", about_page()), ("editorial-policy", policy_page())):
+        d = ROOT / folder; d.mkdir(exist_ok=True)
+        (d / "index.html").write_text(html, encoding="utf-8")
     sitemap(arts); feed(arts); home_latest(arts)
     cleanup(arts, emb)
     print(f"Built {len(arts)} articles")
