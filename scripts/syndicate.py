@@ -87,17 +87,43 @@ def devto(a):
     return r.json().get("url", "ok")
 
 
+def _gql(query, variables=None):
+    """Hashnode GraphQL call with clear errors (their gateway sometimes replies with HTML, not JSON)."""
+    r = requests.post("https://gql.hashnode.com", timeout=60,
+                      json={"query": query, "variables": variables or {}},
+                      headers={"Authorization": (env("HASHNODE_TOKEN") or "").strip(),
+                               "Content-Type": "application/json", "Accept": "application/json"})
+    try:
+        j = r.json()
+    except ValueError:
+        raise RuntimeError(f"hashnode replied with non-JSON ({r.status_code}): {r.text[:200]}")
+    if j.get("errors"):
+        raise RuntimeError(f"hashnode error ({r.status_code}): {str(j['errors'])[:250]}")
+    if r.status_code >= 300:
+        raise RuntimeError(f"hashnode {r.status_code}: {r.text[:200]}")
+    return j["data"]
+
+
+def hashnode_publication_id():
+    """Use the given ID, or look it up from the blog address so a wrong/missing ID isn't fatal."""
+    pid = (env("HASHNODE_PUBLICATION_ID") or "").strip()
+    if re.fullmatch(r"[0-9a-f]{24}", pid or ""):
+        return pid
+    host = (env("HASHNODE_HOST") or "techdcoded.hashnode.dev").strip().replace("https://", "").strip("/")
+    data = _gql("query P($host: String!) { publication(host: $host) { id title } }", {"host": host})
+    pub = (data or {}).get("publication")
+    if not pub:
+        raise RuntimeError(f"no Hashnode blog found at {host} — check HASHNODE_HOST")
+    print(f"  hashnode publication resolved: {pub.get('title')} ({pub['id']})")
+    return pub["id"]
+
+
 def hashnode(a):
-    q = """mutation P($input: PublishPostInput!) { publishPost(input: $input) { post { url } } }"""
-    inp = {"title": brand(a["title"]), "contentMarkdown": excerpt_md(a), "publicationId": env("HASHNODE_PUBLICATION_ID"),
+    q = "mutation P($input: PublishPostInput!) { publishPost(input: $input) { post { url } } }"
+    inp = {"title": brand(a["title"]), "contentMarkdown": excerpt_md(a), "publicationId": hashnode_publication_id(),
            "originalArticleURL": url_of(a), "coverImageOptions": {"coverImageURL": cover(a)},
            "tags": [{"slug": t, "name": t.title()} for t in tags(a)]}
-    r = ok(requests.post("https://gql.hashnode.com", timeout=60, json={"query": q, "variables": {"input": inp}},
-                         headers={"Authorization": env("HASHNODE_TOKEN")}))
-    j = r.json()
-    if j.get("errors"):
-        raise RuntimeError(str(j["errors"])[:300])
-    return j["data"]["publishPost"]["post"]["url"]
+    return _gql(q, {"input": inp})["publishPost"]["post"]["url"]
 
 
 def blogger(a):
@@ -189,7 +215,7 @@ def facebook(a):
 
 PLATFORMS = {
     "devto": (devto, ["DEVTO_API_KEY"]),
-    "hashnode": (hashnode, ["HASHNODE_TOKEN", "HASHNODE_PUBLICATION_ID"]),
+    "hashnode": (hashnode, ["HASHNODE_TOKEN"]),   # publication id is looked up if not supplied
     "blogger": (blogger, ["BLOGGER_CLIENT_ID", "BLOGGER_CLIENT_SECRET", "BLOGGER_REFRESH_TOKEN", "BLOGGER_BLOG_ID"]),
     "tumblr": (tumblr, ["TUMBLR_CONSUMER_KEY", "TUMBLR_CONSUMER_SECRET", "TUMBLR_TOKEN", "TUMBLR_TOKEN_SECRET", "TUMBLR_BLOG"]),
     "bluesky": (bluesky, ["BLUESKY_HANDLE", "BLUESKY_APP_PASSWORD"]),
