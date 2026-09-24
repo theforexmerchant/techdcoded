@@ -89,16 +89,20 @@ def devto(a):
 
 def _gql(query, variables=None):
     """Hashnode GraphQL call with clear errors (their gateway sometimes replies with HTML, not JSON)."""
-    r = requests.post("https://gql.hashnode.com", timeout=60,
+    # gql.hashnode.com was retired in May 2026; the live endpoint is gql-beta.hashnode.com
+    r = requests.post(env("HASHNODE_ENDPOINT") or "https://gql-beta.hashnode.com", timeout=60,
                       json={"query": query, "variables": variables or {}},
-                      headers={"Authorization": (env("HASHNODE_TOKEN") or "").strip(),
+                      headers={"Authorization": "Bearer " + (env("HASHNODE_TOKEN") or "").strip(),
                                "Content-Type": "application/json", "Accept": "application/json"})
     try:
         j = r.json()
     except ValueError:
         raise RuntimeError(f"hashnode replied with non-JSON ({r.status_code}): {r.text[:200]}")
     if j.get("errors"):
-        raise RuntimeError(f"hashnode error ({r.status_code}): {str(j['errors'])[:250]}")
+        msg = str(j["errors"])[:250]
+        if re.search(r"pro plan|subscription|not allowed|forbidden", msg, re.I):
+            raise RuntimeError("hashnode needs a paid Pro plan for API publishing — remove HASHNODE_TOKEN to skip it")
+        raise RuntimeError(f"hashnode error ({r.status_code}): {msg}")
     if r.status_code >= 300:
         raise RuntimeError(f"hashnode {r.status_code}: {r.text[:200]}")
     return j["data"]
@@ -121,9 +125,13 @@ def hashnode_publication_id():
 def hashnode(a):
     q = "mutation P($input: PublishPostInput!) { publishPost(input: $input) { post { url } } }"
     inp = {"title": brand(a["title"]), "contentMarkdown": excerpt_md(a), "publicationId": hashnode_publication_id(),
-           "originalArticleURL": url_of(a), "coverImageOptions": {"coverImageURL": cover(a)},
-           "tags": [{"slug": t, "name": t.title()} for t in tags(a)]}
-    return _gql(q, {"input": inp})["publishPost"]["post"]["url"]
+           "originalArticleURL": url_of(a), "coverImage": {"url": cover(a)},
+           "tags": [{"slug": t} for t in tags(a)]}
+    data = _gql(q, {"input": inp})
+    post = ((data or {}).get("publishPost") or {}).get("post")
+    if not post:
+        raise RuntimeError("hashnode accepted the request but published nothing — a Pro plan is required for API publishing")
+    return post["url"]
 
 
 def blogger(a):
