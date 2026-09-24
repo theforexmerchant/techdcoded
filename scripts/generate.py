@@ -126,16 +126,25 @@ def _models_for(provider):
             ids = _pick(ids, [r"gpt-oss-120b", r"kimi", r"llama-4-maverick", r"llama-3\.3-70b", r"qwen", r"llama"]) or \
                   ["openai/gpt-oss-120b", "llama-3.3-70b-versatile"]
     except Exception as ex:
-        print(f"  {provider} model list failed: {ex}")
+        print(f"  {provider} model list failed: {ex} — using the built-in list")
+    if not ids:
+        ids = {"github": ["openai/gpt-4.1", "openai/gpt-4.1-mini", "openai/gpt-4o", "openai/gpt-4o-mini"],
+               "groq": ["openai/gpt-oss-120b", "llama-3.3-70b-versatile", "llama-3.1-8b-instant"]}.get(provider, [])
     _MODEL_CACHE[provider] = ids[:4]
     return _MODEL_CACHE[provider]
 
 
+class TooBig(RuntimeError):
+    """Prompt was too large for this provider — shrink and retry, don't disable the provider."""
+
+
 def _openai_compat(provider, prompt, json_mode, temperature):
-    url, key, max_out = {
-        "github": ("https://models.github.ai/inference/chat/completions", GH_TOKEN, 4000),
-        "groq": ("https://api.groq.com/openai/v1/chat/completions", GROQ_KEY, 8000),
+    url, key, max_out, max_chars = {
+        "github": ("https://models.github.ai/inference/chat/completions", GH_TOKEN, 4000, 60000),
+        "groq": ("https://api.groq.com/openai/v1/chat/completions", GROQ_KEY, 8000, 8000),
     }[provider]
+    if len(prompt) > max_chars:
+        prompt = prompt[:max_chars] + "\n\n[reference material truncated]"
     last = ""
     for model in _models_for(provider):
         body = {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": temperature, "max_tokens": max_out}
@@ -151,7 +160,12 @@ def _openai_compat(provider, prompt, json_mode, temperature):
             if r.status_code in (429, 500, 502, 503, 504):
                 last = f"{model} {r.status_code}: {r.text[:160]}"; print(f"  {provider} busy: {last}"); time.sleep(8); continue
             if r.status_code >= 400:
-                last = f"{model} {r.status_code}: {r.text[:160]}"; print(f"  {provider} refused: {last}"); break
+                last = f"{model} {r.status_code}: {r.text[:160]}"; print(f"  {provider} refused: {last}")
+                if r.status_code in (400, 413) and re.search(r"too large|context length|max.*tokens|tokens per", r.text, re.I):
+                    if "per m" in r.text.lower() and attempt == 0:   # per-minute token limit: wait it out
+                        print(f"  {provider} minute limit hit — waiting 45s"); time.sleep(45); continue
+                    raise TooBig(f"{provider}: prompt too large ({model})")
+                break
             try:
                 text = r.json()["choices"][0]["message"]["content"] or ""
             except (KeyError, IndexError, ValueError):
@@ -168,20 +182,34 @@ def gemini(prompt, *, search=False, json_mode=False, temperature=0.7):
         return _gemini(prompt, search=True, temperature=temperature)
     order = [p.strip() for p in os.environ.get("AI_ORDER", "gemini,github,groq").split(",") if p.strip()]
     errors = []
-    for p in order:
-        if p in DEAD or (p == "github" and not GH_TOKEN) or (p == "groq" and not GROQ_KEY) or (p == "gemini" and not KEY):
-            continue
-        try:
-            if p == "gemini":
-                return _gemini(prompt, json_mode=json_mode, temperature=temperature)
-            text = _openai_compat(p, prompt, json_mode, temperature)
-            print(f"  (answered by {p})")
-            return text, {}
-        except RuntimeError as ex:
-            errors.append(f"{p}: {str(ex)[:200]}")
-            print(f"  {p} unavailable — trying the next AI. ({str(ex)[:120]})")
-            DEAD.add(p)
-    raise RuntimeError("All AIs failed: " + " | ".join(errors))
+    for attempt in (1, 2):          # second pass ignores DEAD: a provider that failed once may work now
+        for p in order:
+            if (p == "github" and not GH_TOKEN) or (p == "groq" and not GROQ_KEY) or (p == "gemini" and not KEY):
+                continue
+            if attempt == 1 and p in DEAD:
+                continue
+            try:
+                if p == "gemini":
+                    return _gemini(prompt, json_mode=json_mode, temperature=temperature)
+                text = _openai_compat(p, prompt, json_mode, temperature)
+                print(f"  (answered by {p})")
+                return text, {}
+            except TooBig as ex:    # shrink the prompt instead of giving up on this provider
+                print(f"  {p}: {ex} — retrying with a shorter prompt")
+                try:
+                    text = _openai_compat(p, prompt[:12000] + "\n\n[material truncated]", json_mode, temperature)
+                    print(f"  (answered by {p}, shortened)")
+                    return text, {}
+                except RuntimeError as ex2:
+                    errors.append(f"{p}: {str(ex2)[:200]}")
+            except RuntimeError as ex:
+                errors.append(f"{p}: {str(ex)[:200]}")
+                print(f"  {p} unavailable — trying the next AI. ({str(ex)[:120]})")
+                DEAD.add(p)
+        if attempt == 1 and DEAD:
+            print("  all AIs had failed earlier this run — trying them once more")
+            time.sleep(20)
+    raise RuntimeError("All AIs failed: " + (" | ".join(errors) or "every provider was already failing this run"))
 
 
 def resolve_model():
@@ -516,7 +544,7 @@ def wiki_pages(query, limit=3):
             page = next(iter(r.json()["query"]["pages"].values()))
             text = (page.get("extract") or "").strip()
             if len(text) > 400:
-                out.append((page["title"], "https://en.wikipedia.org/wiki/" + page["title"].replace(" ", "_"), text[:12000]))
+                out.append((page["title"], "https://en.wikipedia.org/wiki/" + page["title"].replace(" ", "_"), text[:6000]))
         except Exception as ex:
             print("  wikipedia fetch failed:", t, ex)
     return out
@@ -596,7 +624,7 @@ real-world and Indian examples, common myths and questions people ask. Bullet po
 supported by the material; mark gaps as "not covered by sources".
 
 REFERENCE MATERIAL
-{facts[:60000]}""", temperature=0.2)
+{facts[:16000]}""", temperature=0.2)
                 text = summary + "\n\nBACKGROUND (model knowledge, use only if consistent with the above):\n" + text
             except Exception as ex:
                 print("  wikipedia summarising failed:", ex)
