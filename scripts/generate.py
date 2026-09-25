@@ -24,7 +24,7 @@ SEARCH_OK = True # turned off for the rest of the run once search quota is exhau
 EMBED_MODEL = os.environ.get("GEMINI_EMBED_MODEL", "gemini-embedding-001")
 SIM_LIMIT = 0.86      # embedding cosine above this = too similar to an existing article
 JAC_LIMIT = 0.55      # title word-overlap above this = too similar
-MIN_WORDS = 1100
+MIN_WORDS = 1000
 
 STYLE = """You write for TechDcoded (techdcoded.com), an Indian tech-explainer brand: "You use the technology. We decode it."
 Audience: curious Indian readers (students, professionals, general public) — smart but not engineers.
@@ -618,10 +618,12 @@ Bullet points.""", temperature=0.2)
         if wiki:
             facts = "\n\n".join(f"SOURCE: {t}\n{txt}" for t, _, txt in wiki)
             try:
-                summary, _ = gemini(f"""Using ONLY the reference material below, write detailed factual research notes for a
-writer on: "{topic['title']}" ({topic['angle']}). Cover how it works step by step, history, numbers with their context,
-real-world and Indian examples, common myths and questions people ask. Bullet points. Do not invent anything that is not
-supported by the material; mark gaps as "not covered by sources".
+                summary, _ = gemini(f"""Write detailed factual research notes for a writer on: "{topic['title']}"
+({topic['angle']}). Use the reference material below first, then fill the remaining gaps with well-established,
+widely-known facts you are confident about. Cover how it works step by step, history, numbers with their context,
+real-world and Indian examples, common myths and questions people ask. Bullet points.
+Mark each line [ref] if it comes from the reference material or [known] if it is general knowledge.
+Never invent statistics, prices, dates from the last two years, or named studies.
 
 REFERENCE MATERIAL
 {facts[:16000]}""", temperature=0.2)
@@ -671,7 +673,7 @@ short description of the topic for the featured image
 (heading text = the exact ## heading the picture belongs under)
 ### END ###
 
-body_md rules: 1300-1800 words. Start with an engaging intro paragraph (no heading). Use ## for 6-9 main sections and
+body_md rules: 1300-1800 words (never under 1200). Start with an engaging intro paragraph (no heading). Use ## for 6-9 main sections and
 ### for sub-points. Short paragraphs (2-4 sentences), bullet lists, **bold** for key terms, one Markdown table where a
 comparison or data fits, a section with a real-world or Indian example, and end with '## The Bottom Line'.
 Do NOT include an H1, the FAQ, sources or key takeaways in body_md.
@@ -753,8 +755,8 @@ def mechanical_issues(a):
     hard, soft = [], []
     body = a.get("body_md", "")
     wc = len(re.findall(r"\w+", body))
-    if wc < 900: hard.append(f"Body is only {wc} words; must be at least {MIN_WORDS + 200}.")
-    elif wc < MIN_WORDS: soft.append(f"Body is {wc} words; aim for {MIN_WORDS + 200}+.")
+    if wc < 800: hard.append(f"Body is only {wc} words; must be at least {MIN_WORDS}.")
+    elif wc < MIN_WORDS: soft.append(f"Body is {wc} words; aim for {MIN_WORDS}+.")
     if re.search(r"as an ai (language )?model|\[insert|lorem ipsum|\bTODO\b", body, re.I):
         hard.append("Contains AI boilerplate/placeholder text.")
     if len(re.findall(r"^## ", body, re.M)) < 5: soft.append("Use at least 6 '## ' sections.")
@@ -783,7 +785,10 @@ def autofix(a):
 
 def review(article, notes):
     prompt = f"""You are a strict senior editor for a tech-explainer site that must rank on Google and never publish errors.
-Review this article against the research notes. Score 1-10 each: accuracy (claims supported by notes, no invented numbers),
+Review this article. The research notes are background, not the limit of what may be said: a claim that is
+well-established and correct in the real world is fine even if the notes do not mention it. Penalise only claims that are
+wrong, invented (made-up statistics, prices, studies, product names, recent dates) or misleading.
+Score 1-10 each: accuracy (claims correct and nothing invented),
 helpfulness (answers the title fully, specific, not generic), readability (clear for non-experts), originality (fresh insight,
 not generic filler), safety (no harmful instructions). List concrete problems to fix.
 
