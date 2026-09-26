@@ -108,6 +108,7 @@ def expand(md_text, images=None):
         return f"\n\n{key}\n\n"
 
     md_text = BLOCK_RE.sub(sub, md_text)
+    fallback = 0
     for img in images or []:
         key = f"VBLOCK{len(store)}X"
         store[key] = image_html(img)
@@ -126,11 +127,14 @@ def expand(md_text, images=None):
                     lines.insert(j, f"\n{key}\n")
                     md_text = "\n".join(lines); placed = True
                     break
-        if not placed:  # fallback: before the 3rd section
+        if not placed:  # fallback: spread the leftovers evenly through the article
             parts = re.split(r"(?m)^(?=## )", md_text)
-            idx = min(len(parts) - 1, 2 + len([k for k in store if k != key]) % 3)
+            total = max(1, len(images or []))
+            step = max(1, (len(parts) - 1) // total)
+            idx = min(len(parts) - 1, 1 + fallback * step)
             parts.insert(idx, f"{key}\n\n")
             md_text = "".join(parts)
+            fallback += 1
     return md_text, store
 
 

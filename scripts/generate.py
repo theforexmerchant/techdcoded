@@ -669,8 +669,9 @@ A: 40-80 word answer
 ### IMAGE_ALT ###
 short description of the topic for the featured image
 ### VISUALS ###
-2-3 lines, each: heading text | photo or illustration | 2-4 word stock-photo search | one-sentence caption
-(heading text = the exact ## heading the picture belongs under)
+6-8 lines, each: heading text | photo or illustration | 2-4 word stock-photo search | one-sentence caption
+(heading text = the exact ## heading the picture belongs under; spread them across DIFFERENT headings so almost every
+section gets its own picture)
 ### END ###
 
 body_md rules: 1300-1800 words (never under 1200). Start with an engaging intro paragraph (no heading). Use ## for 6-9 main sections and
@@ -713,9 +714,11 @@ text
 text
 :::
 
-VISUALS: prefer "illustration" (custom AI art in our brand style) for concepts, processes and ideas; use "photo" only for
-specific real objects, places or people at work. For illustrations, the search field should describe the scene visually
-(e.g. "glowing data packets travelling through fibre optic cables"). Never ask for text, labels or logos in an image.
+VISUALS: give 6-8 of them, one per section wherever it helps. Prefer "illustration" (custom AI art) for concepts,
+processes and ideas; use "photo" only for specific real objects, places or people at work. For illustrations the search
+field should describe a real, photographable scene (e.g. "engineer inspecting a steel base isolator under a building").
+Describe real objects, places and people rather than abstract glowing concepts, and make each one different from the
+others in subject and setting so the article never looks repetitive. Never ask for text, labels or logos in an image.
 Write in English."""
 
 

@@ -21,9 +21,31 @@ CF_TOKEN = os.environ.get("CF_API_TOKEN", "")
 # Cloudflare Workers AI image models (free daily allowance), tried in order
 CF_MODELS = [m for m in os.environ.get("CF_IMAGE_MODELS", "@cf/black-forest-labs/flux-1-schnell,@cf/stabilityai/stable-diffusion-xl-base-1.0").split(",") if m]
 USED = DATA / "used_photos.json"
-STYLE = ("Editorial 3D illustration for a technology explainer website. Dark navy background, glowing electric blue, "
-         "cyan and violet accents, clean modern isometric look, soft lighting, high detail. Absolutely no text, "
-         "letters, numbers, logos or watermarks. Subject: ")
+# Natural light/scene moods rotated across an article so the pictures vary without looking artificial.
+PALETTES = [
+    "warm golden-hour sunlight, long soft shadows",
+    "bright natural daylight, clean and crisp",
+    "soft overcast light, gentle shadows, true-to-life colour",
+    "blue hour twilight, cool natural tones, city lights just coming on",
+    "warm indoor lamp light with daylight through a window",
+    "clean studio lighting on a neutral background",
+    "early morning sunlight with light haze",
+    "late afternoon sun, rich but natural colour",
+    "cool daylight in a modern workspace, subtle reflections",
+    "dramatic natural side light against a dark background",
+]
+STYLE_BASE = ("Photorealistic editorial photograph for a technology article. Realistic materials and textures, "
+              "true-to-life natural colours, natural lighting, shallow depth of field, sharp focus, shot on a 35mm "
+              "camera, high detail. Not cartoonish, not neon, no glowing sci-fi effects. "
+              "Absolutely no text, letters, numbers, logos or watermarks. ")
+
+
+def style_for(n=None):
+    pal = random.choice(PALETTES) if n is None else PALETTES[n % len(PALETTES)]
+    return f"{STYLE_BASE}Lighting: {pal}. Subject: "
+
+
+STYLE = style_for(0)          # kept for callers that expect a plain prefix
 
 
 def _save(im, base):
@@ -48,9 +70,9 @@ def pexels_photo(query, used):
     return Image.open(io.BytesIO(data)), p
 
 
-def ai_illustration(prompt):
+def ai_illustration(prompt, n=None):
     url = f"https://generativelanguage.googleapis.com/v1beta/models/{IMAGE_MODEL}:generateContent"
-    body = {"contents": [{"parts": [{"text": STYLE + prompt + ". Wide 16:9 composition."}]}],
+    body = {"contents": [{"parts": [{"text": style_for(n) + prompt + ". Wide 16:9 composition."}]}],
             "generationConfig": {"responseModalities": ["IMAGE"]}}
     r = requests.post(url, json=body, headers={"x-goog-api-key": GEMINI_KEY}, timeout=180)
     r.raise_for_status()
@@ -61,11 +83,11 @@ def ai_illustration(prompt):
     return None
 
 
-def cf_image(prompt, wide=True):
+def cf_image(prompt, wide=True, n=None):
     """Generate an image with Cloudflare Workers AI (free tier). Returns a PIL image or None."""
     if not (CF_ACCOUNT and CF_TOKEN):
         return None
-    full = STYLE + prompt + (". Wide cinematic 16:9 composition, main subject on the right half." if wide else "")
+    full = style_for(n) + prompt + (". Wide cinematic 16:9 composition, main subject on the right half." if wide else "")
     for model in CF_MODELS:
         url = f"https://api.cloudflare.com/client/v4/accounts/{CF_ACCOUNT}/ai/run/{model}"
         body = {"prompt": full[:2000]}
@@ -113,9 +135,9 @@ def get_visuals(visuals, slug):
         try:
             got = None
             if v.get("type") == "illustration":
-                im = cf_image(v.get("prompt") or v.get("query", ""))
+                im = cf_image(v.get("prompt") or v.get("query", ""), n=n)
                 if im is None and IMAGE_MODEL and GEMINI_KEY:
-                    im = ai_illustration(v.get("prompt") or v.get("query", ""))
+                    im = ai_illustration(v.get("prompt") or v.get("query", ""), n=n)
                 if im:
                     w, h = _save(im, base)
                     got = {"credit": "AI illustration: TechDcoded"}
@@ -127,7 +149,7 @@ def get_visuals(visuals, slug):
                     used.add(str(p["id"]))
                     got = {"credit": f"Photo: {p['photographer']} / Pexels", "credit_url": p["url"]}
             if not got and v.get("type") != "illustration":   # photo wanted but none found: illustrate instead
-                im = cf_image(v.get("prompt") or v.get("query", ""))
+                im = cf_image(v.get("prompt") or v.get("query", ""), n=n)
                 if im:
                     w, h = _save(im, base)
                     got = {"credit": "AI illustration: TechDcoded"}
