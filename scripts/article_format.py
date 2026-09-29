@@ -54,7 +54,7 @@ def parse_article(text):
         "body_md": g("BODY"),
         "faq": faq[:6],
         "image_alt": g("IMAGE_ALT"),
-        "visuals": visuals[:3],
+        "visuals": visuals[:8],
     }
     if not art["title"] or len(art["body_md"]) < 1500:
         raise RuntimeError("Article reply was incomplete or not in the expected format")

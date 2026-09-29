@@ -140,8 +140,8 @@ class TooBig(RuntimeError):
 
 def _openai_compat(provider, prompt, json_mode, temperature):
     url, key, max_out, max_chars = {
-        "github": ("https://models.github.ai/inference/chat/completions", GH_TOKEN, 4000, 60000),
-        "groq": ("https://api.groq.com/openai/v1/chat/completions", GROQ_KEY, 8000, 8000),
+        "github": ("https://models.github.ai/inference/chat/completions", GH_TOKEN, 8000, 60000),
+        "groq": ("https://api.groq.com/openai/v1/chat/completions", GROQ_KEY, 10000, 8000),
     }[provider]
     if len(prompt) > max_chars:
         prompt = prompt[:max_chars] + "\n\n[reference material truncated]"
@@ -742,13 +742,19 @@ Research notes (your ONLY source of facts):
 
 {WRITE_SPEC}"""
     last = None
-    for _ in range(3):
-        text, _ = gemini(prompt, temperature=0.7)
+    # Some free models cut the reply short. Each retry asks for a slightly shorter article so it fits.
+    shrink = ["",
+              "\n\nIMPORTANT: keep the body to 1150-1300 words and 6 visuals so your reply is not cut off. "
+              "Finish every section including ### END ###.",
+              "\n\nIMPORTANT: your last reply was cut off. Keep the body to 1000-1150 words, 5 '## ' sections, "
+              "4 FAQ pairs and 4 visuals. Be concise and finish with ### END ###."]
+    for attempt in range(3):
+        text, _ = gemini(prompt + shrink[attempt], temperature=0.7)
         try:
             return parse_article(text)
         except RuntimeError as ex:
             last = ex
-            print("  draft not in the expected format, asking again:", ex)
+            print(f"  draft not in the expected format (attempt {attempt + 1}), asking again shorter:", ex)
     raise RuntimeError(f"Could not get a complete article: {last}")
 
 
