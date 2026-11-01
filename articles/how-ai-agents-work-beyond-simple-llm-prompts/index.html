@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How AI Agents Work: Beyond Simple LLM Prompts | TechDCoded</title>
+<meta name="description" content="Discover how ai agents work under the hood, from reasoning loops and memory architecture to tool integration and the 7-layer cognitive stack.">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<link rel="canonical" href="https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/">
+<link rel="icon" type="image/png" href="/assets/favicon.png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="TechDCoded" href="/feed.xml">
+<meta name="theme-color" content="#050a1e">
+<meta property="og:site_name" content="TechDCoded">
+<meta property="og:locale" content="en_IN">
+<meta property="og:title" content="How AI Agents Work: Beyond Simple LLM Prompts | TechDCoded">
+<meta property="og:description" content="Discover how ai agents work under the hood, from reasoning loops and memory architecture to tool integration and the 7-layer cognitive stack.">
+<meta property="og:url" content="https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/">
+<meta property="og:image" content="https://techdcoded.com/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How AI Agents Work: Beyond Simple LLM Prompts | TechDCoded">
+<meta name="twitter:description" content="Discover how ai agents work under the hood, from reasoning loops and memory architecture to tool integration and the 7-layer cognitive stack.">
+<meta name="twitter:image" content="https://techdcoded.com/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/assets/site.css?v=f5841fb6">
+<meta property="og:type" content="article"><meta property="article:published_time" content="2026-11-01T13:41:00+05:30"><meta property="article:section" content="Fresh Tech">
+<script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "BlogPosting", "headline": "How AI Agents Work: Beyond Simple LLM Prompts", "description": "Discover how ai agents work under the hood, from reasoning loops and memory architecture to tool integration and the 7-layer cognitive stack.", "image": ["https://techdcoded.com/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts.jpg"], "datePublished": "2026-11-01T13:41:00+05:30", "dateModified": "2026-11-01T13:41:00+05:30", "author": {"@type": "Person", "name": "Bibekananda Patra", "url": "https://techdcoded.com/about/"}, "publisher": {"@type": "Organization", "name": "TechDCoded", "logo": {"@type": "ImageObject", "url": "https://techdcoded.com/assets/logo-mark.png"}}, "mainEntityOfPage": "https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/", "articleSection": "Fresh Tech", "keywords": "how ai agents work, ai agent architecture, how autonomous ai works, react loop ai, llm agent harness, vector databases ai memory, model context protocol", "wordCount": 1928, "inLanguage": "en-IN"}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://techdcoded.com/"}, {"@type": "ListItem", "position": 2, "name": "Articles", "item": "https://techdcoded.com/articles/"}, {"@type": "ListItem", "position": 3, "name": "How AI Agents Work: Beyond Simple LLM Prompts", "item": "https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/"}]}, {"@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is the main difference between an LLM and an AI agent?", "acceptedAnswer": {"@type": "Answer", "text": "A large language model (LLM) is a text prediction engine that generates a single response to a user prompt and stops. An AI agent wraps an LLM inside an outer software harness, enabling it to set goals, run iterative reasoning loops, use external tools like web browsers or databases, and execute multi-step tasks independently without human guidance."}}, {"@type": "Question", "name": "What is an agent harness in software development?", "acceptedAnswer": {"@type": "Answer", "text": "An agent harness, or scaffold, is the surrounding software wrapper that manages an LLM's operational state. It provides system prompts, handles context windows, enforces security sandboxes, parses structural outputs like JSON, and directly interfaces the model with external computer tools, web APIs, local files, and command-line interfaces."}}, {"@type": "Question", "name": "How do AI agents store information in long-term memory?", "acceptedAnswer": {"@type": "Answer", "text": "AI agents store persistent memory outside the LLM's temporary context window using vector databases such as Pinecone, Chroma, or Qdrant. Information is converted into vector embeddings, allowing the agent to recall past execution logs, episodic event sequences, and semantic facts using Retrieval-Augmented Generation (RAG) pipelines across separate user sessions."}}, {"@type": "Question", "name": "What is the Model Context Protocol (MCP)?", "acceptedAnswer": {"@type": "Answer", "text": "Introduced by Anthropic in late 2024, the Model Context Protocol (MCP) is an open architectural standard designed to connect AI agents with external context sources and software tools. It standardizes how models discover API capabilities, fetch structured data, and trigger execution routines across enterprise environments without needing unique custom integrations for every platform."}}, {"@type": "Question", "name": "Are virtual voice assistants like Siri considered modern AI agents?", "acceptedAnswer": {"@type": "Answer", "text": "Early voice assistants introduced consumer-facing agent concepts in the early 2010s, but they relied on basic rule-based logic and deterministic decision trees. Modern AI agents differ significantly because they are powered by modern transformer-based LLMs, enabling general-purpose reasoning, dynamic planning, autonomous self-correction, and unstructured task execution."}}]}]}</script>
+<script>function loadScript(a){var b=document.getElementsByTagName("head")[0],c=document.createElement("script");c.type="text/javascript",c.src="https://tracker.metricool.com/resources/be.js",c.onreadystatechange=a,c.onload=a,b.appendChild(c)}loadScript(function(){beTracker.t({hash:"5b8fca006781a420995665ad57682a95"})});</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="/" aria-label="TechDCoded home"><picture><source srcset="/assets/logo.webp" type="image/webp"><img src="/assets/logo.png" alt="TechDCoded" width="620" height="143"></picture></a>
+  <nav><a class="hide-m" href="/">Home</a><a href="/articles/">Articles</a><a class="hide-m" href="/about/">About</a><a class="hide-m" href="https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a" target="_blank" rel="noopener">WhatsApp</a>
+  <a class="btn-yt" href="https://www.youtube.com/@techdcoded?sub_confirmation=1" target="_blank" rel="noopener">▶ Subscribe</a></nav>
+</div></header>
+
+<div class="progress" id="prog"></div>
+<main class="narrow">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>›</span><a href="/articles/">Articles</a><span>›</span>Fresh Tech</nav>
+<article>
+<span class="pill">Fresh Tech</span>
+<h1 class="title">How AI Agents Work: Beyond Simple LLM Prompts</h1>
+<div class="meta"><span>Bibekananda Patra</span><span>·</span><time datetime="2026-11-01">1 Nov 2026</time><span>·</span><span>9 min read</span></div>
+<div class="hero-img"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts.jpg" alt="Technical architectural diagram illustrating how an AI agent harness connects a central LLM reasoning engine to memory systems and real-world software tools." width="1200" height="630" fetchpriority="high"></picture></div>
+<div class="answer"><b>Quick answer</b><p>AI agents are autonomous systems powered by large language models working alongside software scaffolds, memory modules, and external tools. Unlike traditional chatbots that generate a single answer and stop, agents run continuous control loops to break down complex goals, execute tasks, evaluate outcomes, and self-correct until the final objective is achieved.</p></div>
+<div class="takeaways"><h2>Key takeaways</h2><ul><li>AI agents differ from chatbots by operating autonomously inside continuous, goal-driven control loops.</li><li>An agent harness acts as the software scaffold that connects the LLM brain to databases, browsers, and code execution sandboxes.</li><li>The ReAct loop governs agent execution through continuous cycles of Thought, Action, Execution, Observation, and Reflection.</li><li>Long-term memory relies on vector databases like Pinecone, Chroma, and Qdrant to store episodic and semantic history across sessions.</li><li>Standardization tools like Function Calling and the Model Context Protocol (MCP) enable safe, structured interactions with external APIs.</li></ul></div>
+<details class="toc" open><summary>In this article</summary><ul><li><a href="#what-makes-an-ai-agent-different-from-a-standard-chatbot">What Makes an AI Agent Different from a Standard Chatbot?</a></li><li><a href="#the-evolution-of-artificial-agents-from-1958-to-today">The Evolution of Artificial Agents: From 1958 to Today</a></li><li><a href="#the-anatomy-of-an-ai-agent-the-harness-and-the-brain">The Anatomy of an AI Agent: The Harness and the Brain</a></li><li><a href="#ken-huangs-7-layer-cognitive-reference-architecture">Ken Huang’s 7-Layer Cognitive Reference Architecture</a></li><li><a href="#inside-the-react-reasoning-loop-how-agents-think-and-act">Inside the ReAct Reasoning Loop: How Agents Think and Act</a></li><li><a href="#memory-systems-short-term-vs-long-term-retention">Memory Systems: Short-Term vs. Long-Term Retention</a></li><li><a href="#tool-interfacing-function-calling-and-open-protocols">Tool Interfacing: Function Calling and Open Protocols</a></li><li><a href="#the-bottom-line">The Bottom Line</a></li></ul></details>
+<div class="prose"><p>Imagine asking a digital assistant on your phone to plan a trip from Bengaluru to New Delhi. A traditional chatbot will simply print out a list of popular flights and hotel recommendations, waiting for you to perform every follow-up action. An <strong>AI agent</strong>, by contrast, takes a single high-level objective, breaks it into sub-tasks, checks live flight schedules, queries hotel availability against your saved preferences, reserves the bookings, and updates your personal schedule without asking for step-by-step guidance. </p>
+<p>Understanding <strong>how ai agents work</strong> requires looking beyond basic prompt engineering and simple text generation. While single-turn artificial intelligence models act as passive tools, agentic AI introduces autonomous systems capable of setting goals, making real-time decisions, and executing complex workflows. </p>
+<aside class="vb call keyterm"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/></svg></div><div><b>Agentic AI</b><p>An autonomous software system powered by a reasoning engine (like an LLM) that can set sub-goals, evaluate its environment, use software tools, and execute multi-step actions without constant human prompting.</p></div></aside>
+<h2 id="what-makes-an-ai-agent-different-from-a-standard-chatbot">What Makes an AI Agent Different from a Standard Chatbot?</h2>
+<p>The fundamental difference between a standard chatbot and an AI agent lies in how control flow is managed. Traditional tools operate reactively. You provide a prompt input, the model predicts the most statistically probable sequence of text, outputs the response, and immediately stops executing code. </p>
+<figure class="vb photo"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-1.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-1.jpg" alt="An illustration of a software developer monitoring an autonomous control loop system compared to a static prompt interface." width="1024" height="1024" loading="lazy"></picture><figcaption>An illustration of a software developer monitoring an autonomous control loop system compared to a static prompt interface. <span class="cr">AI illustration: TechDcoded</span></figcaption></figure>
+<p>Agentic AI introduces goal-directed behavior. Instead of terminating after one response, the control flow is driven by a large language model (LLM) surrounded by external software scaffolds. This architecture enables the AI to modify its digital environment, utilize third-party tools, and operate in a continuous control loop of perception, planning, tool usage, and self-evaluation until it reaches a desired target state.</p>
+<figure class="vb compare"><div class="cl"><h4>Standard Chatbot vs. AI Agent</h4><ul><li>Reactive single-turn responses</li><li>Static prompt-in, text-out workflow</li><li>Operates purely inside the text context window</li><li>Requires human guidance for every next step</li></ul></div><div class="vs">VS</div><div class="cr"><h4>Option B</h4><ul><li>Goal-directed multi-step autonomy</li><li>Continuous loop of planning, acting, and self-evaluation</li><li>Utilizes external tools, APIs, and command-line interfaces</li><li>Self-corrects errors and independently pursues sub-tasks</li></ul></div></figure>
+<h2 id="the-evolution-of-artificial-agents-from-1958-to-today">The Evolution of Artificial Agents: From 1958 to Today</h2>
+<p>The concept of an artificial agent is not new, but its modern implementation has undergone dramatic structural shifts over the decades. </p>
+<figure class="vb photo"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-2.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-2.jpg" alt="A historical mainframe system representing early agent architecture concepts dating back to the 1950s." width="1200" height="800" loading="lazy"></picture><figcaption>A historical mainframe system representing early agent architecture concepts dating back to the 1950s. <span class="cr"><a href="https://www.pexels.com/photo/woman-in-white-clothing-using-a-computer-8875514/" target="_blank" rel="nofollow noopener">Photo: cottonbro studio / Pexels</a></span></figcaption></figure>
+<p>In 1958, computer scientist Oliver Selfridge published "Pandemonium: A Paradigm for Learning," which established early theoretical foundations for agent-oriented software architecture. By the 1990s, computer scientists had developed the belief–desire–intention (BDI) software model alongside early agent-oriented programming paradigms. These early systems powered industrial monitoring and control networks using physical sensors and actuators. During this decade, Harvard professor Milind Tambe noted that the precise definition of an AI agent remained ambiguous across the industry.</p>
+<figure class="vb timeline"><figcaption>Milestones in Agent Architecture</figcaption><ol><li><time>1958</time><p>Oliver Selfridge publishes &quot;Pandemonium,&quot; outlining theoretical foundations for artificial software agents.</p></li><li><time>1990s</time><p>The belief-desire-intention (BDI) model emerges, powering industrial rule-based control systems.</p></li><li><time>Early 2010s</time><p>Consumer voice assistants like Apple&#x27;s Siri and Amazon&#x27;s Alexa introduce mainstream artificial agents, though they lack general reasoning capabilities.</p></li><li><time>2017</time><p>Google researchers publish &quot;Attention Is All You Need,&quot; introducing the transformer architecture behind modern LLMs.</p></li><li><time>2018</time><p>Academic researchers begin studying autonomous software agents built on early transformer models such as BERT and GPT-1.</p></li><li><time>Late 2023</time><p>OpenAI introduces native function-calling APIs, allowing LLMs to trigger structured code and external tools.</p></li><li><time>2024</time><p>The term &quot;agentic&quot; enters widespread industry usage, popularized in part by AI researcher Andrew Ng.</p></li><li><time>Late 2024</time><p>Anthropic launches the Model Context Protocol (MCP), establishing an open standard for connecting agentic models to data sources.</p></li></ol></figure>
+<p>Early artificial agents relied heavily on simple "if-then" deterministic logic, which later evolved into complex decision trees. By the early 2010s, consumer voice assistants like Siri and Alexa were deployed worldwide as everyday AI agents. However, these tools lacked general-purpose reasoning. </p>
+<p>The major breakthrough occurred after Google researchers published "Attention Is All You Need" in 2017, introducing the transformer neural network architecture. By 2018, researchers began building autonomous agents powered by early transformer models like BERT and GPT-1. The real shift toward real-world deployment accelerated in late 2023 when native function-calling APIs emerged, allowing LLMs to programmatically interface with software tools.</p>
+<h2 id="the-anatomy-of-an-ai-agent-the-harness-and-the-brain">The Anatomy of an AI Agent: The Harness and the Brain</h2>
+<p>At the center of a modern AI agent is a foundation LLM acting as the reasoning engine. However, an LLM by itself cannot read files, browse the web, or run code. To turn an LLM into an active agent, engineers enclose it inside an <strong>agent harness</strong> (also known as an agent scaffold).</p>
+<figure class="vb photo"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-3.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-3.jpg" alt="An architectural diagram showing an outer software harness managing security sandboxes around a central language model core." width="1024" height="1024" loading="lazy"></picture><figcaption>An architectural diagram showing an outer software harness managing security sandboxes around a central language model core. <span class="cr">AI illustration: TechDcoded</span></figcaption></figure>
+<aside class="vb call keyterm"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/></svg></div><div><b>Agent Harness</b><p>The outer software management layer that wraps around an LLM to manage its context window, run system prompts, execute external tool code, enforce security boundaries, and parse outputs.</p></div></aside>
+<p>The agent harness manages all system prompts, tracks operational context, handles state persistence, and provides security sandboxes. It acts as the intermediary between the model's raw text outputs and the outside world.</p>
+<p><code>+-------------------------------------------------------------+
+|                      AGENT HARNESS                          |
+|                                                             |
+|   +-----------------------+     +-----------------------+   |
+|   | Context &amp; State       |     | Security Sandboxes    |   |
+|   | Management            |     | &amp; Boundaries          |   |
+|   +-----------+-----------+     +-----------^-----------+   |
+|               |                             |               |
+|               v                             |               |
+|   +-----------------------------------------+-----------+   |
+|   |             FOUNDATION LLM (BRAIN)                  |   |
+|   +-----------------------------------------+-----------+   |
+|               |                             |               |
+|               v                             |               |
+|   +-----------+-----------+     +-----------+-----------+   |
+|   | Input Parsing         |     | Tool Interfacing      |   |
+|   | (JSON Schema)         |     | (APIs, CLI, Web DBs)  |   |
+|   +-----------------------+     +-----------------------+   |
++-------------------------------------------------------------+</code></p>
+<p>When an agent needs to perform an action, the harness captures the model's intent, formats it safely, and executes it against local databases, command-line interfaces (CLIs), web browsers, local software files, or physical hardware. For example, modern software tools like Anthropic's Claude Code utilize dedicated agent harnesses to inspect execution environments, read local code files, and safely execute terminal commands on a developer's computer.</p>
+<h2 id="ken-huangs-7-layer-cognitive-reference-architecture">Ken Huang’s 7-Layer Cognitive Reference Architecture</h2>
+<p>To understand how modern enterprise-grade agentic platforms operate, computer scientist Ken Huang formulated the <strong>7-Layer Cognitive Reference Architecture</strong>. This reference stack details how raw compute infrastructure translates into an active user-facing agent ecosystem.</p>
+<figure class="vb photo"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-4.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-4.jpg" alt="A visual breakdown illustrating the seven distinct layers supporting enterprise-grade cognitive AI platforms." width="1024" height="1024" loading="lazy"></picture><figcaption>A visual breakdown illustrating the seven distinct layers supporting enterprise-grade cognitive AI platforms. <span class="cr">AI illustration: TechDcoded</span></figcaption></figure>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th style="text-align: left;">Architecture Layer</th>
+<th style="text-align: left;">Core Functionality</th>
+<th style="text-align: left;">Components Included</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Layer 1: Foundation Models</strong></td>
+<td style="text-align: left;">Core intelligence &amp; pretrained weights</td>
+<td style="text-align: left;">Base LLMs, vision-language models, reasoning weights</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Layer 2: Data Operations</strong></td>
+<td style="text-align: left;">Memory management &amp; retrieval pipelines</td>
+<td style="text-align: left;">Vector databases, data loaders, Retrieval-Augmented Generation (RAG)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Layer 3: Agent Frameworks</strong></td>
+<td style="text-align: left;">Execution logic &amp; task coordination</td>
+<td style="text-align: left;">Orchestration engines, state machines, workflow controllers</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Layer 4: Deployment &amp; Infrastructure</strong></td>
+<td style="text-align: left;">Computational runtime environment</td>
+<td style="text-align: left;">Server networks, runtime engines, GPU hardware clusters</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Layer 5: Evaluation &amp; Observability</strong></td>
+<td style="text-align: left;">Performance logging &amp; state tracking</td>
+<td style="text-align: left;">Telemetry tools, run tracing, operational metric logging</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Layer 6: Security &amp; Compliance</strong></td>
+<td style="text-align: left;">System guardrails &amp; data boundary checks</td>
+<td style="text-align: left;">Security frameworks, access policies, compliance validators</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Layer 7: Agent Ecosystem</strong></td>
+<td style="text-align: left;">User interaction &amp; external applications</td>
+<td style="text-align: left;">User interfaces, API connectors, end-user applications</td>
+</tr>
+</tbody>
+</table></div>
+<p>Every production agent system relies on this complete vertical stack. Layers 1 through 4 handle raw model execution and data retrieval, while Layers 5 and 6 ensure the agent's operations remain visible, safe, and compliant with enterprise policies.</p>
+<h2 id="inside-the-react-reasoning-loop-how-agents-think-and-act">Inside the ReAct Reasoning Loop: How Agents Think and Act</h2>
+<p>How does an agent actually complete a task without human intervention? It uses a continuous control process often implemented through a pattern called the <strong>ReAct (Reasoning + Acting) Loop</strong>. </p>
+<figure class="vb photo"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-5.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-5.jpg" alt="A continuous flowchart tracing the ReAct loop cycle through thought generation, tool execution, and reflection." width="1024" height="1024" loading="lazy"></picture><figcaption>A continuous flowchart tracing the ReAct loop cycle through thought generation, tool execution, and reflection. <span class="cr">AI illustration: TechDcoded</span></figcaption></figure>
+<p>Instead of generating a full solution in one shot, the agent cycles through structured thinking, tool execution, and self-evaluation until its objective is met.</p>
+<figure class="vb steps"><figcaption>The ReAct Reasoning Loop</figcaption><ol><li><span class="sn">1</span><div><b>Goal Ingestion &amp; Deconstruction</b><p>The harness feeds the high-level objective to the LLM, which breaks it down into structured sub-tasks.</p></div></li><li><span class="sn">2</span><div><b>Thought Generation</b><p>The LLM generates an internal monologue (&quot;Thought&quot;) to evaluate what information is missing and choose the best approach.</p></div></li><li><span class="sn">3</span><div><b>Action Selection</b><p>The model formats a structured request (such as a JSON function call) specifying which external tool to trigger.</p></div></li><li><span class="sn">4</span><div><b>Environment Execution</b><p>The agent harness intercepts the request, runs the tool in a sandbox or via API, and retrieves the raw output.</p></div></li><li><span class="sn">5</span><div><b>Observation Parsing</b><p>The tool result (&quot;Observation&quot;) is loaded back into the context window alongside the previous command history.</p></div></li><li><span class="sn">6</span><div><b>Reflection &amp; Iteration</b><p>The agent evaluates whether the sub-task succeeded; if an error occurred, it adjusts its plan and retries.</p></div></li></ol></figure>
+<aside class="vb call didyouknow"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></div><div><b>Did you know?</b><p>When an AI agent runs into an execution error—like a failed API call or a syntax bug in code—it doesn't crash. In the Reflection phase, the agent reads the error message as an "Observation," analyzes what went wrong, and attempts an alternate fix automatically.</p></div></aside>
+<p>For instance, if an engineering team in Hyderabad sets up an automated agent to monitor server health, the agent doesn't just send an alert when a service fails. Its ReAct loop allows it to think through the problem, execute diagnostic scripts via a CLI tool, read the log output, decide on a fix, and apply a patch autonomously.</p>
+<h2 id="memory-systems-short-term-vs-long-term-retention">Memory Systems: Short-Term vs. Long-Term Retention</h2>
+<p>For an agent to execute multi-step plans across extended sessions, it requires robust memory systems. Without memory, an LLM resets after every turn. Agent developers solve this by splitting memory into distinct functional layers:</p>
+<figure class="vb photo"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-6.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-6.jpg" alt="A physical server room representing high-performance vector databases storing episodic and semantic memory for agents." width="1200" height="801" loading="lazy"></picture><figcaption>A physical server room representing high-performance vector databases storing episodic and semantic memory for agents. <span class="cr"><a href="https://www.pexels.com/photo/computer-server-in-data-center-room-17489156/" target="_blank" rel="nofollow noopener">Photo: panumas nikhomkhai / Pexels</a></span></figcaption></figure>
+<h3 id="short-term-memory-in-context">Short-Term Memory (In-Context)</h3>
+<p>Short-term memory lives directly inside the LLM's active context window. It contains recent prompt history, current operational variables, user conversation history, and immediate tool outputs. Because context windows have strict token limits, short-term memory is temporary and continually refreshed or summarized as new actions occur.</p>
+<h3 id="long-term-memory-vector-databases">Long-Term Memory (Vector Databases)</h3>
+<p>To store information permanently across separate sessions, agents leverage external vector databases such as <strong>Pinecone</strong>, <strong>Chroma</strong>, or <strong>Qdrant</strong>. Text data, execution logs, and user preferences are transformed into numerical representations called vector embeddings. When the agent encounters a new problem, it queries these vector stores to retrieve past experiences.</p>
+<p><code>+-------------------------+
+                                 |   AGENT REASONING LLM   |
+                                 +------------+------------+
+                                              |
+                     +------------------------+------------------------+
+                     |                                                 |
+                     v                                                 v
+        +-------------------------+                       +-------------------------+
+        |    SHORT-TERM MEMORY    |                       |    LONG-TERM MEMORY     |
+        |   (In-Context Window)   |                       |   (Vector Databases)    |
+        +------------+------------+                       +------------+------------+
+                     |                                                 |
+       +-------------+-------------+                     +-------------+-------------+
+       |                           |                     |                           |
+       v                           v                     v                           v
++--------------+           +---------------+     +---------------+           +---------------+
+| Recent Turns |           | Current Vars  |     | Pinecone DB   |           | Chroma DB     |
++--------------+           +---------------+     +---------------+           +---------------+
+                                                         |                           |
+                                                         v                           v
+                                                 +---------------+           +---------------+
+                                                 | Episodic Mem. |           | Semantic Mem. |
+                                                 +---------------+           +---------------+</code></p>
+<h3 id="episodic-vs-semantic-memory">Episodic vs. Semantic Memory</h3>
+<ul>
+<li><strong>Episodic Memory:</strong> Tracks explicit sequences of past events (e.g., <em>"What exact diagnostic steps did the agent run during yesterday's network outage?"</em>).</li>
+<li><strong>Semantic Memory:</strong> Retains structured facts and generalized knowledge extracted over time using Retrieval-Augmented Generation (RAG) pipelines (e.g., <em>"What is the standard deployment policy for this database?"</em>).</li>
+</ul>
+<h2 id="tool-interfacing-function-calling-and-open-protocols">Tool Interfacing: Function Calling and Open Protocols</h2>
+<p>An agent cannot affect the physical or digital world using text generation alone. It requires formal communication interfaces to run external software tools securely.</p>
+<figure class="vb photo"><picture><source srcset="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-7.webp" type="image/webp"><img src="/assets/articles/how-ai-agents-work-beyond-simple-llm-prompts-7.jpg" alt="A software developer writing structured API integrations and terminal scripts inside a modern software workspace." width="1200" height="800" loading="lazy"></picture><figcaption>A software developer writing structured API integrations and terminal scripts inside a modern software workspace. <span class="cr"><a href="https://www.pexels.com/photo/programming-code-on-laptop-with-developer-hands-37880001/" target="_blank" rel="nofollow noopener">Photo: Alicia Christin Gerald / Pexels</a></span></figcaption></figure>
+<h3 id="function-calling">Function Calling</h3>
+<p>Introduced natively in late 2023, <strong>function calling</strong> provides structured prompt instructions—typically formatted using JSON Schema—that compel the LLM to output precise machine-readable code instead of conversational plain text. </p>
+<p>For instance, if an agent decides it needs to query an external database, it generates a structured JSON object containing exact parameters (such as table names and search keys). The agent harness reads this JSON payload, executes the database query, and feeds the output back to the LLM.</p>
+<aside class="vb call warning"><div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0zM12 9v4M12 17h.01"/></svg></div><div><b>Guardrails in Tool Execution</b><p>Because agent tool calls execute actions in software environments, system developers implement strict permission sandboxes inside Layer 6 (Security &amp; Compliance). This prevents agents from accidentally executing destructive system commands or exposing sensitive operational data.</p></div></aside>
+<h3 id="model-context-protocol-mcp">Model Context Protocol (MCP)</h3>
+<p>In late 2024, Anthropic introduced the <strong>Model Context Protocol (MCP)</strong>, an open architectural standard designed to simplify how agents connect to data sources and tools. Rather than requiring developers to write custom code for every API, MCP provides a unified standard that allows agents to discover capabilities, inspect context sources, and trigger software routines across disparate enterprise platforms seamlessly.</p>
+<h2 id="the-bottom-line">The Bottom Line</h2>
+<p>Understanding <strong>how ai agents work</strong> reveals a fundamental transition in computing: shifting from static tools that answer prompts to autonomous digital partners that achieve goals. By enclosing powerful foundation models inside structured agent harnesses, organizing operations through 7-layer cognitive architectures, running iterative ReAct loops, and leveraging vector databases for long-term memory, agentic AI transforms plain language instructions into complex, self-correcting real-world actions.</p>
+<hr /></div>
+<section class="faq"><h2>Frequently asked questions</h2><details><summary>What is the main difference between an LLM and an AI agent?</summary><p>A large language model (LLM) is a text prediction engine that generates a single response to a user prompt and stops. An AI agent wraps an LLM inside an outer software harness, enabling it to set goals, run iterative reasoning loops, use external tools like web browsers or databases, and execute multi-step tasks independently without human guidance.</p></details><details><summary>What is an agent harness in software development?</summary><p>An agent harness, or scaffold, is the surrounding software wrapper that manages an LLM&#x27;s operational state. It provides system prompts, handles context windows, enforces security sandboxes, parses structural outputs like JSON, and directly interfaces the model with external computer tools, web APIs, local files, and command-line interfaces.</p></details><details><summary>How do AI agents store information in long-term memory?</summary><p>AI agents store persistent memory outside the LLM&#x27;s temporary context window using vector databases such as Pinecone, Chroma, or Qdrant. Information is converted into vector embeddings, allowing the agent to recall past execution logs, episodic event sequences, and semantic facts using Retrieval-Augmented Generation (RAG) pipelines across separate user sessions.</p></details><details><summary>What is the Model Context Protocol (MCP)?</summary><p>Introduced by Anthropic in late 2024, the Model Context Protocol (MCP) is an open architectural standard designed to connect AI agents with external context sources and software tools. It standardizes how models discover API capabilities, fetch structured data, and trigger execution routines across enterprise environments without needing unique custom integrations for every platform.</p></details><details><summary>Are virtual voice assistants like Siri considered modern AI agents?</summary><p>Early voice assistants introduced consumer-facing agent concepts in the early 2010s, but they relied on basic rule-based logic and deterministic decision trees. Modern AI agents differ significantly because they are powered by modern transformer-based LLMs, enabling general-purpose reasoning, dynamic planning, autonomous self-correction, and unstructured task execution.</p></details></section>
+<section class="sources"><h2>Sources</h2><ol><li><a href="https://en.wikipedia.org/wiki/AI_agent" target="_blank" rel="nofollow noopener">AI agent - Wikipedia</a></li><li><a href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="nofollow noopener">Large language model - Wikipedia</a></li><li><a href="https://en.wikipedia.org/wiki/Anthropic" target="_blank" rel="nofollow noopener">Anthropic - Wikipedia</a></li><li><a href="https://lilianweng.github.io/posts/2023-06-23-agent/" target="_blank" rel="nofollow noopener">LLM Powered Autonomous Agents - Lil&#x27;Log (Lilian Weng)</a></li><li><a href="https://python.langchain.com/docs/concepts/agents/" target="_blank" rel="nofollow noopener">Agents Conceptual Documentation - LangChain</a></li><li><a href="https://www.anthropic.com/research/building-effective-agents" target="_blank" rel="nofollow noopener">Building Effective Agents - Anthropic Research</a></li></ol></section>
+</article>
+<section class="authorbox">
+<img src="/assets/logo-mark.png" alt="Bibekananda Patra" width="72" height="72" loading="lazy">
+<div><b>Bibekananda Patra</b><span>Founder, TechDCoded</span>
+<p>I run TechDCoded, where I explain how everyday technology actually works — in short videos on YouTube and in written explainers here. Every article is researched from public sources and written to be understood without a technical background.</p>
+<p class="al">Co-founder: Omm Shree Dibya Dulabha Patra · <a href="/about/">About TechDCoded</a> · <a href="/editorial-policy/">How we write</a> ·
+<a href="https://www.youtube.com/@techdcoded" target="_blank" rel="noopener">YouTube</a></p></div></section>
+<div class="share">Share:
+<a href="https://wa.me/?text=How AI Agents Work: Beyond Simple LLM Prompts https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/" target="_blank" rel="noopener">WhatsApp</a>
+<a href="https://x.com/intent/post?text=How AI Agents Work: Beyond Simple LLM Prompts https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/" target="_blank" rel="noopener">X</a>
+<a href="https://www.linkedin.com/sharing/share-offsite/?url=https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/" target="_blank" rel="noopener">LinkedIn</a>
+<button type="button" onclick="navigator.clipboard.writeText('https://techdcoded.com/articles/how-ai-agents-work-beyond-simple-llm-prompts/');this.textContent='Copied!'">Copy link</button></div>
+<div class="cta"><div><b>Get one tech explainer a day</b><p>Short videos on YouTube, daily tech bites on WhatsApp.</p></div>
+<div class="acts"><a class="btn-yt" href="https://www.youtube.com/@techdcoded?sub_confirmation=1" target="_blank" rel="noopener">▶ Subscribe</a><a class="btn-wa" href="https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a" target="_blank" rel="noopener">Join WhatsApp</a></div></div>
+<section class="related"><h2>Keep reading</h2><div class="cards"><a class="card" href="/articles/how-ai-trading-bots-work-the-tech-explained/" data-cat="AI &amp; Software" data-q="how ai trading bots work: the tech explained discover how ai trading bots work. decode the step-by-step pipeline of real-time data ingestion, signal generation, risk management, and api execution. ai &amp; software">
+<div class="cimg"><picture style="display:block;width:100%;height:100%"><source srcset="/assets/articles/how-ai-trading-bots-work-the-tech-explained.webp" type="image/webp"><img src="/assets/articles/how-ai-trading-bots-work-the-tech-explained.jpg" alt="A conceptual illustration of an AI trading bot&#x27;s software architecture, showcasing data pipelines, neural networks, and automated trade execution." width="1200" height="630" style="display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover" loading="lazy"></picture></div>
+<div class="cb"><span class="cat">AI &amp; Software</span><h3>How AI Trading Bots Work: The Tech Explained</h3><p>Discover how AI trading bots work. Decode the step-by-step pipeline of real-time data ingestion, signal generation, risk management, and API execution.</p>
+<div class="cm"><time datetime="2026-09-27">27 Sep 2026</time><span>9 min read</span></div></div></a><a class="card" href="/articles/can-ai-actually-think-how-llms-predict-words/" data-cat="Am I Being Lied To" data-q="can ai actually think? how llms predict words can ai actually think, or is it just math? we decode how large language models predict tokens, use probability, and mimic human intelligence. am i being lied to">
+<div class="cimg"><picture style="display:block;width:100%;height:100%"><source srcset="/assets/articles/can-ai-actually-think-how-llms-predict-words.webp" type="image/webp"><img src="/assets/articles/can-ai-actually-think-how-llms-predict-words.jpg" alt="Graphic illustrating large language model token prediction and probability distributions" width="1200" height="630" style="display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover" loading="lazy"></picture></div>
+<div class="cb"><span class="cat">Am I Being Lied To</span><h3>Can AI Actually Think? How LLMs Predict Words</h3><p>Can AI actually think, or is it just math? We decode how large language models predict tokens, use probability, and mimic human intelligence.</p>
+<div class="cm"><time datetime="2026-10-12">12 Oct 2026</time><span>10 min read</span></div></div></a><a class="card" href="/articles/why-ai-training-costs-millions-gpu-tech-explained/" data-cat="The Cost Of" data-q="why ai training costs millions: gpu tech explained discover why training modern ai models costs millions. we decode how gpus, high-bandwidth memory, and massive cluster interconnects drive the expense. the cost of">
+<div class="cimg"><picture style="display:block;width:100%;height:100%"><source srcset="/assets/articles/why-ai-training-costs-millions-gpu-tech-explained.webp" type="image/webp"><img src="/assets/articles/why-ai-training-costs-millions-gpu-tech-explained.jpg" alt="Engineers inspecting high-density server racks filled with advanced GPU hardware in a modern enterprise data center." width="1200" height="630" style="display:block;width:100%;height:auto;aspect-ratio:1200/630;object-fit:cover" loading="lazy"></picture></div>
+<div class="cb"><span class="cat">The Cost Of</span><h3>Why AI Training Costs Millions: GPU Tech Explained</h3><p>Discover why training modern AI models costs millions. We decode how GPUs, high-bandwidth memory, and massive cluster interconnects drive the expense.</p>
+<div class="cm"><time datetime="2026-10-26">26 Oct 2026</time><span>7 min read</span></div></div></a></div></section>
+</main>
+<a class="totop" href="#" aria-label="Back to top">↑</a>
+<script>
+const pg=document.getElementById('prog'),tt=document.querySelector('.totop');
+addEventListener('scroll',()=>{const h=document.documentElement,p=h.scrollTop/(h.scrollHeight-h.clientHeight);pg.style.width=(p*100)+'%';tt.classList.toggle('on',h.scrollTop>900)},{passive:true});
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.15});
+document.querySelectorAll('.prose .vb').forEach(el=>io.observe(el));
+</script>
+<footer class="foot"><div class="wrap">
+<nav><a href="/">Home</a><a href="/articles/">All articles</a><a href="/about/">About</a><a href="/editorial-policy/">How we write</a><a href="https://www.youtube.com/@techdcoded" target="_blank" rel="noopener">YouTube</a><a href="https://www.instagram.com/techdcoded" target="_blank" rel="noopener">Instagram</a><a href="https://www.facebook.com/techdcoded/" target="_blank" rel="noopener">Facebook</a><a href="https://x.com/techdcoded" target="_blank" rel="noopener">X</a><a href="https://www.linkedin.com/in/techdcoded" target="_blank" rel="noopener">LinkedIn</a><a href="https://whatsapp.com/channel/0029Vb8OFIr5vKA1diUdno3a" target="_blank" rel="noopener">WhatsApp</a><a href="https://t.me/techdcoded" target="_blank" rel="noopener">Telegram</a></nav>
+<p>© TechDCoded™ · You use the technology. We decode it. · <a href="mailto:business@techdcoded.com">business@techdcoded.com</a></p>
+</div></footer>
+</body>
+</html>
