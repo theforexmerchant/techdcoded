@@ -1,0 +1,155 @@
+{
+ "slug": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery",
+ "date": "2026-11-20",
+ "time": "03:39",
+ "updated": "2026-11-20",
+ "title": "Sodium Ion vs Lithium Ion Chemistry: Inside the Battery",
+ "meta_description": "Explore sodium ion vs lithium ion chemistry. Discover how atomic size, anode intercalation, and cell voltages shape battery performance and energy storage.",
+ "category": "Technology vs Technology",
+ "idea": "Lithium vs Sodium Batteries",
+ "source": "idea-bank",
+ "primary_keyword": "sodium ion vs lithium ion chemistry",
+ "secondary_keywords": [
+  "sodium ion battery vs lithium ion",
+  "battery intercalation mechanism",
+  "hard carbon anode sodium",
+  "battery desolvation energy",
+  "zero volt battery storage"
+ ],
+ "tldr": "While lithium-ion and sodium-ion batteries both rely on a \"rocking-chair\" movement of ions between electrodes, sodium ions are physically larger and heavier than lithium ions. Because sodium cannot fit easily between standard graphite layers, it requires disordered hard carbon anodes and operates at a slightly lower voltage, trading raw energy density for lower material costs, superior cold-weather kinetics, and the ability to safely discharge down to zero volts.",
+ "key_takeaways": [
+  "Both chemistries use a \"rocking-chair\" mechanism where single-charge (+1) alkali cations shuttle through an electrolyte between cathode and anode.",
+  "Sodium ions ($1.02\\text{ \\AA}$) are significantly larger than lithium ions ($0.76\\text{ \\AA}$), preventing sodium from intercalating into standard crystalline graphite.",
+  "Sodium cells use hard carbon anodes with wider interlayer spacing ($d > 0.37\\text{ nm}$), storing ions through a dual slope-and-plateau mechanism.",
+  "Sodium does not alloy with aluminum, allowing cost-effective aluminum current collectors on both electrodes and safe transportation at zero volts ($0\\text{ V}$).",
+  "Lithium-ion retains higher gravimetric energy density ($160\\text{–}270\\text{ Wh/kg}$ vs. $110\\text{–}160\\text{ Wh/kg}$), but sodium features lower desolvation energy, enabling rapid charging and superior performance down to $-40\\text{ }^\\circ\\text{C}$."
+ ],
+ "body_md": "Every rechargeable gadget in your pocket and most electric vehicles humming through city streets rely on a quiet physical phenomenon: tiny atoms giving up electrons, sliding into microscopic gaps inside solid materials, and sliding back out when you need power. For over three decades, lithium has dominated this domain. Yet, a closely related chemical sibling—sodium—is challenging lithium's monopoly. \n\nTo understand why this shift matters, we have to look past the battery pack casings and inspect the atomic architecture. Understanding **sodium ion vs lithium ion chemistry** reveals how minute variations in atomic radius and electron potential completely alter how an energy cell is built, how it performs under stress, and where it fits into everyday life.\n\n## The Periodic Table Siblings: Size, Mass, and Voltage\n\nBoth lithium ($\\text{Li}$) and sodium ($\\text{Na}$) reside in Group 1 of the periodic table, known as the alkali metals. Sitting in the s-block, both elements possess a single valence electron in their outermost shell. When chemically provoked, each element readily sheds that lone electron to form a monovalent cation with a $+1$ charge: $\\text{Li}^+$ and $\\text{Na}^+$. In their pure metallic forms, both elements are soft, lustrous, and aggressively reactive with ambient moisture and atmospheric oxygen. For this reason, neither metal exists in nature as a free element; they are locked away inside stable salts and mineral compounds.\n\n:::keyterm Monovalent Cation\nAn atom that has lost a single electron, leaving it with a net positive charge of $+1$. In rechargeable batteries, these charged atoms serve as the mobile carriers shuttling electrical energy between electrodes.\n:::\n\nDespite these structural similarities, atomic physics introduces critical divergence points. Lithium is the lightest solid element, carrying an atomic mass of roughly $6.94\\text{ g/mol}$. Sodium sits one row lower on the periodic table, with extra electron shells pushing its atomic mass up to approximately $22.99\\text{ g/mol}$—more than three times heavier. \n\n:::stats Atomic Differences\n6.94 g/mol | Lithium atomic mass\n22.99 g/mol | Sodium atomic mass\n0.76 Å | Lithium ionic radius\n1.02 Å | Sodium ionic radius\n:::\n\nThis mass disparity is accompanied by a substantial difference in physical size. The ionic radius of $\\text{Li}^+$ is a compact $0.76\\text{ \\AA}$ ($76\\text{ picometers}$), whereas $\\text{Na}^+$ expands to $1.02\\text{ \\AA}$ ($102\\text{ picometers}$). Furthermore, their electrochemical potentials differ. Lithium features a standard reduction potential of $-3.04\\text{ V}$ against the Standard Hydrogen Electrode (SHE). Sodium sits at $-2.71\\text{ V}$ vs. SHE. That $0.33\\text{ V}$ gap might seem tiny on paper, but in electrochemistry, it dictates the baseline thermodynamic ceiling of cell voltage.\n\n:::timeline Milestones in Alkali Electrochemistry\n1807 | Humphry Davy isolates pure potassium and elemental sodium via electrolysis.\n1970s | Researchers explore early intercalation chemistry using titanium disulfide hosts.\n1991 | Sony commercializes the first practical lithium-ion cell paired with graphite.\n2010s | Sodium-ion research revives globally to hedge against critical mineral bottlenecks.\n:::\n\n## The Rocking-Chair Mechanism: Step-by-Step\n\nBoth lithium-ion and sodium-ion systems belong to a class of energy storage devices known as \"rocking-chair\" rechargeable secondary batteries. Rather than consuming and reforming bulk metals through destructive chemical reactions, these cells preserve their internal structures by shuttling ions back and forth through a liquid medium.\n\n:::steps The Rocking-Chair Shuttling Cycle\n1. Cathode Oxidation | Charging current draws electrons from the transition metal cathode, forcing alkali cations out of the host crystal.\n2. Electrolyte Migration | Cations travel through liquid electrolyte solvents and filter through a micro-porous polymer separator.\n3. Anode Intercalation | Incoming electrons reduce the negative electrode host, allowing cations to squeeze into its atomic structure.\n4. Spontaneous Discharge | When connected to an external load, cations leave the anode, reversing course to deliver electrical work.\n:::\n\nThroughout this cycle, the liquid electrolyte acts strictly as a passive transport highway. It facilitates ion transit while blocking electrons, ensuring that current is forced to travel through the external circuit to do useful work. The liquid itself does not undergo permanent chemical conversion during standard operation.\n\n## The Anode Dilemma: Graphite vs. Hard Carbon\n\nThe structural difference between lithium and sodium becomes starkly apparent at the negative electrode (the anode). The process of slipping an ion between the atomic layers of an electrode host is known as **intercalation**. \n\nIn conventional lithium-ion cells, the anode is made of crystalline graphite. Graphite consists of neatly stacked, two-dimensional sheets of carbon atoms arranged in a hexagonal honeycomb lattice, known as graphene. The vertical gap between these graphene layers—the interlayer spacing—measures approximately $0.335\\text{ nm}$. The compact $\\text{Li}^+$ ion ($0.76\\text{ \\AA}$) fits neatly between these carbon planes, binding with the carbon to form a stable staged intercalation compound with the chemical formula $\\text{LiC}_6$.\n\nSodium ions, however, cannot comfortably replicate this feat. Because the $\\text{Na}^+$ ion is roughly $34\\%$ larger than $\\text{Li}^+$ ($1.02\\text{ \\AA}$), the thermodynamic formation enthalpy of binary sodium-graphite intercalation compounds (such as $\\text{NaC}_6$ or $\\text{NaC}_8$) is unfavorable under normal ambient conditions. Graphite simply refuses to take up sodium ions in meaningful quantities.\n\n```\nGraphite (Li-ion)             Hard Carbon (Na-ion)\n=================             ~~~~\\    /~~~~\n  Li+     Li+                     \\  Na+   /   (Disordered sheets)\n=================             ~~~~/    \\~~~~\n  Li+     Li+                      [ O ]       (Closed nanopores)\n=================             ~~~~~~~~~~~~~~\n(Ordered: d = 0.335 nm)       (Disordered: d > 0.37 nm)\n```\n\nTo resolve this thermodynamic barrier, sodium-ion cells turn to an alternative anode material: **hard carbon**. Unlike crystalline graphite, hard carbon is a non-graphitizable, disordered form of carbon produced by heating organic precursors without oxygen (pyrolysis). Its internal architecture features wide structural defects, crumpled carbon sheets with an expanded interlayer spacing exceeding $0.37\\text{ nm}$, and internal closed nanopores.\n\nSodium stores energy inside hard carbon through what electrochemists call an \"adsorption-insertion\" or \"slope-and-plateau\" mechanism:\n\n*   **The High-Voltage Slope Region:** At higher operational potentials, incoming $\\text{Na}^+$ ions insert directly into the expanded, disordered graphitic layers and bind chemically to active surface defect sites.\n*   **The Low-Voltage Plateau Region:** As the cell continues charging at lower potentials, additional sodium ions condense and cluster inside the closed internal nanopores of the carbon matrix.\n\nWhile this allows sodium to be stored effectively, hard carbon yields a practical capacity between $250\\text{ and }350\\text{ mAh/g}$, trailing behind graphite's theoretical capacity of $372\\text{ mAh/g}$ for lithium.\n\n:::myth The Sodium Flammability Fallacy\nMyth: Sodium-ion batteries will explode like pure sodium metal if punctured or dropped in water.\nFact: Commercial sodium-ion cells do not contain elemental metallic sodium. They use stable, non-metallic sodium compounds (such as Prussian blue analogues or layered metal oxides) bound within a solid cathode matrix, paired with carbon at the anode.\n:::\n\n## Current Collectors and the Zero-Volt Advantage\n\nEvery battery relies on metallic foils called current collectors to gather electrons from the electrode materials and transfer them to the circuit terminals. The chemical relationship between alkali ions and these metal foils reveals one of sodium-ion's biggest operational advantages.\n\nIn a lithium-ion battery, lithium reacts and forms an alloy with aluminum at low electrochemical potentials. Because the negative electrode operates at precisely these low potentials during charge and discharge, aluminum foil cannot be used on the anode side without dissolving into an alloy. Battery makers are forced to use heavier, more expensive copper foil on the anode, reserving lightweight aluminum foil exclusively for the positive cathode.\n\n:::compare Current Collector Chemistry\nLithium-Ion Anode | Sodium-Ion Anode\nUses copper foil to avoid lithium-aluminum alloying | Uses low-cost, lightweight aluminum foil on both sides\nDegrades permanently if cell drops below 1.5–2.0 V | Can be fully discharged to 0 V without collector damage\nMust be shipped partially charged, increasing transit fire hazard | Can be safely stored and shipped in a \"dead short\" state\n:::\n\nSodium, by contrast, does not alloy with aluminum at anode potentials. As a result, sodium-ion cells can employ inexpensive, lightweight aluminum foil on both the cathode and the anode. \n\nThis metallurgical quirk directly impacts safety and transport logistics. In a lithium-ion battery, if the cell is over-discharged below approximately $1.5\\text{–}2.0\\text{ V}$, the copper current collector begins to oxidize and dissolve into the liquid electrolyte. When recharged, this dissolved copper precipitates as sharp metallic spikes that can short-circuit the cell internally, causing irreversible degradation or catastrophic failure. Lithium batteries must therefore always maintain a reserve charge during shipping and warehousing.\n\nSodium-ion cells face no such copper dissolution limits. Because they utilize aluminum collectors, sodium cells can be completely drained to a true $0\\text{ V}$ state—a complete \"dead short.\" At zero volts, the cell holds zero stored electrochemical energy, dramatically reducing thermal runaway risks during long-distance transit and air cargo handling.\n\n## Cell Performance: Energy Density, Voltage, and Kinetics\n\nThe interplay between ionic radius, mass, and reduction potential produces distinct trade-offs across real-world performance metrics.\n\n| Metric | Lithium-Ion Chemistry | Sodium-Ion Chemistry |\n| :--- | :--- | :--- |\n| **Nominal Cell Voltage** | $\\sim 3.2\\text{–}3.3\\text{ V}$ ($\\text{LiFePO}_4$) / $\\sim 3.6\\text{–}3.8\\text{ V}$ (NMC) | $\\sim 3.0\\text{–}3.2\\text{ V}$ |\n| **Theoretical Anode Capacity** | $372\\text{ mAh/g}$ (Crystalline graphite) | $250\\text{–}350\\text{ mAh/g}$ (Hard carbon) |\n| **Gravimetric Energy Density** | $160\\text{–}270\\text{ Wh/kg}$ | $110\\text{–}160\\text{ Wh/kg}$ |\n| **Low-Temperature Retention** | Sluggish kinetics, risk of plating below $0\\text{ }^\\circ\\text{C}$ | Retains $80\\text{–}90\\%$ capacity down to $-20\\text{ }^\\circ\\text{C}$ to $-40\\text{ }^\\circ\\text{C}$ |\n| **Electrode Current Collectors** | Aluminum (Cathode) + Copper (Anode) | Aluminum (Both Cathode and Anode) |\n\nBecause sodium sits higher on the reduction potential scale ($-2.71\\text{ V}$ vs. $-3.04\\text{ V}$ for lithium), commercial sodium-ion cells produce lower operational voltages, typically between $3.0\\text{ V}$ and $3.2\\text{ V}$. Combined with the heavier atomic mass of sodium and the bulkier hard carbon anode, commercial sodium-ion cells yield a gravimetric energy density of $110\\text{–}160\\text{ Wh/kg}$. In comparison, lithium-ion cells span from $160\\text{ Wh/kg}$ in basic lithium iron phosphate ($\\text{LiFePO}_4$ or LFP) up to $270\\text{ Wh/kg}$ in high-nickel nickel-manganese-cobalt (NMC) formulations. A sodium battery pack will be roughly $20\\text{–}40\\%$ heavier than an equivalent lithium pack carrying identical energy capacity.\n\n:::didyouknow\nEven though sodium ions are bulkier than lithium ions, they can move through the liquid-electrode boundary faster in cold conditions because of how they interact with solvent molecules.\n:::\n\nHowever, the physical bulk of the $\\text{Na}^+$ ion yields an unexpected advantage: lower **charge density**. Because sodium's single positive charge is distributed across a significantly larger atomic sphere ($1.02\\text{ \\AA}$ vs $0.76\\text{ \\AA}$), its electrostatic grip on neighboring molecules is weaker. \n\nIn a liquid carbonate electrolyte, ions travel surrounded by a tightly bound shell of solvent molecules. Before an ion can intercalate into an electrode, it must strip off this solvent shell—a process governed by **desolvation energy**. Because $\\text{Na}^+$ has lower charge density, its desolvation energy is considerably lower than that of $\\text{Li}^+$. It sheds its solvent coat easily at the electrode boundary, enabling rapid charge rates and allowing sodium cells to maintain $80\\text{–}90\\%$ of their discharge capacity at extreme sub-zero temperatures (between $-20\\text{ }^\\circ\\text{C}$ and $-40\\text{ }^\\circ\\text{C}$), environments where lithium-ion batteries suffer severe kinetic slowdowns and risk dangerous lithium plating.\n\n## The Indian Landscape: Raw Materials and Practical Deployment\n\nThe technical differences between lithium and sodium have direct economic consequences. Global lithium reserves are geographically concentrated in regions like the South American \"Lithium Triangle\" and Australia. For countries like India, electrifying transport and the power grid using exclusively lithium-ion cells creates heavy import reliance on overseas extraction and refining supply chains.\n\nSodium presents a starkly different raw material profile. It is the sixth most abundant element in the Earth’s crust and dissolves abundantly across oceans. Extracted readily from everyday sea salt (sodium chloride) and domestic soda ash production hubs that line India's vast coastline, sodium offers an accessible domestic raw-material base.\n\nBecause sodium-ion packs carry a $20\\text{–}40\\%$ weight penalty, they are poorly suited for high-end, long-range luxury passenger cars where every kilogram reduces driving range. Instead, sodium-ion technology aligns naturally with applications where initial purchase price, thermal resilience, and safety matter more than minimal weight:\n\n*   **Fixed Stationary Storage:** Solar and wind grid balancing stations, uninterruptible power supplies (UPS), and rural telecom towers where physical footprint and weight are secondary to cycle longevity and fire safety.\n*   **Light Commercial Urban Mobility:** Electric three-wheelers (e-rickshaws) and low-speed two-wheelers operating in stop-and-go city traffic, where lower manufacturing costs and tolerance for high summer temperatures provide substantial practical benefits.\n\n:::quote\n\"Sodium is practically inexhaustible, readily extracted from sea salt and domestic soda ash reserves across India's coastline.\"\n:::\n\nDomestic industrial players have already begun positioning around these chemical traits. Reliance New Energy acquired UK-based sodium-ion developer Faradion to localize end-to-end sodium battery cell manufacturing within India. Simultaneously, Indian automotive technology firm KPIT Technologies has unveiled indigenous sodium-ion cell prototypes aimed directly at light commercial vehicles, commercial buses, and two-wheelers.\n\n## The Bottom Line\n\nSodium-ion batteries are not an outright replacement for lithium-ion; they are an atomic alternative engineered around distinct physical trade-offs. Lithium's tight ionic radius ($0.76\\text{ \\AA}$) and high electrochemical voltage retain an unmatched advantage for high-energy, weight-sensitive applications like long-range electric cars and ultra-thin smartphones. \n\nSodium compromises on volumetric and gravimetric energy density because its larger, heavier ions ($1.02\\text{ \\AA}$) demand porous hard carbon hosts and yield lower nominal cell voltages. In exchange, sodium-ion chemistry eliminates the need for expensive copper foils, enables completely safe transit at zero volts, recharges rapidly across sub-zero temperatures, and unlocks an inexhaustible, democratized raw material supply. Rather than declaring a winner, modern energy storage is adopting a dual-track approach: lithium where energy density is paramount, and sodium where resilience, supply security, and cost dictate the pace.",
+ "faq": [
+  {
+   "q": "Can sodium-ion batteries be used directly as drop-in replacements for lithium-ion cells?",
+   "a": "Not without modifications to system engineering. Because commercial sodium-ion cells output a lower nominal voltage (typically 3.0–3.2 V versus 3.6–3.8 V for NMC lithium-ion) and have a lower gravimetric energy density, battery management systems, pack circuitry, and spatial physical allocations must be reconfigured to deliver the same performance profile."
+  },
+  {
+   "q": "Why can't standard graphite anodes be used in sodium-ion batteries?",
+   "a": "Sodium ions have a larger ionic radius (1.02 Å) than lithium ions (0.76 Å). Under normal conditions, the thermodynamic formation enthalpy of inserting sodium into crystalline graphite's narrow interlayer gaps (0.335 nm) is unfavorable. Sodium requires hard carbon anodes, which provide wider interlayer spacing (above 0.37 nm) and internal nanopores."
+  },
+  {
+   "q": "Why are sodium-ion batteries safer to transport than lithium-ion batteries?",
+   "a": "Lithium-ion cells use copper anode collectors, which oxidize and dissolve if the cell discharges below 1.5–2.0 V, creating short-circuit hazards. Sodium-ion cells use aluminum collectors on both electrodes, allowing them to be fully discharged to zero volts (a dead short) without damage, removing stored electrical energy during shipping."
+  },
+  {
+   "q": "How does sodium-ion perform better in cold temperatures despite having larger ions?",
+   "a": "Although sodium ions are physically larger, their single positive charge is spread over a bigger volume, giving them lower charge density. This results in lower desolvation energy in liquid electrolytes. Sodium ions shed their surrounding solvent molecules more easily at the electrode interface, maintaining rapid transport down to -20 °C to -40 °C."
+  },
+  {
+   "q": "Will sodium-ion batteries replace lithium-ion in smartphones and laptops?",
+   "a": "It is unlikely in the near term. Portable consumer electronics like smartphones and laptops prioritize maximum energy capacity within thin, lightweight form factors. Because sodium-ion cells deliver lower gravimetric energy density (110–160 Wh/kg vs 160–270 Wh/kg for lithium), using sodium would make portable devices noticeably thicker and heavier for the same battery life."
+  }
+ ],
+ "image_alt": "Cross-section diagram illustrating sodium ion and lithium ion intercalation into graphite and hard carbon host matrices.",
+ "sources": [
+  {
+   "title": "List of battery sizes - Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/List_of_battery_sizes"
+  },
+  {
+   "title": "Rechargeable battery - Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Rechargeable_battery"
+  },
+  {
+   "title": "Alkali metal - Wikipedia",
+   "url": "https://en.wikipedia.org/wiki/Alkali_metal"
+  },
+  {
+   "title": "Sodium-Ion Technology Overview - Faradion",
+   "url": "https://faradion.co.uk/technology/"
+  },
+  {
+   "title": "Batteries Research and Development - U.S. Department of Energy Vehicle Technologies Office",
+   "url": "https://www.energy.gov/eere/vehicles/batteries"
+  },
+  {
+   "title": "Batteries Subject Overview - Nature",
+   "url": "https://www.nature.com/subjects/batteries"
+  }
+ ],
+ "images": [
+  {
+   "file": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-1",
+   "w": 1024,
+   "h": 1024,
+   "after_heading": "The Periodic Table Siblings: Size, Mass, and Voltage",
+   "caption": "A research scientist examining atomic scale models of lithium and sodium crystal lattices inside a university chemistry laboratory.",
+   "alt": "A research scientist examining atomic scale models of lithium and sodium crystal lattices inside a university chemistry laboratory.",
+   "credit": "AI illustration: TechDcoded"
+  },
+  {
+   "file": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-2",
+   "w": 1024,
+   "h": 1024,
+   "after_heading": "The Rocking-Chair Mechanism: Step-by-Step",
+   "caption": "A detailed cross-section illustration showing cations migrating through a microporous polymer separator between cathode and anode layers.",
+   "alt": "A detailed cross-section illustration showing cations migrating through a microporous polymer separator between cathode and anode layers.",
+   "credit": "AI illustration: TechDcoded"
+  },
+  {
+   "file": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-3",
+   "w": 1024,
+   "h": 1024,
+   "after_heading": "The Anode Dilemma: Graphite vs. Hard Carbon",
+   "caption": "An electron microscope style rendering comparing crystalline graphite sheets alongside disordered hard carbon nanopores.",
+   "alt": "An electron microscope style rendering comparing crystalline graphite sheets alongside disordered hard carbon nanopores.",
+   "credit": "AI illustration: TechDcoded"
+  },
+  {
+   "file": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-4",
+   "w": 1200,
+   "h": 800,
+   "after_heading": "Current Collectors and the Zero-Volt Advantage",
+   "caption": "Rolls of industrial aluminum and copper metal foils mounted on high-precision battery manufacturing machinery.",
+   "alt": "Rolls of industrial aluminum and copper metal foils mounted on high-precision battery manufacturing machinery.",
+   "credit": "Photo: Freek Wolsink / Pexels",
+   "credit_url": "https://www.pexels.com/photo/high-tech-industrial-manufacturing-facility-34221997/"
+  },
+  {
+   "file": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-5",
+   "w": 1200,
+   "h": 800,
+   "after_heading": "Cell Performance: Energy Density, Voltage, and Kinetics",
+   "caption": "A high-precision thermal testing chamber displaying lithium and sodium-ion test cells operating under extreme sub-zero conditions.",
+   "alt": "A high-precision thermal testing chamber displaying lithium and sodium-ion test cells operating under extreme sub-zero conditions.",
+   "credit": "Photo: ThisIsEngineering / Pexels",
+   "credit_url": "https://www.pexels.com/photo/photo-of-sound-engineer-on-sound-studio-3861968/"
+  },
+  {
+   "file": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-6",
+   "w": 1200,
+   "h": 800,
+   "after_heading": "The Indian Landscape: Raw Materials and Practical Deployment",
+   "caption": "A commercial electric three-wheeler negotiating city street traffic past industrial solar installations in India.",
+   "alt": "A commercial electric three-wheeler negotiating city street traffic past industrial solar installations in India.",
+   "credit": "Photo: Aditya Upadhyay / Pexels",
+   "credit_url": "https://www.pexels.com/photo/a-narrow-alley-with-people-walking-down-it-27742788/"
+  },
+  {
+   "file": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-7",
+   "w": 1024,
+   "h": 1024,
+   "after_heading": "The Bottom Line",
+   "caption": "Modern utility-scale battery energy storage system containers installed beside a large field of solar photovoltaic panels.",
+   "alt": "Modern utility-scale battery energy storage system containers installed beside a large field of solar photovoltaic panels.",
+   "credit": "AI illustration: TechDcoded"
+  }
+ ],
+ "cover": "sodium-ion-vs-lithium-ion-chemistry-inside-the-battery-cover",
+ "word_count": 2371,
+ "review": {
+  "accuracy": 9,
+  "helpfulness": 8,
+  "readability": 8,
+  "originality": 9,
+  "safety": 10
+ },
+ "author": "Bibekananda Patra"
+}
